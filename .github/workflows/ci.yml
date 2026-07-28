@@ -1,0 +1,61 @@
+name: CI
+
+# Required checks per PROCESS.md G6 (CI green) and the project's CI baseline:
+# install -> lint -> typecheck -> test (coverage gate) -> build -> axe a11y check.
+# Runs on every PR and on every push to a PR branch (regression catch, PROCESS.md 9.2).
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  ci:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Format check (Prettier)
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Includes an automated axe accessibility assertion (Button.test.tsx) —
+      # every themed/interactive component gets one as it's added.
+      - name: Unit + integration tests with coverage gate (80%)
+        run: npm run test:coverage
+
+      - name: Build (web / ios / android entries)
+        run: npm run build
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
+
+# Not yet wired (flagged, not silently skipped — see docs/PROTOTYPE_README.md):
+#  - SAST / dependency (SCA) scan / secret scanning — PROCESS.md 9.3 required baseline.
+#    Needs a decision on tooling (e.g. CodeQL, npm audit gate, gitleaks) — ask before adding.
+#  - Preview deploy (Vercel/Netlify) posting a PR comment — needs an account/token.
+#  - Storybook publish target (Chromatic or GitHub Pages) — needs a decision.
