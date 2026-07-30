@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { ThemeProvider } from '@/tokens'
 import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
+import { DesignSystemPage } from '@/design-system/DesignSystemPage'
 import './App.css'
 
 /**
@@ -46,6 +47,11 @@ function Home() {
           ))}
         </ul>
       </nav>
+      <p>
+        <Link to="/design-system" className={buttonClassName('secondary')}>
+          Design System reference
+        </Link>
+      </p>
     </main>
   )
 }
@@ -56,6 +62,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/design-system" element={<DesignSystemPage />} />
           {FUNNEL_STEPS.map((step) => (
             <Route key={step.path} path={step.path} element={<Placeholder title={step.label} />} />
           ))}
