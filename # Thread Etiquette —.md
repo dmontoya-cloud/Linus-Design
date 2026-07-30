@@ -6,12 +6,11 @@
 
 ## The core rules
 
-1. **One topic per thread.** Don't bury a new issue inside an existing thread — start a newone. Keep the whole discussion *in* the thread.
+1. **One topic per thread.** Don't bury a new issue inside an existing thread — start a newone. Keep the whole discussion _in_ the thread.
 2. **Tag the thread with its number.** Every thread title leads with the work item it's about(issue or BUG). If you don't have a number yet, get/create one first (see below).
 3. **A bug means a BUG.** If you're addressing a defect — or QA finds one — **log it in Azurefirst**, then reference that BUG number everywhere you touch it (thread, commits, PR).
 4. **QA pass = a short report, not a thumbs-up.** When QA passes, post the **QA Verifiedreport** below (bug number + what was tested + result). A bare "passed ✅" doesn't give ustraceability.
 5. **Status is always current.** Post a status update whenever it changes so the threadreflects reality.
-
 
 ---
 
@@ -20,7 +19,7 @@
 Title format — number first so it's searchable:
 
 ```
-[BUG 2065] GET /api/v1/assets 502 on multiple endpoints  
+[BUG 2065] GET /api/v1/assets 502 on multiple endpoints
 [ISSUE 1411] Asset list pagination spinner stuck
 ```
 
@@ -62,16 +61,14 @@ Then drop the BUG number into the thread.
 
 Pick one and post it (and, if your client allows editing the thread title/first post, reflectit there):
 
-
-| Tag                     | Meaning                                 |
-|-------------------------|-----------------------------------------|
-| 🔍 **Investigating**  | Triaging / reproducing                  |
-| 🛠️ **In Progress** | Actively being fixed                    |
-| 👀 **In Review**      | PR open — link it                     |
-| 🧪 **In QA**          | Handed to QA on build `<version>` |
-| ✅ **Verified**        | QA passed — closes `AB#<id>`    |
-| 🚫 **Blocked**        | Say what/who is blocking                |
-
+| Tag                  | Meaning                           |
+| -------------------- | --------------------------------- |
+| 🔍 **Investigating** | Triaging / reproducing            |
+| 🛠️ **In Progress**   | Actively being fixed              |
+| 👀 **In Review**     | PR open — link it                 |
+| 🧪 **In QA**         | Handed to QA on build `<version>` |
+| ✅ **Verified**      | QA passed — closes `AB#<id>`      |
+| 🚫 **Blocked**       | Say what/who is blocking          |
 
 A bug isn't "done" until it's **merged + QA-verified + the work item is closed** with averification note.
 
@@ -82,40 +79,40 @@ A bug isn't "done" until it's **merged + QA-verified + the work item is closed**
 When you move something to QA, post:
 
 ```
-🧪 IN QA — AB#<id>  
-Build/Version: <e.g. 0.0.87 (123) / commit sha>  
-Environment: <Dev / Staging / device + OS>  
-What changed / what to check: <one or two lines>  
+🧪 IN QA — AB#<id>
+Build/Version: <e.g. 0.0.87 (123) / commit sha>
+Environment: <Dev / Staging / device + OS>
+What changed / what to check: <one or two lines>
 PR: <link>
 ```
 
 ## QA Verified report (post when QA passes)
 
 ```
-✅ QA VERIFIED — AB#<id>  
-Title: <bug title>  
-Build/Version: <version tested>  
-Environment: <Dev / Staging / device + OS>  
-Tested:  
-  - <case / step 1>  
-  - <case / step 2>  
-Result: Pass — behaves as expected; no regressions seen in <area>  
+✅ QA VERIFIED — AB#<id>
+Title: <bug title>
+Build/Version: <version tested>
+Environment: <Dev / Staging / device + OS>
+Tested:
+  - <case / step 1>
+  - <case / step 2>
+Result: Pass — behaves as expected; no regressions seen in <area>
 Notes: <optional>
 ```
 
 ## QA-found bug report (post when QA finds one)
 
 ```
-🐞 NEW BUG — AB#<id>     (logged in Azure first)  
-Title: <short summary>  
-Severity: <Sev1–4 / P1–P4>  
-Build/Version: <where it was found>  
-Environment: <Dev / Staging / device + OS>  
-Steps to reproduce:  
-1.  
-2.  
-Expected:  
-Actual:  
+🐞 NEW BUG — AB#<id>     (logged in Azure first)
+Title: <short summary>
+Severity: <Sev1–4 / P1–P4>
+Build/Version: <where it was found>
+Environment: <Dev / Staging / device + OS>
+Steps to reproduce:
+1.
+2.
+Expected:
+Actual:
 Evidence: <screenshot / log / video>
 ```
 
@@ -139,5 +136,3 @@ If a verified bug comes back, **reopen the same work item** (don't spin up a fre
 
 - ✅ `[BUG 2065] 502 on /assets` · 🛠️ In Progress · PR linked · `AB#2065` in the commit · QAVerified report on close.
 - ❌ "hey the assets thing is broken again" in an unrelated thread, no number, fixed in acommit titled "fix stuff."
-
- 

@@ -15,7 +15,9 @@ function renderPage() {
 describe('DesignSystemPage', () => {
   it('renders the page title and all top-level sections', () => {
     renderPage()
-    expect(screen.getByRole('heading', { level: 1, name: 'Linus Design System' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Linus Design System' }),
+    ).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: /Colors/ })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: /Typography/ })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: /Spacing/ })).toBeInTheDocument()
@@ -37,7 +39,9 @@ describe('DesignSystemPage', () => {
 
   it('marks unresolved swatches as unavailable rather than guessing a color', () => {
     renderPage()
-    expect(screen.getAllByRole('img', { name: /hex value not yet available/ }).length).toBeGreaterThan(0)
+    expect(
+      screen.getAllByRole('img', { name: /hex value not yet available/ }).length,
+    ).toBeGreaterThan(0)
   })
 
   it('links back to the prototype index', () => {

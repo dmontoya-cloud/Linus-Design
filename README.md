@@ -8,14 +8,12 @@ Human-led, AI-assisted software delivery. AI accelerates execution; humans own j
 
 ## What's in here
 
-
-| File              | Purpose                                                                                   | Audience                                |
-|-------------------|-------------------------------------------------------------------------------------------|-----------------------------------------|
+| File              | Purpose                                                                                   | Audience                              |
+| ----------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
 | `PROCESS.md`      | The full operating model: roles, the PoD, the lifecycle, gates, traceability, ISO mapping | Everyone — engineers, leads, auditors |
-| `CLAUDE.md`       | Binding operational rules for Claude (the builder)                                        | Claude + engineers configuring it       |
-| `.claude/skills/` | Skills that encode the controls Claude follows                                            | Claude + skill maintainers              |
-| `docs/templates/` | Copy-paste templates for PoD kickoff, remediation logs and daily status reports           | Human Leads                             |
-
+| `CLAUDE.md`       | Binding operational rules for Claude (the builder)                                        | Claude + engineers configuring it     |
+| `.claude/skills/` | Skills that encode the controls Claude follows                                            | Claude + skill maintainers            |
+| `docs/templates/` | Copy-paste templates for PoD kickoff, remediation logs and daily status reports           | Human Leads                           |
 
 ## The model in one paragraph
 
@@ -32,7 +30,6 @@ Work is organised into **PoDs** (Pods of Delivery): one Human Lead + Claude (bui
 1. **No AI sign-off.** Requirements, code review, remediation, docs, and merge approval are human acts.
 2. **No guessing.** Unsure agents ask the Human Lead — always.
 
-
 ## Getting started
 
 1. Read `PROCESS.md` top to bottom once.
@@ -41,9 +38,6 @@ Work is organised into **PoDs** (Pods of Delivery): one Human Lead + Claude (bui
 4. Set up the Azure DevOps work-item types per `PROCESS.md` §10.
 5. Run your first PoD using `docs/templates/pod-kickoff.md`.
 
-
 ## A note on ISO 27001
 
 The control mapping in `PROCESS.md` §13 is a design aid, not a certification. Validate it against your Statement of Applicability and confirm with your auditor — applicability is set by your risk assessment.
-
- 

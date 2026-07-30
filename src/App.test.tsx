@@ -1,9 +1,16 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 
 describe('App', () => {
+  // App is always served under /web/ in real usage (see vite.config.ts) and its BrowserRouter
+  // is configured with basename="/web" to match. jsdom defaults to path "/", so tests must
+  // start navigation at /web/ too, or every route silently fails to match.
+  beforeEach(() => {
+    window.history.pushState({}, '', '/web/')
+  })
+
   it('renders the prototype index with a link per funnel step', () => {
     render(<App />)
     expect(screen.getByRole('heading', { name: /prototype/i })).toBeInTheDocument()

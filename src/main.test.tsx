@@ -6,6 +6,10 @@ describe('mountApp', () => {
   let container: HTMLDivElement
 
   beforeEach(() => {
+    // App's BrowserRouter uses basename="/web" (it's always served under /web/ in real usage
+    // — see vite.config.ts). jsdom defaults to path "/", so navigation must start at /web/ or
+    // no route matches and mountApp renders nothing.
+    window.history.pushState({}, '', '/web/')
     container = document.createElement('div')
     container.id = 'root'
     document.body.appendChild(container)
