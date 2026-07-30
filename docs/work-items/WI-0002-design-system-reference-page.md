@@ -34,15 +34,15 @@ was confirmed than actually was.
 - `ZeWegEMb6WNXeXQTIsIEY2` ("Linus - Universal Design System") has one real page, "🎨 Color Styles"
   (node `2216:739`), with ~606 nodes. `get_metadata` on that page confirms structure (headers: Main
   app colors, Text labels, Grayscale, Initials, Icons, Button Rules, Graphs & Charts) but the actual
-  swatch hex/label values live in text-layer *content*, which `get_metadata` does not expose — it
+  swatch hex/label values live in text-layer _content_, which `get_metadata` does not expose — it
   only returns layout (position/size/name), and ~52 of those swatches use generic Figma default
   names (`info`, `label`, `HEX`), not semantic names.
 - One real hex value surfaced anyway: a design-rationale paragraph on that page states the primary
   interaction color is `#087DAE`.
-- Nine semantic text-color *names* are confirmed as real layer names (`Text/Primary`,
+- Nine semantic text-color _names_ are confirmed as real layer names (`Text/Primary`,
   `Text/Secondary`, `Text/White`, `Text/Info`, `Text/Teal`, `Text/Alert`, `Text/Warning`,
   `Text/Success`, `Text/Disabled`) — their hex values are not.
-- The full data-visualization/chart palette (Sequential Graphs group) *is* published as real Figma
+- The full data-visualization/chart palette (Sequential Graphs group) _is_ published as real Figma
   FILL styles with hex baked into the style name (e.g. `Sequential Graphs/Darker Teal #065E83`) —
   fully confirmed.
 - `pdf/Buttons.pdf` (a fresh export David dropped into the repo's `pdf/` folder, dated the same day

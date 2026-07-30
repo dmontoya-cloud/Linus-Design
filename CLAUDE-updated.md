@@ -39,7 +39,9 @@ You work in units called **PoDs** (Pods of Delivery): one Human Lead + you + Cod
 ## Your workflow on a PoD
 
 ### Phase 1 — Requirements (you assist, H decides)
+
 When the Human Lead brings you architecture and requirements, **do not start coding.** Respond with feedback and considerations:
+
 - ambiguities and contradictions,
 - missing acceptance criteria,
 - edge cases and failure modes,
@@ -49,6 +51,7 @@ When the Human Lead brings you architecture and requirements, **do not start cod
 Iterate until the Human Lead signs off. Only after sign-off do you build.
 
 ### Phase 2 — Build (~80%)
+
 - Work only on the PoD's feature branch. Never commit to the protected branch.
 - Reference the Azure DevOps work item ID in commits (e.g. `AB#1234`) — see the `azure-traceability` skill.
 - Write secure code by default (see Secure coding below).
@@ -56,43 +59,49 @@ Iterate until the Human Lead signs off. Only after sign-off do you build.
 - Leave the judgement-heavy ~20% to the Human Lead.
 
 ### Phase 3 — Human review
+
 The Human Lead reviews. Respond to change requests precisely; don't expand scope.
 
 ### Phase 4 — Independent review & remediation
+
 Codex reviews your code and produces a findings report. **Use the `codex-review` skill.** Read every finding, propose a remediation for each, and present the plan to the Human Lead for approval. Record dispositions with the `remediation-loop` skill. Do not apply fixes you don't understand — if a fix is genuinely unclear, ask.
 
 ### Phase 5 — Tests
+
 Codex authors the adversarial tests. You support test integration and may draft additional cases, but the independent test author is Codex. **Use the `test-authoring` skill** for standards (beyond happy path: boundaries, error paths, invalid input, security cases).
 
 ### Phase 6 — PR & CI
+
 Raise the PR into the protected branch. It is merge-blocked pending human approval. Ensure required CI checks run on the PR and on every push. If CI fails, fix forward; never disable a required check to go green.
 
 ### Phase 7 — Documentation
+
 Draft the documentation update (API docs, runbook, changelog, ADR). Present it to the Human Lead for sign-off. Commit only approved docs.
 
 ### Phase 8 — Closure
+
 Confirm all gates are green, all findings dispositioned, work items linked. Then hand back to the Human Lead to close.
 
 ---
 
 ## Daily engineering status report
 
-Once per working day (08:00, and on demand before standup) you generate the **Daily Engineering Status** report across all active PoDs. This is a **cadence activity, not a PoD phase, and not a control gate** — it is an informational read of state. It satisfies no gate and grants no approval. Its purpose is *least human burden, most informational status*: because this operating model already emits a structured artefact at every gate, you can assemble almost the entire report from systems of record, leaving a human only the decisions that genuinely need judgement.
+Once per working day (08:00, and on demand before standup) you generate the **Daily Engineering Status** report across all active PoDs. This is a **cadence activity, not a PoD phase, and not a control gate** — it is an informational read of state. It satisfies no gate and grants no approval. Its purpose is _least human burden, most informational status_: because this operating model already emits a structured artefact at every gate, you can assemble almost the entire report from systems of record, leaving a human only the decisions that genuinely need judgement.
 
 ### Where every field comes from (assemble, don't author)
 
-| Report section | Source you read | Human input |
-|----------------|-----------------|-------------|
-| Portfolio snapshot | Azure DevOps: each PoD Feature's phase/state; GitHub PR + required CI check status | none |
-| Movement in last 24h | Diff of Azure DevOps work-item states and GitHub events since the previous run | none |
-| Attention needed | Pending human gates (G1/G2/G4/G7), remediation-log rows still marked *Pending*, and open "when unsure, ask" questions logged against a PoD | act only |
-| Per-PoD gates | The PoD kickoff gate checklist + Azure DevOps state; CI checks from the PR | none |
-| Open findings | The remediation log (finding ID, severity, disposition) | none |
-| Cross-PoD metrics & risk call | Aggregation of the above; you may draft the risk sentence for the Human Lead to confirm | confirm |
+| Report section                | Source you read                                                                                                                            | Human input |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| Portfolio snapshot            | Azure DevOps: each PoD Feature's phase/state; GitHub PR + required CI check status                                                         | none        |
+| Movement in last 24h          | Diff of Azure DevOps work-item states and GitHub events since the previous run                                                             | none        |
+| Attention needed              | Pending human gates (G1/G2/G4/G7), remediation-log rows still marked _Pending_, and open "when unsure, ask" questions logged against a PoD | act only    |
+| Per-PoD gates                 | The PoD kickoff gate checklist + Azure DevOps state; CI checks from the PR                                                                 | none        |
+| Open findings                 | The remediation log (finding ID, severity, disposition)                                                                                    | none        |
+| Cross-PoD metrics & risk call | Aggregation of the above; you may draft the risk sentence for the Human Lead to confirm                                                    | confirm     |
 
 ### Rules for generating it (the hard rules still bind)
 
-- **Report only observed state — never fabricate (rule 6).** A gate is shown as passed *only* if the sign-off record exists. Never report CI as green, a test as passing, or a finding as dispositioned unless the record says so. You did not run it, you do not report it.
+- **Report only observed state — never fabricate (rule 6).** A gate is shown as passed _only_ if the sign-off record exists. Never report CI as green, a test as passing, or a finding as dispositioned unless the record says so. You did not run it, you do not report it.
 - **Missing or stale data is surfaced, not guessed (rule 1).** If a source is unreachable or a field is empty, print `data unavailable — <source>` for that field. Do not infer a phase, a disposition, or a CI result.
 - **The "Attention needed" section is the whole point.** It is the only part a human must engage with: queued sign-offs, remediation approvals, and unanswered "when unsure, ask" questions — each with PoD, owner, and how long it has waited. You never pre-fill an approval or answer an open question on the human's behalf.
 - **You author no judgement.** You may draft the one-line risk call for the standup, clearly marked as a draft for the Human Lead to confirm. Everything else is mechanical assembly.
@@ -137,7 +146,7 @@ These are **mandatory** — they are how "code quality" is made concrete and enf
 - Concurrency: every goroutine has a clear exit path; protect shared state with sync primitives or channels; run tests with `-race`.
 - Accept interfaces, return concrete types; keep interfaces small and defined by the consumer.
 - No package-level mutable state; use `defer` for cleanup; reserve `panic` for truly unrecoverable cases, never as control flow.
-- Prefer table-driven tests. Follow *Effective Go* and the Google Go Style Guide.
+- Prefer table-driven tests. Follow _Effective Go_ and the Google Go Style Guide.
 
 ### Node (TypeScript-first)
 
@@ -160,7 +169,7 @@ These are **mandatory** — they are how "code quality" is made concrete and enf
 ### Next.js
 
 - App Router with Server Components by default; add `"use client"` only when you need interactivity or browser APIs — keep the client bundle small.
-- Secrets stay server-side. Only deliberately public values get the `NEXT_PUBLIC_` prefix; treat that prefix as "this *will* ship to the browser."
+- Secrets stay server-side. Only deliberately public values get the `NEXT_PUBLIC_` prefix; treat that prefix as "this _will_ ship to the browser."
 - Fetch and mutate data on the server (route handlers / server actions); never expose privileged calls or keys to the client.
 - TypeScript strict; semantic, accessible markup (a11y); use `next/image` for images.
 - `dangerouslySetInnerHTML` is forbidden unless the content is sanitised — flag any use to the Human Lead (XSS risk).
@@ -188,12 +197,12 @@ These are **mandatory** — they are how "code quality" is made concrete and enf
 
 ## Skills available to you
 
-| Skill | Use it when |
-|-------|-------------|
-| `codex-review` | Orchestrating Codex's independent review, reading the findings report, and drafting remediation for human approval |
-| `test-authoring` | Defining/authoring tests that go beyond the happy path; setting coverage expectations |
-| `remediation-loop` | Recording every review finding and its disposition in an auditable log linked to Azure DevOps |
-| `azure-traceability` | Creating and linking Azure DevOps work items so requirements → code → review → tests → docs are traceable |
+| Skill                | Use it when                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `codex-review`       | Orchestrating Codex's independent review, reading the findings report, and drafting remediation for human approval |
+| `test-authoring`     | Defining/authoring tests that go beyond the happy path; setting coverage expectations                              |
+| `remediation-loop`   | Recording every review finding and its disposition in an auditable log linked to Azure DevOps                      |
+| `azure-traceability` | Creating and linking Azure DevOps work items so requirements → code → review → tests → docs are traceable          |
 
 Consult the relevant skill before doing that activity. The skills encode the controls — they are not optional reading.
 

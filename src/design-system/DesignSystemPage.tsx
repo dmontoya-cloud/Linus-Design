@@ -80,15 +80,28 @@ function Swatches({ items, placeholder }: { items: Swatch[]; placeholder?: boole
       {items.map((item) => (
         <div className={styles.swatch} key={item.name}>
           {placeholder || !item.hex ? (
-            <div className={styles.swatchColorPlaceholder} role="img" aria-label={`${item.name}: hex value not yet available`}>
+            <div
+              className={styles.swatchColorPlaceholder}
+              role="img"
+              aria-label={`${item.name}: hex value not yet available`}
+            >
               TBD
             </div>
           ) : (
-            <div className={styles.swatchColor} style={{ background: item.hex }} role="img" aria-label={`${item.name}, ${item.hex}`} />
+            <div
+              className={styles.swatchColor}
+              style={{ background: item.hex }}
+              role="img"
+              aria-label={`${item.name}, ${item.hex}`}
+            />
           )}
           <div className={styles.swatchMeta}>
             <span className={styles.swatchName}>{item.name}</span>
-            {item.hex && !placeholder ? <span className={styles.swatchHex}>{item.hex}</span> : <span className={styles.swatchHex}>hex TBD</span>}
+            {item.hex && !placeholder ? (
+              <span className={styles.swatchHex}>{item.hex}</span>
+            ) : (
+              <span className={styles.swatchHex}>hex TBD</span>
+            )}
             {item.note ? <div className={styles.sourceNote}>{item.note}</div> : null}
           </div>
         </div>
@@ -98,8 +111,14 @@ function Swatches({ items, placeholder }: { items: Swatch[]; placeholder?: boole
 }
 
 function Badge({ kind }: { kind: 'confirmed' | 'placeholder' | 'blocked' }) {
-  const label = kind === 'confirmed' ? 'Confirmed' : kind === 'placeholder' ? 'Placeholder' : 'Blocked'
-  const className = kind === 'confirmed' ? styles.badgeConfirmed : kind === 'placeholder' ? styles.badgePlaceholder : styles.badgeBlocked
+  const label =
+    kind === 'confirmed' ? 'Confirmed' : kind === 'placeholder' ? 'Placeholder' : 'Blocked'
+  const className =
+    kind === 'confirmed'
+      ? styles.badgeConfirmed
+      : kind === 'placeholder'
+        ? styles.badgePlaceholder
+        : styles.badgeBlocked
   return <span className={`${styles.badge} ${className}`}>{label}</span>
 }
 
@@ -152,15 +171,15 @@ export function DesignSystemPage() {
           <p className={styles.lede}>
             A working reference for the tokens and components backing the Linus Patient Engagement
             prototype. Structured after mews.design; content pulled from the &quot;Linus Mobile -
-            Design System&quot; and &quot;Linus - Universal Design System&quot; Figma files, plus PDF
-            exports where live Figma access wasn&apos;t available.
+            Design System&quot; and &quot;Linus - Universal Design System&quot; Figma files, plus
+            PDF exports where live Figma access wasn&apos;t available.
           </p>
           <p className={styles.sourceNote}>
             This is a living document for a prototype in progress — sections are explicitly labelled{' '}
-            <Badge kind="confirmed" /> (verified against a real source), <Badge kind="placeholder" />{' '}
-            (a stand-in value, not yet brand-approved), or <Badge kind="blocked" /> (a real value
-            exists in Figma but couldn&apos;t be retrieved yet). See{' '}
-            <a href="#sources">Sources &amp; status</a> for the full breakdown.
+            <Badge kind="confirmed" /> (verified against a real source),{' '}
+            <Badge kind="placeholder" /> (a stand-in value, not yet brand-approved), or{' '}
+            <Badge kind="blocked" /> (a real value exists in Figma but couldn&apos;t be retrieved
+            yet). See <a href="#sources">Sources &amp; status</a> for the full breakdown.
           </p>
         </section>
 
@@ -171,30 +190,46 @@ export function DesignSystemPage() {
           <p className={styles.lede}>
             The core UI palette (&quot;Main app colors&quot; and &quot;Grayscale&quot; — roughly 52
             swatches) lives on the Figma &quot;Color Styles&quot; page but only as raw shapes with
-            label/hex text content; the tooling available in this session couldn&apos;t read that text
-            (see Sources &amp; status). One brand hex is confirmed from a design-rationale note on
-            the same page.
+            label/hex text content; the tooling available in this session couldn&apos;t read that
+            text (see Sources &amp; status). One brand hex is confirmed from a design-rationale note
+            on the same page.
           </p>
 
           <h3>Brand</h3>
-          <Swatches items={[{ name: 'Primary Blue', hex: '#087DAE', note: 'Confirmed — cited directly in Figma design notes as the primary interaction color' }]} />
+          <Swatches
+            items={[
+              {
+                name: 'Primary Blue',
+                hex: '#087DAE',
+                note: 'Confirmed — cited directly in Figma design notes as the primary interaction color',
+              },
+            ]}
+          />
 
           <h3>
             Semantic text colors <Badge kind="blocked" />
           </h3>
-          <p className={styles.sourceNote}>Token names are confirmed; hex values are not yet retrievable.</p>
+          <p className={styles.sourceNote}>
+            Token names are confirmed; hex values are not yet retrievable.
+          </p>
           <Swatches items={SEMANTIC_TEXT_TOKENS.map((name) => ({ name }))} placeholder />
 
           <h3>
             Data visualization / charts <Badge kind="confirmed" />
           </h3>
-          <p className={styles.sourceNote}>Published Figma styles under &quot;Sequential Graphs&quot; — hex is embedded directly in the style name.</p>
+          <p className={styles.sourceNote}>
+            Published Figma styles under &quot;Sequential Graphs&quot; — hex is embedded directly in
+            the style name.
+          </p>
           <Swatches items={CHART_SEQUENTIAL} />
 
           <h3>
             Main app colors &amp; grayscale (52 swatches) <Badge kind="blocked" />
           </h3>
-          <p className={styles.sourceNote}>Placeholder grid below stands in for the real palette until it can be exported or read live from Figma.</p>
+          <p className={styles.sourceNote}>
+            Placeholder grid below stands in for the real palette until it can be exported or read
+            live from Figma.
+          </p>
           <Swatches
             items={Array.from({ length: 6 }, (_, i) => ({ name: `Unresolved swatch ${i + 1}` }))}
             placeholder
@@ -210,37 +245,70 @@ export function DesignSystemPage() {
             provisional token set (<code>src/tokens/typography.ts</code>), used only to prove the
             theming pipeline end to end.
           </p>
-          <div className={styles.typeSample} style={{ fontSize: defaultTypography.size2xl, fontWeight: defaultTypography.weightBold }}>
+          <div
+            className={styles.typeSample}
+            style={{
+              fontSize: defaultTypography.size2xl,
+              fontWeight: defaultTypography.weightBold,
+            }}
+          >
             Heading 2XL
             <span className={styles.typeMeta}>
               {defaultTypography.size2xl} / {defaultTypography.weightBold}
             </span>
           </div>
-          <div className={styles.typeSample} style={{ fontSize: defaultTypography.sizeXl, fontWeight: defaultTypography.weightBold }}>
+          <div
+            className={styles.typeSample}
+            style={{ fontSize: defaultTypography.sizeXl, fontWeight: defaultTypography.weightBold }}
+          >
             Heading XL
             <span className={styles.typeMeta}>
               {defaultTypography.sizeXl} / {defaultTypography.weightBold}
             </span>
           </div>
-          <div className={styles.typeSample} style={{ fontSize: defaultTypography.sizeLg, fontWeight: defaultTypography.weightMedium }}>
+          <div
+            className={styles.typeSample}
+            style={{
+              fontSize: defaultTypography.sizeLg,
+              fontWeight: defaultTypography.weightMedium,
+            }}
+          >
             Heading LG
             <span className={styles.typeMeta}>
               {defaultTypography.sizeLg} / {defaultTypography.weightMedium}
             </span>
           </div>
-          <div className={styles.typeSample} style={{ fontSize: defaultTypography.sizeMd, fontWeight: defaultTypography.weightRegular }}>
+          <div
+            className={styles.typeSample}
+            style={{
+              fontSize: defaultTypography.sizeMd,
+              fontWeight: defaultTypography.weightRegular,
+            }}
+          >
             Body MD
             <span className={styles.typeMeta}>
               {defaultTypography.sizeMd} / {defaultTypography.weightRegular}
             </span>
           </div>
-          <div className={styles.typeSample} style={{ fontSize: defaultTypography.sizeSm, fontWeight: defaultTypography.weightRegular }}>
+          <div
+            className={styles.typeSample}
+            style={{
+              fontSize: defaultTypography.sizeSm,
+              fontWeight: defaultTypography.weightRegular,
+            }}
+          >
             Body SM
             <span className={styles.typeMeta}>
               {defaultTypography.sizeSm} / {defaultTypography.weightRegular}
             </span>
           </div>
-          <div className={styles.typeSample} style={{ fontSize: defaultTypography.sizeXs, fontWeight: defaultTypography.weightRegular }}>
+          <div
+            className={styles.typeSample}
+            style={{
+              fontSize: defaultTypography.sizeXs,
+              fontWeight: defaultTypography.weightRegular,
+            }}
+          >
             Caption XS
             <span className={styles.typeMeta}>
               {defaultTypography.sizeXs} / {defaultTypography.weightRegular}
@@ -250,7 +318,9 @@ export function DesignSystemPage() {
 
         <section id="spacing" className={styles.section}>
           <h2>Spacing &amp; layout</h2>
-          <p className={styles.lede}>4px-base spacing scale and the three responsive breakpoints used across the prototype.</p>
+          <p className={styles.lede}>
+            4px-base spacing scale and the three responsive breakpoints used across the prototype.
+          </p>
           <table>
             <thead>
               <tr>
@@ -330,10 +400,18 @@ export function DesignSystemPage() {
             <button type="button" className={styles.previewPrimary}>
               Default
             </button>
-            <button type="button" className={styles.previewPrimary} style={{ filter: 'brightness(0.85)' }}>
+            <button
+              type="button"
+              className={styles.previewPrimary}
+              style={{ filter: 'brightness(0.85)' }}
+            >
               Pressed
             </button>
-            <button type="button" className={`${styles.previewPrimary} ${styles.previewDisabled}`} disabled>
+            <button
+              type="button"
+              className={`${styles.previewPrimary} ${styles.previewDisabled}`}
+              disabled
+            >
               Disabled
             </button>
           </div>
@@ -360,7 +438,9 @@ export function DesignSystemPage() {
               </tr>
             </tbody>
           </table>
-          <p className={styles.sourceNote}>Height is fixed per size; width is variable (content-driven) above the stated minimum.</p>
+          <p className={styles.sourceNote}>
+            Height is fixed per size; width is variable (content-driven) above the stated minimum.
+          </p>
 
           <h3>Icon positions</h3>
           <ul className={styles.calloutList}>
@@ -375,8 +455,8 @@ export function DesignSystemPage() {
             Gap vs. this repo&apos;s implementation <Badge kind="blocked" />
           </h3>
           <p>
-            The current <code>Atom/Button</code> component (<code>src/components/atoms/Button</code>)
-            only implements a single filled/outline/danger set with no size, icon-slot, or
+            The current <code>Atom/Button</code> component (<code>src/components/atoms/Button</code>
+            ) only implements a single filled/outline/danger set with no size, icon-slot, or
             pressed-state props. Closing that gap is out of scope for this reference page — tracked
             as follow-up work in WI-0002.
           </p>
@@ -398,7 +478,10 @@ export function DesignSystemPage() {
                 <td>
                   <Badge kind="confirmed" />
                 </td>
-                <td>Figma design-rationale text, &quot;Linus - Universal Design System&quot; Color Styles page</td>
+                <td>
+                  Figma design-rationale text, &quot;Linus - Universal Design System&quot; Color
+                  Styles page
+                </td>
               </tr>
               <tr>
                 <td>Semantic text tokens (names)</td>
@@ -419,7 +502,10 @@ export function DesignSystemPage() {
                 <td>
                   <Badge kind="blocked" />
                 </td>
-                <td>Exists in Figma; hex sits in text-layer content not exposed by the metadata API, and live-selection tools returned no selection in this session</td>
+                <td>
+                  Exists in Figma; hex sits in text-layer content not exposed by the metadata API,
+                  and live-selection tools returned no selection in this session
+                </td>
               </tr>
               <tr>
                 <td>Typography scale</td>
@@ -440,11 +526,15 @@ export function DesignSystemPage() {
                 <td>
                   <Badge kind="confirmed" />
                 </td>
-                <td>Figma &quot;Buttons&quot; page + PDF export (<code>pdf/Buttons.pdf</code>)</td>
+                <td>
+                  Figma &quot;Buttons&quot; page + PDF export (<code>pdf/Buttons.pdf</code>)
+                </td>
               </tr>
             </tbody>
           </table>
-          <p className={styles.sourceNote}>Full write-up: docs/work-items/WI-0002-design-system-reference-page.md</p>
+          <p className={styles.sourceNote}>
+            Full write-up: docs/work-items/WI-0002-design-system-reference-page.md
+          </p>
         </section>
       </main>
     </div>
