@@ -59,7 +59,10 @@ function Home() {
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      {/* Every entry that mounts <App/> is served under /web/ (see vite.config.ts's three
+          rollupOptions.input entries and src/main.tsx) — basename must match, or no Route
+          ever matches the real browser pathname and the app silently renders nothing. */}
+      <BrowserRouter basename="/web">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/design-system" element={<DesignSystemPage />} />
