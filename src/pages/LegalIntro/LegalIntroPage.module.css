@@ -1,0 +1,34 @@
+.fadeTitle {
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+}
+
+/* Keeps LegalLayout's default gray paragraph-style subtitle — just adds the fade-in. */
+.fadeSubtitle {
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.fadeField {
+  align-self: stretch;
+  max-width: 320px;
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.fadeButton {
+  align-self: flex-end;
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

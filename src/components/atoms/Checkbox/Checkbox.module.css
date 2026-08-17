@@ -1,0 +1,96 @@
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  cursor: pointer;
+}
+
+.item input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin: 0;
+  border-radius: var(--radius-sm, 8px);
+  border: 2px solid var(--color-border-strong, #81909c);
+  background: var(--color-surface, #fff);
+  position: relative;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.item input[type='checkbox']:hover {
+  border-color: var(--color-text-secondary, #5b6b79);
+}
+
+.item input[type='checkbox']:checked,
+.item input[type='checkbox']:indeterminate {
+  background: var(--color-primary, #087dae);
+  border-color: var(--color-primary, #087dae);
+}
+
+.item input[type='checkbox']:checked:hover,
+.item input[type='checkbox']:indeterminate:hover {
+  background: var(--color-primary-hover, #065e83);
+  border-color: var(--color-primary-hover, #065e83);
+}
+
+.item input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-on-primary, #fff);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.item input[type='checkbox']:indeterminate::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 10px;
+  height: 2px;
+  background: var(--color-on-primary, #fff);
+}
+
+.error input[type='checkbox'] {
+  border-color: var(--color-border-danger, #dc2626);
+}
+
+.item input[type='checkbox']:disabled {
+  border-color: var(--color-border-disabled, #eff0f2);
+  cursor: not-allowed;
+}
+.item input[type='checkbox']:disabled:checked,
+.item input[type='checkbox']:disabled:indeterminate {
+  background: var(--color-border-disabled, #eff0f2);
+  border-color: var(--color-border-disabled, #eff0f2);
+}
+.item input[type='checkbox']:disabled:checked::after,
+.item input[type='checkbox']:disabled:indeterminate::after {
+  border-color: var(--color-surface, #fff);
+  background: var(--color-surface, #fff);
+}
+
+.item input[type='checkbox']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
+}
+
+.label {
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.item:has(input:disabled) .label {
+  color: var(--color-text-tertiary, #94a3ad);
+}

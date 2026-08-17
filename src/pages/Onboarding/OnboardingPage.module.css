@@ -1,0 +1,90 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg, 24px);
+}
+
+.nameRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg, 24px);
+}
+
+@media (min-width: 480px) {
+  .nameRow {
+    flex-direction: row;
+  }
+
+  .nameRow > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.submit {
+  align-self: flex-end;
+  margin-top: var(--space-sm, 8px);
+}
+
+/* Resets the browser's default fieldset chrome (border/padding/min-width) so this reads as
+   a plain grouped section, not a boxed-in form control — the legend alone carries the
+   "these three fields are one question" relationship. */
+.dobFieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm, 8px);
+}
+
+/* Shared by the "What's your name?" <h2> and the "When were you born?" <legend> — docs/
+   design.md's headline-5-semibold, a new tier added specifically for this: headline-4 (the
+   previous smallest headline) and even paragraph-4 both read as too large here, so
+   headline-5 (18px) was added as a genuinely smaller title style rather than reusing a
+   generic body/paragraph token for something that still needs to read as a title. */
+.sectionTitle {
+  margin: 0 0 var(--space-sm, 8px);
+  padding: 0;
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.dobRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg, 24px);
+}
+
+@media (min-width: 480px) {
+  .dobRow {
+    flex-direction: row;
+  }
+
+  .dobRow > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Cascades in the same rhythm as Terms of Use / Privacy Policy / Consent — see
+   src/pages/cascade.ts. */
+.reveal {
+  opacity: 0;
+  animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

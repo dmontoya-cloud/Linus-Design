@@ -1,0 +1,22 @@
+{
+  "description": "Baseline snapshot used to diff docs/design.md and docs/design.html against the last successful push to Figma. Updated after every sync. Not a source of truth itself — docs/design.md is.",
+  "figmaFiles": {
+    "designSystem": {
+      "name": "Linus Health — Design System",
+      "fileKey": "E4lFZqPmiDDZ56ilsPQAo7",
+      "url": "https://www.figma.com/design/E4lFZqPmiDDZ56ilsPQAo7"
+    },
+    "prototype": {
+      "name": "Linus Health — Prototype",
+      "fileKey": "vk2nA9XMZoRPWdzJhYObdT",
+      "url": "https://www.figma.com/design/vk2nA9XMZoRPWdzJhYObdT",
+      "mirrors": "tokens only (Color, Primitives, Spacing, Radius variable collections + text/effect styles) — not components"
+    }
+  },
+  "lastSync": {
+    "date": "2026-08-12",
+    "designMdSha256": "2ecd7c0160e9db0d01b0bafcdbaef512a2d748cc5200745ddd5c111c3cdac8ce",
+    "designHtmlSha256": "9d0c8d85031547ebe720fd9b55099a15ff1dd99e581300bfd26f14407ca34005",
+    "note": "Baseline established after the initial full Figma build — both files matched docs/design.md's full spec (all 16 documented components) as of this commit."
+  }
+}

@@ -24,3 +24,16 @@ if (!window.matchMedia) {
     dispatchEvent: () => false,
   })
 }
+
+// jsdom doesn't implement <dialog>'s showModal()/close() at all — polyfill just
+// enough (toggle the `open` attribute, fire the native `close` event) for
+// components built on native <dialog> (e.g. Modal) to be testable.
+if (!HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+    this.setAttribute('open', '')
+  }
+  HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
+    this.removeAttribute('open')
+    this.dispatchEvent(new Event('close'))
+  }
+}
