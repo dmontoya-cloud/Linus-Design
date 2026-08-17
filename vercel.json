@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/web/:path*", "destination": "/web/index.html" },
+    { "source": "/ios/:path*", "destination": "/ios/index.html" },
+    { "source": "/android/:path*", "destination": "/android/index.html" }
+  ]
+}

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Logo } from '@/components/atoms/Logo'
 import styles from './SettingUpPage.module.css'
 
 /** Total time this screen stays up before handing off to /onboarding. */
@@ -25,7 +24,6 @@ export function SettingUpPage() {
   return (
     <main className={styles.page}>
       <div className={styles.content}>
-        <Logo className={styles.logo} />
         <div className={styles.spinnerWrap}>
           <div className={styles.spinnerPulse}>
             <div className={styles.spinnerRing} aria-hidden="true" />
