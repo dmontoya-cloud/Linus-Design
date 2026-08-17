@@ -2,19 +2,22 @@ import { useEffect } from 'react'
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Routes, Route, Link } from 'react-router-dom'
+import { MemoryRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { axe } from 'vitest-axe'
 import { AuthProvider, useAuth } from '@/auth'
 import { LanguageProvider } from '@/language'
 import { OnboardingPage } from './OnboardingPage'
 
-function DashboardProbe() {
-  const { profile } = useAuth()
-  return (
-    <p>
-      Profile name: {profile ? `${profile.firstName} ${profile.lastName}` : 'none'}
-    </p>
-  )
+interface RegistrationState {
+  firstName: string
+  lastName: string
+  dateOfBirth: string
+}
+
+function GenderIdentityProbe() {
+  const location = useLocation()
+  const state = location.state as RegistrationState | null
+  return <p>Registration state: {state ? `${state.firstName} ${state.lastName} ${state.dateOfBirth}` : 'none'}</p>
 }
 
 /** Test-only harness — sets AuthContext's `preferredName` and offers a link onward, standing
@@ -40,7 +43,7 @@ function renderOnboardingPage({ preferredName }: { preferredName?: string } = {}
           <Routes>
             <Route path="/legal-intro-stub" element={<LegalIntroStub name={preferredName ?? ''} />} />
             <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route path="/dashboard" element={<DashboardProbe />} />
+            <Route path="/gender-identity" element={<GenderIdentityProbe />} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>
@@ -88,12 +91,12 @@ describe('OnboardingPage', () => {
     expect(firstNameField).toHaveValue('Ada')
   })
 
-  it('saves the profile and navigates to /dashboard on the happy path', async () => {
+  it('hands off first name, last name, and date of birth to /gender-identity on the happy path', async () => {
     const user = userEvent.setup()
     renderOnboardingPage()
     await fillHappyPath(user)
     await user.click(screen.getByRole('button', { name: 'Continue' }))
-    expect(screen.getByText('Profile name: Ada Lovelace')).toBeInTheDocument()
+    expect(screen.getByText('Registration state: Ada Lovelace 1988-01-01')).toBeInTheDocument()
   })
 
   it('does not navigate when required fields are left empty', async () => {

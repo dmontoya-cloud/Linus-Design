@@ -9,6 +9,8 @@ const testProfile: Profile = {
   firstName: 'Ada',
   lastName: 'Lovelace',
   dateOfBirth: '1988-01-01',
+  gender: 'female',
+  sexAssignedAtBirth: 'female',
 }
 
 function Consumer() {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -37,6 +37,17 @@ describe('LegalIntroPage', () => {
     ).toBeInTheDocument()
     expect(screen.getByLabelText('How should we call you?')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: "Let's go" })).toBeInTheDocument()
+  })
+
+  it('lists the three things being agreed to', () => {
+    renderLegalIntroPage()
+    // "listitem" doesn't support name-from-content in the ARIA spec, so <li> items have no
+    // computed accessible name — assert on text content within the list instead.
+    const list = screen.getByRole('list')
+    expect(within(list).getByText('Terms of Use')).toBeInTheDocument()
+    expect(within(list).getByText('Privacy Policy')).toBeInTheDocument()
+    expect(within(list).getByText('Consent')).toBeInTheDocument()
+    expect(list.children).toHaveLength(3)
   })
 
   it('swaps the greeting to the typed name live, and back when cleared', async () => {

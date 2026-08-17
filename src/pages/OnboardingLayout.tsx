@@ -5,10 +5,10 @@ import { LanguageToggle } from '@/components/atoms/LanguageToggle'
 import { useLanguage } from '@/language'
 import styles from './OnboardingLayout.module.css'
 
-/** Total steps in the intended flow — Registration, Assessment, Report. Login, Terms of
- * Use, Privacy Policy, and Consent are all part of the pre-registration legal flow and
- * carry LegalLayout's own, separate 3-step progress bar instead of this one. */
-export const ONBOARDING_TOTAL_STEPS = 3
+/** Total steps in the intended flow — Registration, Gender & Identity, Assessment, Report.
+ * Login, Terms of Use, Privacy Policy, and Consent are all part of the pre-registration
+ * legal flow and carry LegalLayout's own, separate 3-step progress bar instead of this one. */
+export const ONBOARDING_TOTAL_STEPS = 4
 
 interface OnboardingLayoutProps {
   step: number

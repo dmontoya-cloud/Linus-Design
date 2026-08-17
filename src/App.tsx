@@ -12,6 +12,7 @@ import { LegalIntroPage } from '@/pages/LegalIntro/LegalIntroPage'
 import { TermsOfUsePage } from '@/pages/TermsOfUse/TermsOfUsePage'
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicy/PrivacyPolicyPage'
 import { OnboardingPage } from '@/pages/Onboarding/OnboardingPage'
+import { GenderIdentityPage } from '@/pages/GenderIdentity/GenderIdentityPage'
 import { ConsentPage } from '@/pages/Consent/ConsentPage'
 import { SettingUpPage } from '@/pages/SettingUp/SettingUpPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
@@ -20,15 +21,19 @@ import './App.css'
 /**
  * Login → Verify Email (magic-link mock) → Legal Intro → Terms of Use →
  * Privacy Policy → Consent → Setting Up (spinner) → Onboarding (registration)
- * → Dashboard are real screens, gated by AuthContext's mock auth. Legal
- * Intro is a brief, conversational heads-up ("you'll need to agree to some
- * things") before the three-step Terms/Privacy/Consent flow, not a step of
- * its own. Terms/Privacy/Consent all sit before registration — agree to the
- * legal stuff first, then give assessment consent, then fill in your
- * profile; Setting Up is a brief non-interactive beat between consenting and
- * landing on the registration form. Paywall/Assessment/Report are still
- * PoD-4 stubs, as are History/Settings (reachable only from Dashboard's own
- * nav, not listed in this funnel).
+ * → Gender & Identity → Dashboard are real screens, gated by AuthContext's
+ * mock auth. Legal Intro is a brief, conversational heads-up ("you'll need
+ * to agree to some things") before the three-step Terms/Privacy/Consent
+ * flow, not a step of its own. Terms/Privacy/Consent all sit before
+ * registration — agree to the legal stuff first, then give assessment
+ * consent, then fill in your profile; Setting Up is a brief non-interactive
+ * beat between consenting and landing on the registration form. Registration
+ * and Gender & Identity together make up the Profile: Registration collects
+ * name/date of birth and passes it forward in router state, Gender &
+ * Identity collects gender/sex assigned at birth and saves the whole thing
+ * at once. Paywall/Assessment/Report are still PoD-4 stubs, as are
+ * History/Settings (reachable only from Dashboard's own nav, not listed in
+ * this funnel).
  */
 const FUNNEL_STEPS = [
   { path: '/login', label: 'Login' },
@@ -39,6 +44,7 @@ const FUNNEL_STEPS = [
   { path: '/consent', label: 'Consent' },
   { path: '/setting-up', label: 'Setting Up' },
   { path: '/onboarding', label: 'Onboarding' },
+  { path: '/gender-identity', label: 'Gender & Identity' },
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/paywall', label: 'Paywall / Subscription' },
   { path: '/assessment', label: 'Assessment Intro' },
@@ -54,6 +60,7 @@ const REAL_STEP_PATHS = [
   '/consent',
   '/setting-up',
   '/onboarding',
+  '/gender-identity',
   '/dashboard',
 ]
 
@@ -112,8 +119,8 @@ function Home() {
     <main className="screen-placeholder">
       <h1>Linus Patient Engagement — Prototype</h1>
       <p>
-        Login, Legal Intro, Terms of Use, Privacy Policy, Consent, Setting Up, and Onboarding are
-        real. Mock data only.
+        Login, Legal Intro, Terms of Use, Privacy Policy, Consent, Setting Up, Onboarding, and
+        Gender &amp; Identity are real. Mock data only.
       </p>
       <nav aria-label="Phase 1 funnel">
         <ul>
@@ -199,6 +206,14 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <OnboardingPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/gender-identity"
+                element={
+                  <RequireAuth>
+                    <GenderIdentityPage />
                   </RequireAuth>
                 }
               />

@@ -10,6 +10,8 @@ const TEST_PROFILE: Profile = {
   firstName: 'Ada',
   lastName: 'Lovelace',
   dateOfBirth: '1988-01-01',
+  gender: 'female',
+  sexAssignedAtBirth: 'female',
 }
 
 function WithProfile({ children }: { children: ReactNode }) {

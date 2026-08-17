@@ -36,10 +36,12 @@ const MONTHS = [
  * required, so the usual per-field asterisk is suppressed (`hideRequiredMark`) — with
  * nothing optional to contrast against, it wouldn't tell the visitor anything. Fields
  * cascade in the same rhythm as Terms of Use / Privacy Policy / Consent — see
- * src/pages/cascade.ts.
+ * src/pages/cascade.ts. Doesn't call `saveProfile` itself — these fields ride along in
+ * router state to Gender & Identity, which collects the rest of the Profile and saves it
+ * all at once.
  */
 export function OnboardingPage() {
-  const { saveProfile, preferredName } = useAuth()
+  const { preferredName } = useAuth()
   const navigate = useNavigate()
   const [firstName, setFirstName] = useState(() => preferredName ?? '')
   const [lastName, setLastName] = useState('')
@@ -51,8 +53,7 @@ export function OnboardingPage() {
     event.preventDefault()
     if (!month) return
     const dateOfBirth = `${year}-${month}-${day.padStart(2, '0')}`
-    saveProfile({ firstName, lastName, dateOfBirth })
-    navigate('/dashboard')
+    navigate('/gender-identity', { state: { firstName, lastName, dateOfBirth } })
   }
 
   return (

@@ -23,6 +23,7 @@ describe('App', () => {
       'Consent',
       'Setting Up',
       'Onboarding',
+      'Gender & Identity',
       'Dashboard',
       'Paywall / Subscription',
       'Assessment Intro',
@@ -55,7 +56,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
   })
 
-  it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Consent → Setting Up → Onboarding → Dashboard happy path', async () => {
+  it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Consent → Setting Up → Onboarding → Gender & Identity → Dashboard happy path', async () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
@@ -118,6 +119,11 @@ describe('App', () => {
     await user.selectOptions(screen.getByLabelText('Month'), '01')
     await user.type(screen.getByLabelText('Day'), '1')
     await user.type(screen.getByLabelText('Year'), '1988')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(screen.getByRole('heading', { name: 'A bit more about you' })).toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText('Gender'), 'female')
+    await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(screen.getByRole('heading', { name: 'Welcome back, Ada' })).toBeInTheDocument()

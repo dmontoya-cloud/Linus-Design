@@ -1,10 +1,16 @@
 import { createContext } from 'react'
 
+export type Gender = 'female' | 'male' | 'non-binary' | 'prefer-not-to-say'
+
+export type SexAssignedAtBirth = 'female' | 'male'
+
 export interface Profile {
   firstName: string
   lastName: string
   /** ISO yyyy-mm-dd, built from the separate month/day/year fields on Registration. */
   dateOfBirth: string
+  gender: Gender
+  sexAssignedAtBirth: SexAssignedAtBirth
 }
 
 export interface ConsentRecord {

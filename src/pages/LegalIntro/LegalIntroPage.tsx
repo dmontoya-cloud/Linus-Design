@@ -7,6 +7,8 @@ import styles from './LegalIntroPage.module.css'
 
 const DEFAULT_GREETING = "we're glad to have you"
 
+const AGREEMENTS = ['Terms of Use', 'Privacy Policy', 'Consent']
+
 /**
  * Legal Intro — a brief, conversational heads-up shown right after Verify
  * Account, before the three-step Terms of Use / Privacy Policy / Consent
@@ -17,9 +19,12 @@ const DEFAULT_GREETING = "we're glad to have you"
  * <name>" the moment the visitor types their own name into the field below —
  * there's no reliable way to derive a real human name from an email address,
  * so this just asks instead. The name lives in AuthContext (not local state),
- * so Registration's first name field can pre-fill from it later. Its own
- * text fades/rises in on a stagger, the same subtle entrance Verify Account
- * uses for its logo/spinner/message.
+ * so Registration's first name field can pre-fill from it later. Right below
+ * the subtitle, a plain list names the three things that's actually about —
+ * Terms of Use, Privacy Policy, Consent — matching the three-step flow ahead
+ * rather than leaving "a few things" unspecified. Its own text fades/rises
+ * in on a stagger, the same subtle entrance Verify Account uses for its
+ * logo/spinner/message.
  */
 export function LegalIntroPage() {
   const navigate = useNavigate()
@@ -34,6 +39,11 @@ export function LegalIntroPage() {
       titleClassName={styles.fadeTitle}
       subtitleClassName={styles.fadeSubtitle}
     >
+      <ul className={styles.fadeList}>
+        {AGREEMENTS.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
       <div className={styles.fadeField}>
         <Field
           label="How should we call you?"
