@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { Logo } from '@/components/atoms/Logo'
 import { ActivityCard, type Activity } from './ActivityCard'
+import { FullCheckInCard } from './FullCheckInCard'
 import styles from './DashboardPage.module.css'
 
 const NAV_LINKS = [
@@ -87,6 +88,7 @@ export function DashboardPage() {
 
       <main className={styles.content}>
         <h1 className={styles.welcome}>Welcome back, {profile?.firstName ?? 'there'}</h1>
+        <FullCheckInCard />
         <h2 className={styles.copy}>You have {PENDING_ACTIVITIES.length} activities pending.</h2>
         <ul className={styles.activityGrid}>
           {PENDING_ACTIVITIES.map((activity) => (
