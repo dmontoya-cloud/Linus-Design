@@ -6,6 +6,7 @@ export interface SpacingTokens {
   lg: string
   xl: string
   xxl: string
+  xxxl: string
 }
 
 export const defaultSpacing: SpacingTokens = {
@@ -15,6 +16,7 @@ export const defaultSpacing: SpacingTokens = {
   lg: '24px',
   xl: '32px',
   xxl: '48px',
+  xxxl: '64px',
 }
 
 /** Responsive breakpoints (min-width), matching mobile/tablet/desktop from the Figma frames. */

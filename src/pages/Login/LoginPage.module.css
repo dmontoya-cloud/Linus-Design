@@ -1,0 +1,109 @@
+.page {
+  min-height: 100svh;
+  display: flex;
+}
+
+/* flex: 1, no padding and no max-width, so this panel always takes exactly
+   half the page (matching .imagePanel's equal flex: 1) — padding on a
+   flex-basis: 0 item throws off the 50/50 split in this browser engine
+   even with box-sizing: border-box, so both padding and the
+   readable-width cap live on .formContent instead, one layer in. */
+.formPanel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Holds the logo pinned to the top and the rest of the form vertically
+   centered in the space below it — a plain flex column stretched to the
+   panel's full height by .formPanel's align-items: stretch. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 576px;
+  box-sizing: border-box;
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+}
+
+.formContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-md, 16px);
+  text-align: left;
+}
+
+.logo {
+  flex-shrink: 0;
+  margin-bottom: var(--space-lg, 24px);
+}
+
+.title {
+  font-family: var(--font-headline-2-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-2-semibold-size, 2.5rem);
+  font-weight: var(--font-headline-2-semibold-weight, 600);
+  line-height: var(--font-headline-2-semibold-line-height, 1.2);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0 0 var(--space-lg, 24px);
+}
+
+.magicLink {
+  width: 100%;
+  text-align: left;
+}
+
+.magicLinkCopy {
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-secondary, #5b6b79);
+  line-height: 1.5;
+  margin: 0 0 var(--space-md, 16px);
+}
+
+.magicLinkForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 16px);
+}
+
+.magicLinkSubmit {
+  align-self: flex-end;
+}
+
+/* Reserved for a real photo/illustration — a placeholder gradient stands in
+   for now. Only shown from `desktop` (see docs/design.md's breakpoints
+   token) up, where there's enough width for a true 50/50 split; below that
+   the form panel alone fills the screen. */
+.imagePanel {
+  display: none;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding: var(--space-xxl, 48px) var(--space-xl, 32px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .imagePanel {
+    display: block;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-soft, #e6f2f7) 0%,
+      var(--color-secondary-subtle, #bce0a4) 100%
+    );
+  }
+
+  .panel {
+    max-width: 672px;
+    padding: var(--space-xxl, 48px) var(--space-xxl, 48px);
+  }
+}

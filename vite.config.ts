@@ -50,6 +50,11 @@ export default defineConfig({
         web: fileURLToPath(new URL('./web/index.html', import.meta.url)),
         ios: fileURLToPath(new URL('./ios/index.html', import.meta.url)),
         android: fileURLToPath(new URL('./android/index.html', import.meta.url)),
+        // Not a SPA entry — a self-contained static page (docs/design.html, the design
+        // system reference). Registered as a build entry, same as the four above, purely
+        // so it actually lands in dist/docs/design.html for the production build; nothing
+        // in it needs bundling.
+        designSystem: fileURLToPath(new URL('./docs/design.html', import.meta.url)),
       },
     },
   },

@@ -3,9 +3,9 @@
 - **Type:** Feature
 - **PoD:** PoD 0 — repo scaffold
 - **Human Lead:** David
-- **Status:** In progress — build complete locally, pending PR + human review (G2) and merge approval
-- **Feature branch:** feature/0001-repo-ci-scaffold
-- **PR:** not yet opened (no GitHub push access from this environment this session — see CONTRIBUTING.md)
+- **Status:** In progress — pushed to GitHub, CI red (see below), PR not yet opened
+- **Feature branch:** feature/0001-repo-ci-scaffold (pushed; `main` also created from the same commit, not yet protected, still the non-default branch on GitHub)
+- **PR:** not yet opened
 
 ## Acceptance criteria
 
@@ -39,11 +39,29 @@
 - SAST/SCA/secret-scanning tooling choice (CodeQL vs. npm audit gate vs. gitleaks, etc.) —
   PROCESS.md §9.3 lists these as required baseline checks; deferred to avoid guessing at tooling
   preference.
-- Coverage (`npm run test:coverage`) could not be fully re-verified in the build sandbox used to
-  produce this scaffold — file-deletion is restricted there, which appears to make the v8
-  coverage provider's temp-file cleanup hang. Plain `npm test` (17/17 tests) and one earlier
-  coverage run both passed; the config itself is standard and should run normally in GitHub
-  Actions. Re-verify on the first real CI run and flag back if it doesn't.
+
+## CI status (observed, run 30462965122, 2026-07-29T14:51Z)
+
+**Red.** Failed at the "Install dependencies" step (`npm ci`), before lint/typecheck/test/build
+ever ran — none of those steps are verified green in real CI yet, despite passing locally.
+
+Root cause: `npm error npm ci can only install packages when your package.json and
+package-lock.json ... are in sync ... Missing: @emnapi/core@2.0.0-alpha.3 from lock file` —
+the committed `package-lock.json` drifted from `package.json` (a side effect of the sandbox
+environment used to build this scaffold; documented as a known-hang workaround at build time, but
+the resulting lockfile wasn't re-validated with a clean `npm ci` before committing — that check
+should have happened and didn't).
+
+Secondary issue, not yet fatal: the workflow pins `node-version: 20`, but a dependency declares
+`engines: { node: '^22.14.0 || >=24.0.0' }` (`EBADENGINE` warning). GitHub Actions also flagged
+that `actions/checkout@v4`, `actions/setup-node@v4`, and `actions/upload-artifact@v4` are being
+forced onto Node 24 regardless, since Node 20 is deprecated on the runners as of Sept 2025.
+
+**Fix (proposed, not yet applied — needs a decision before I push again):** regenerate
+`package-lock.json` with a clean `npm install` and verify `npm ci` succeeds locally first, and
+bump the workflow's `node-version` to 22 or 24. This is mechanical, but I'm flagging it for your
+sign-off rather than silently pushing a fix to a branch already marked "build complete" — this
+line in this file was itself wrong until this correction.
 
 ## Independent review findings (G3) & remediation (G4)
 

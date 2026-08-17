@@ -241,79 +241,39 @@ export function DesignSystemPage() {
             Typography <Badge kind="placeholder" />
           </h2>
           <p className={styles.lede}>
-            No real Figma type scale has been confirmed yet. The scale below is this repo&apos;s
-            provisional token set (<code>src/tokens/typography.ts</code>), used only to prove the
-            theming pipeline end to end.
+            Not Figma-sourced — this is the founder-decided IBM Plex Sans scale now documented in{' '}
+            <code>docs/design.md</code> (see that file for the full 25-style scale and rationale); a
+            Figma-confirmed type scale is still open, tracked separately in WI-0002.
           </p>
-          <div
-            className={styles.typeSample}
-            style={{
-              fontSize: defaultTypography.size2xl,
-              fontWeight: defaultTypography.weightBold,
-            }}
-          >
-            Heading 2XL
-            <span className={styles.typeMeta}>
-              {defaultTypography.size2xl} / {defaultTypography.weightBold}
-            </span>
-          </div>
-          <div
-            className={styles.typeSample}
-            style={{ fontSize: defaultTypography.sizeXl, fontWeight: defaultTypography.weightBold }}
-          >
-            Heading XL
-            <span className={styles.typeMeta}>
-              {defaultTypography.sizeXl} / {defaultTypography.weightBold}
-            </span>
-          </div>
-          <div
-            className={styles.typeSample}
-            style={{
-              fontSize: defaultTypography.sizeLg,
-              fontWeight: defaultTypography.weightMedium,
-            }}
-          >
-            Heading LG
-            <span className={styles.typeMeta}>
-              {defaultTypography.sizeLg} / {defaultTypography.weightMedium}
-            </span>
-          </div>
-          <div
-            className={styles.typeSample}
-            style={{
-              fontSize: defaultTypography.sizeMd,
-              fontWeight: defaultTypography.weightRegular,
-            }}
-          >
-            Body MD
-            <span className={styles.typeMeta}>
-              {defaultTypography.sizeMd} / {defaultTypography.weightRegular}
-            </span>
-          </div>
-          <div
-            className={styles.typeSample}
-            style={{
-              fontSize: defaultTypography.sizeSm,
-              fontWeight: defaultTypography.weightRegular,
-            }}
-          >
-            Body SM
-            <span className={styles.typeMeta}>
-              {defaultTypography.sizeSm} / {defaultTypography.weightRegular}
-            </span>
-          </div>
-          <div
-            className={styles.typeSample}
-            style={{
-              fontSize: defaultTypography.sizeXs,
-              fontWeight: defaultTypography.weightRegular,
-            }}
-          >
-            Caption XS
-            <span className={styles.typeMeta}>
-              {defaultTypography.sizeXs} / {defaultTypography.weightRegular}
-            </span>
-          </div>
+          {(
+            [
+              ['headline-1-semibold', 'Heading 1'],
+              ['headline-3-semibold', 'Heading 3'],
+              ['headline-5-semibold', 'Heading 5 (section title)'],
+              ['paragraph-4-semibold', 'Body Large'],
+              ['paragraph-2-regular', 'Body Medium'],
+              ['paragraph-1-regular', 'Body Small'],
+              ['label-m-regular', 'Caption'],
+            ] as const
+          ).map(([name, label]) => {
+            const style = defaultTypography.styles[name]
+            return (
+              <div
+                key={name}
+                className={styles.typeSample}
+                style={{
+                  fontFamily: style.fontFamily,
+                  fontSize: style.fontSize,
+                  fontWeight: style.fontWeight,
+                }}
+              >
+                {label}
+                <span className={styles.typeMeta}>
+                  {style.fontSize} / {style.fontWeight} ({name})
+                </span>
+              </div>
+            )
+          })}
         </section>
 
         <section id="spacing" className={styles.section}>

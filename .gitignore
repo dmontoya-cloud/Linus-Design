@@ -14,6 +14,9 @@ dist-ssr
 coverage
 storybook-static
 
+# Claude Code local-only settings (machine-specific permissions, not shared config)
+.claude/settings.local.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

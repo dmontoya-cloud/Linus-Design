@@ -5,6 +5,26 @@
   font-family: var(--font-family, system-ui, sans-serif);
 }
 
+.back-to-start {
+  position: fixed;
+  bottom: var(--space-md, 16px);
+  right: var(--space-md, 16px);
+  z-index: 10;
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-s-regular-size, 0.5625rem);
+  font-weight: var(--font-label-s-regular-weight, 400);
+  letter-spacing: 0.03em;
+  color: var(--color-text-tertiary, #94a3ad);
+  text-decoration: none;
+}
+
+.back-to-start:hover,
+.back-to-start:focus-visible {
+  color: var(--color-text-secondary, #5b6b79);
+  text-decoration: underline;
+}
+
 .screen-placeholder {
   max-width: 480px;
   margin: 0 auto;

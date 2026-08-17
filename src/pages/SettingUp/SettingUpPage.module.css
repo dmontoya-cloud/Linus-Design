@@ -1,0 +1,86 @@
+.page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background, #faf9f7);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl, 32px);
+  text-align: center;
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+}
+
+.logo {
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+}
+
+.spinnerWrap {
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+/* Separate element from spinnerRing so the entrance fade/rise (on
+   spinnerWrap) and the continuous spin (on spinnerRing) each own their own
+   `transform` — stacking both on one element would make the second
+   animation clobber the first instead of composing with it. */
+.spinnerPulse {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinner-breathe 2.4s ease-in-out infinite;
+}
+
+.spinnerRing {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border, #ced3d7);
+  border-top-color: var(--color-primary, #087dae);
+  animation: spinner-spin 0.9s linear infinite;
+}
+
+.message {
+  font-family: var(--font-paragraph-3-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-3-regular-size, 1.1875rem);
+  font-weight: var(--font-paragraph-3-regular-weight, 400);
+  line-height: var(--font-paragraph-3-regular-line-height, 1.5);
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0;
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}

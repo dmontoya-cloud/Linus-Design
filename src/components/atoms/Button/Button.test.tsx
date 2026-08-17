@@ -34,9 +34,42 @@ describe('Button', () => {
     expect(button).toBeDisabled()
   })
 
+  it.each(['primary', 'secondary', 'tertiary', 'danger'] as const)(
+    'renders the %s variant without throwing',
+    (variant) => {
+      render(<Button variant={variant}>Continue</Button>)
+      expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument()
+    },
+  )
+
+  it.each(['lg', 'md', 'sm'] as const)('renders the %s size without throwing', (size) => {
+    render(<Button size={size}>Continue</Button>)
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument()
+  })
+
   it('has no automatically detectable accessibility violations (axe)', async () => {
     const { container } = render(<Button>Continue</Button>)
     const results = await axe(container)
     expect(results.violations).toEqual([])
+  })
+
+  it('shows a spinner and hides the label when loading, and is disabled', () => {
+    render(<Button loading>Continue</Button>)
+    const button = screen.getByRole('button', { name: 'Loading' })
+    expect(button).toBeDisabled()
+    expect(button).toHaveAttribute('aria-busy', 'true')
+    expect(screen.queryByText('Continue')).not.toBeInTheDocument()
+  })
+
+  it('does not fire onClick while loading', async () => {
+    const onClick = vi.fn()
+    const user = userEvent.setup()
+    render(
+      <Button loading onClick={onClick}>
+        Continue
+      </Button>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Loading' }))
+    expect(onClick).not.toHaveBeenCalled()
   })
 })
