@@ -9,28 +9,28 @@ import styles from './ConsentPage.module.css'
 
 const LONG_TEXT = [
   <>
-    <strong>1. How your results are used.</strong> Each check-in you complete adds to your
-    report, which is built to show your own trends over time — how your memory, thinking, and
-    lifestyle answers today compare to your own baseline, not to a pass/fail standard. Nothing
-    about how your results are used changes once you consent here; this just makes that use
-    explicit and on the record.
+    <strong>1. How your results are used.</strong> Each check-in you complete adds to your report,
+    which is built to show your own trends over time — how your memory, thinking, and lifestyle
+    answers today compare to your own baseline, not to a pass/fail standard. Nothing about how your
+    results are used changes once you consent here; this just makes that use explicit and on the
+    record.
   </>,
   <>
-    <strong>2. Storage and security.</strong> Your assessment results are encrypted and stored
-    for as long as your account stays active, so your report can keep reflecting your full
-    history rather than resetting with every check-in.
+    <strong>2. Storage and security.</strong> Your assessment results are encrypted and stored for
+    as long as your account stays active, so your report can keep reflecting your full history
+    rather than resetting with every check-in.
   </>,
   <>
-    <strong>3. Who can access your results.</strong> Only you can see your full results by
-    default. Linus Health will never share your individual results with anyone else — including
-    a doctor, family member, or employer — without your permission, and any sharing you choose is
-    always initiated by you.
+    <strong>3. Who can access your results.</strong> Only you can see your full results by default.
+    Linus Health will never share your individual results with anyone else — including a doctor,
+    family member, or employer — without your permission, and any sharing you choose is always
+    initiated by you.
   </>,
   <>
     <strong>4. This is not a diagnosis.</strong> As covered in the Terms of Use, Thrive does not
-    diagnose, treat, or rule out any condition. Consenting here means you understand your report
-    is a personal insight tool, not a medical result, and that you should bring any health
-    concerns to your doctor directly.
+    diagnose, treat, or rule out any condition. Consenting here means you understand your report is
+    a personal insight tool, not a medical result, and that you should bring any health concerns to
+    your doctor directly.
   </>,
   <>
     <strong>5. Withdrawing consent.</strong> You can withdraw this consent at any time from your

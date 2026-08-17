@@ -94,7 +94,9 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
 
     expect(screen.getByRole('heading', { name: 'Privacy Policy' })).toBeInTheDocument()
-    await user.click(screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }))
+    await user.click(
+      screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }),
+    )
     await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
 
     expect(screen.getByRole('heading', { name: 'Consent' })).toBeInTheDocument()
@@ -111,7 +113,8 @@ describe('App', () => {
     })
 
     await waitFor(
-      () => expect(screen.getByRole('heading', { name: 'Tell us about yourself' })).toBeInTheDocument(),
+      () =>
+        expect(screen.getByRole('heading', { name: 'Tell us about yourself' })).toBeInTheDocument(),
       { timeout: 3000 },
     )
     await user.type(screen.getByLabelText('First name'), 'Ada')

@@ -22,7 +22,7 @@ For each AI-assisted question:
 - Write in the founder’s voice (first person where appropriate)
 - Get better over time — by question ~20, suggestions should be highly personalized
 
------
+---
 
 ## Section 1: About You
 
@@ -42,7 +42,7 @@ For each AI-assisted question:
 - **Ask:** “Give me the quick version — what’s your journey been and what led you to wanting to build something?”
 - **Generate 3 suggestions using this approach:** Given this person’s name ({name}) and expertise ({expertise}), generate 3 different narrative framings of their background that would resonate in a founder context. Each should be 2–3 sentences. Make them substantively different — e.g. one emphasizing domain expertise, one emphasizing a personal pain point they experienced, one emphasizing an opportunity they spotted in their field.
 
------
+---
 
 ## Section 2: Your Purpose
 
@@ -70,7 +70,7 @@ For each AI-assisted question:
 - **Ask:** “What about your background or experience makes you uniquely positioned to solve this problem?”
 - **Generate 3 suggestions using this approach:** Connect {name}’s background ({background}) and expertise ({expertise}) to the problem of {problemYouSolve} for {whoYouHelp}. Generate 3 different “founder-market fit” narratives. Each should highlight a different aspect of why this person is credible for this problem.
 
------
+---
 
 ## Section 3: Your Product
 
@@ -116,7 +116,7 @@ For each AI-assisted question:
 - **Ask:** “What’s the ‘aha’ moment? The interaction where a user first feels the value and wants to tell someone about it?”
 - **Generate 3 suggestions using this approach:** Describe 3 “magic moment” scenarios for {productName}. Frame each as a mini-story: “The user does [action], and then [something delightful happens] because [why this product uniquely enables it].” Must be specific to this product — not generic (“onboarding is smooth”). Each should highlight a different aspect of the product’s value.
 
------
+---
 
 ## Section 4: Your Audience
 
@@ -144,7 +144,7 @@ For each AI-assisted question:
 - **Ask:** “What’s broken about the current options?”
 - **Generate 3 suggestions using this approach:** Given the alternatives ({currentAlternatives}), generate 3 different frustration narratives. Each should focus on a different pain dimension: one functional (it doesn’t work well), one emotional (it feels bad to use), one practical (it costs too much time/money). Be specific and vivid.
 
------
+---
 
 ## Section 5: Business Intent
 
@@ -178,7 +178,7 @@ For each AI-assisted question:
 - **Ask:** “How do you want to get this in front of people?”
 - **Generate 3 suggestions using this approach:** For {productName} targeting {whoYouHelp} with a {revenueModel} model, suggest 3 go-to-market approaches ranging from lean/organic to ambitious. Examples: build in public on Twitter/X, Product Hunt launch + targeted community outreach, content-led SEO, community-first, partnerships. Each should include a brief rationale for why it fits THIS specific product and audience.
 
------
+---
 
 ## Section 6: Brand Voice
 
@@ -196,7 +196,7 @@ This section captures the product's verbal identity — personality and tone. Vi
 - **Ask:** “How should this product talk to its users?”
 - **Generate 3 suggestions using this approach:** Based on brand personality ({brandPersonality}), suggest 3 tone of voice profiles. Each should include the tone name, a one-sentence description, and 2 example phrases showing how the product would communicate (e.g. an error message, a success state, a CTA). Make the examples concrete and noticeably different from each other.
 
------
+---
 
 ## Section 7: Tech Stack
 
@@ -283,7 +283,7 @@ That file is a baseline, not a boundary. Research beyond it (web search) when th
   - For very early prototypes or pure local-only utilities, it's fine to take **None** across the board — say so plainly and move on.
 - **Carry forward:** Record each choice (with a one-line rationale) for the Tech Stack section of `docs/VISION.md`. These flow into the PRD's Dependencies & Integrations and the roadmap's polish/launch phase.
 
------
+---
 
 ## Section 8: Tooling
 
@@ -294,7 +294,7 @@ That file is a baseline, not a boundary. Research beyond it (web search) when th
 - **Options:** Claude Code, Cursor, Windsurf, GitHub Copilot, Other
 - If “Other”: ask “What’s the tool called?”
 
------
+---
 
 ## After Intake Is Complete
 

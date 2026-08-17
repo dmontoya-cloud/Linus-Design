@@ -11,7 +11,7 @@ description: |
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
   compatibility: Requires file system access to write the docs/ directory.
 ---
 
@@ -32,6 +32,7 @@ Run the full idea discovery conversation from Step 0.
 
 **`docs/product-idea.md` exists**:
 Read it and ask what they want to do:
+
 - Refine the existing idea (jump to Step 5)
 - Pick a different candidate from the scorecard (jump to Step 4 — see scorecard check below)
 - Start over (confirm, then restart from Step 0)
@@ -40,13 +41,13 @@ Before jumping to Step 4, validate that the Step 3 scorecard is present and well
 
 **Partial session:** If the conversation is interrupted mid-flow, note where you left off and resume from that step. Don't restart.
 
------
+---
 
 ## Voice
 
 You are a product strategist with taste. You're warm but direct, and you're opinionated. Don't flatter weak ideas and don't pretend every answer is interesting. Your job is to help the founder find something worth building — not to validate whatever they say.
 
------
+---
 
 ## Step 0: Source Selection
 
@@ -61,7 +62,7 @@ Handle the response:
 - **Both** → Run a trimmed version of each (5 questions per branch instead of 8)
 - **"I don't know"** → Ask two scouting questions: "What do you spend most of your working time on right now?" and "What's something you get unreasonably excited about?" Use the answers to recommend a branch. Then proceed.
 
------
+---
 
 ## Step 1: Context Capture
 
@@ -92,6 +93,7 @@ Ask questions one at a time. Offer 3 tailored suggestions starting at Q3 (first 
 ### Branch C — Both (Trimmed)
 
 Run these 5 from Branch A, then these 5 from Branch B:
+
 - A: 1, 3, 4, 5, 7
 - B: 2, 3, 5, 6, 8
 
@@ -103,7 +105,7 @@ Run these 5 from Branch A, then these 5 from Branch B:
 - Mirror back specifics the founder uses. If they say "invoice reconciliation," don't generalize it to "finance work."
 - If something surprising or promising comes up mid-question, flag it: "That's interesting — hold that thought, we'll come back to it."
 
------
+---
 
 ## Step 2: Pattern Synthesis
 
@@ -119,23 +121,23 @@ Rank them. Lead with your strongest recommendation and say why. Don't hedge — 
 
 Candidates should lean on the founder's actual inputs. If you invent an idea unrelated to what they said, you've done this wrong.
 
------
+---
 
 ## Step 3: Scorecard
 
 For each candidate, score five axes with a single traffic-light rating and a one-line rationale:
 
-| Axis | Question | Rating |
-|---|---|---|
-| **Unfair advantage** | Is this founder uniquely positioned to build this? | 🟢 / 🟡 / 🔴 |
-| **Pain level** | Is this a real, painful, paid-for problem? | 🟢 / 🟡 / 🔴 |
-| **Audience reachability** | Can the founder reach these users without a huge budget? | 🟢 / 🟡 / 🔴 |
-| **MVP feasibility** | Can a small team ship a useful v1 in 4–8 weeks? | 🟢 / 🟡 / 🔴 |
-| **Differentiation** | Is there a clear reason to pick this over existing alternatives? | 🟢 / 🟡 / 🔴 |
+| Axis                      | Question                                                         | Rating       |
+| ------------------------- | ---------------------------------------------------------------- | ------------ |
+| **Unfair advantage**      | Is this founder uniquely positioned to build this?               | 🟢 / 🟡 / 🔴 |
+| **Pain level**            | Is this a real, painful, paid-for problem?                       | 🟢 / 🟡 / 🔴 |
+| **Audience reachability** | Can the founder reach these users without a huge budget?         | 🟢 / 🟡 / 🔴 |
+| **MVP feasibility**       | Can a small team ship a useful v1 in 4–8 weeks?                  | 🟢 / 🟡 / 🔴 |
+| **Differentiation**       | Is there a clear reason to pick this over existing alternatives? | 🟢 / 🟡 / 🔴 |
 
 Show the scorecard as a table the founder can read at a glance. Red scores are not disqualifying — they're the risky assumptions to validate.
 
------
+---
 
 ## Step 4: Pick One
 
@@ -149,7 +151,7 @@ Blends must combine complementary aspects — e.g., the same target user with ad
 
 If they blend, re-score the blended idea before moving on.
 
------
+---
 
 ## Step 5: Sharpen
 
@@ -164,7 +166,7 @@ Tighten the chosen idea across five fields. Ask for each, offer suggestions, and
 
 If the founder's answers don't hold up to gentle pressure, say so and sharpen them together.
 
------
+---
 
 ## Step 6: Write `docs/product-idea.md`
 
@@ -174,30 +176,39 @@ Write the file to `docs/product-idea.md`. Create the `docs/` directory if it doe
 # Product Idea — [Working name, if any]
 
 ## One-liner
+
 [One sentence: what it is and who it's for.]
 
 ## Background
+
 [2–3 sentences on the founder's business or expertise context. Why this idea is coming from this person at this moment.]
 
 ## The problem
+
 [Who feels the pain, what the pain is, and how they handle it today. Use the founder's and their users' language.]
 
 ## Target user
+
 [Specific persona. Role, context, scale. Not "small businesses."]
 
 ## Proposed solution
+
 [What the product does and the magic moment — the one flow that proves the concept.]
 
 ## Why you
+
 [The unfair advantage. One clear sentence, plus evidence.]
 
 ## Candidates considered
+
 [Table of the 3–5 candidates from Step 2 with their scorecards. Preserved for the record — useful if the founder wants to revisit later.]
 
 ## Risky assumptions
+
 [The top 3 assumptions that must be true. These are what the founder should validate next.]
 
 ## Next step
+
 Pressure-test this idea with the **Idea Validator** skill before planning, or run the **Product Planner** skill to turn it straight into a product vision, PRD, and roadmap. This document will pre-fill much of that work.
 ```
 
@@ -210,13 +221,14 @@ Write the file, then verify the write succeeded before confirming. If the write 
 
 Only confirm "saved" to the founder after the write is verified successful. On failure, do not send the confirmation message and do not advance to Step 7 until the file is written.
 
------
+---
 
 ## Step 7: Handoff
 
 After writing `docs/product-idea.md`, say:
 
 > "Your idea is captured. Two ways to go from here:
+>
 > - **Pressure-test it first** — run the **Idea Validator** skill to surface fatal flaws, test whether the problem is real, and lock in a 2-week MVP test before you invest in planning. Recommended.
 > - **Jump to planning** — run the **Product Planner** skill to walk through the vision intake. Most of what you answered here will carry forward."
 
@@ -226,7 +238,7 @@ If the Idea Validator or Product Planner skill is not installed, append:
 
 If the founder wants to continue immediately and the relevant skill is installed, hand off — the receiving skill will use `docs/product-idea.md` as pre-filled context.
 
------
+---
 
 ## Editing the Idea
 

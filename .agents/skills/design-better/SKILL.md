@@ -4,7 +4,7 @@ description: Use when the user is building or refactoring UI in their product co
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.1"
+  version: '1.1'
   compatibility: Reads `docs/design.md` when present; otherwise falls back to the codebase's existing design tokens/conventions. No required documents or other skills.
 ---
 
@@ -26,7 +26,7 @@ A craft layer for any coding agent generating or reviewing UI. Style is owned by
 
 2. **Confirm scope and weight.** Restate the surface (signup / dashboard / chat / settings / detail / marketing) and which heuristic categories will dominate — a signup leans on Forms + States + Accessibility + Microcopy; a data dashboard leans on Hierarchy + IA + Cognitive Load; an AI chat leans on the AI-product subset.
 
-3. **Generate or review using both layers.** The style source (`docs/design.md` tokens, or the codebase conventions) for every visual decision; the heuristics catalogue and the Laws of UX for every craft decision. Cite heuristics by number and laws by name in reviews (*"H22 — disabled instead of erroring after submit"*; *"Hick's Law — too many options in one step"*).
+3. **Generate or review using both layers.** The style source (`docs/design.md` tokens, or the codebase conventions) for every visual decision; the heuristics catalogue and the Laws of UX for every craft decision. Cite heuristics by number and laws by name in reviews (_"H22 — disabled instead of erroring after submit"_; _"Hick's Law — too many options in one step"_).
 
 4. **Pre-flight checklist before delivering:**
    - Every interactive element has default, hover/focus-visible, active, disabled, and loading (where async) states.
@@ -171,7 +171,7 @@ Each entry: number (cite in reviews) + short name + one-line rule + code action.
 
 ## The Laws of UX
 
-The 50 heuristics above are the actionable checklist; the Laws of UX below are the psychological principles behind them — drawn from [lawsofux.com](https://lawsofux.com/). Apply them where relevant, especially the ones with no direct heuristic. Cite them by name in reviews (*"Hick's Law — too many options in one step"*). Where a heuristic already operationalizes a law, the `↔ H#` cross-reference points to it — treat the two as one rule seen from two angles: the law is the *why*, the heuristic is the *check*.
+The 50 heuristics above are the actionable checklist; the Laws of UX below are the psychological principles behind them — drawn from [lawsofux.com](https://lawsofux.com/). Apply them where relevant, especially the ones with no direct heuristic. Cite them by name in reviews (_"Hick's Law — too many options in one step"_). Where a heuristic already operationalizes a law, the `↔ H#` cross-reference points to it — treat the two as one rule seen from two angles: the law is the _why_, the heuristic is the _check_.
 
 ### Perception & grouping — how users visually parse a layout
 

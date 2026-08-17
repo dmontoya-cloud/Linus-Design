@@ -51,9 +51,7 @@ export function LegalLayout({
       </div>
       <div className={styles.content}>
         <h1 className={[styles.title, titleClassName].filter(Boolean).join(' ')}>{title}</h1>
-        <p className={[styles.subtitle, subtitleClassName].filter(Boolean).join(' ')}>
-          {subtitle}
-        </p>
+        <p className={[styles.subtitle, subtitleClassName].filter(Boolean).join(' ')}>{subtitle}</p>
         {children}
       </div>
     </main>

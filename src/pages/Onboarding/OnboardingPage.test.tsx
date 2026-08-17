@@ -17,7 +17,12 @@ interface RegistrationState {
 function GenderIdentityProbe() {
   const location = useLocation()
   const state = location.state as RegistrationState | null
-  return <p>Registration state: {state ? `${state.firstName} ${state.lastName} ${state.dateOfBirth}` : 'none'}</p>
+  return (
+    <p>
+      Registration state:{' '}
+      {state ? `${state.firstName} ${state.lastName} ${state.dateOfBirth}` : 'none'}
+    </p>
+  )
 }
 
 /** Test-only harness — sets AuthContext's `preferredName` and offers a link onward, standing
@@ -41,7 +46,10 @@ function renderOnboardingPage({ preferredName }: { preferredName?: string } = {}
       <AuthProvider>
         <MemoryRouter initialEntries={[preferredName ? '/legal-intro-stub' : '/onboarding']}>
           <Routes>
-            <Route path="/legal-intro-stub" element={<LegalIntroStub name={preferredName ?? ''} />} />
+            <Route
+              path="/legal-intro-stub"
+              element={<LegalIntroStub name={preferredName ?? ''} />}
+            />
             <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/gender-identity" element={<GenderIdentityProbe />} />
           </Routes>

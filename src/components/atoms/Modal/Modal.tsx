@@ -48,7 +48,12 @@ export function Modal({ open, onClose, title, size = 'md', children }: ModalProp
         <h3 className={styles.title} id={titleId}>
           {title}
         </h3>
-        <button type="button" className={styles.closeButton} aria-label="Close dialog" onClick={onClose}>
+        <button
+          type="button"
+          className={styles.closeButton}
+          aria-label="Close dialog"
+          onClick={onClose}
+        >
           &times;
         </button>
       </div>

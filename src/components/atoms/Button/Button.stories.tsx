@@ -19,7 +19,10 @@ const meta = {
   },
   args: { onClick: fn(), children: 'Continue' },
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'tertiary', 'danger', 'outline'] },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'tertiary', 'danger', 'outline'],
+    },
     size: { control: 'select', options: ['lg', 'md', 'sm'] },
   },
 } satisfies Meta<typeof Button>

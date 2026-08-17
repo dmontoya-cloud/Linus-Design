@@ -39,9 +39,13 @@ Use the exact heading structure specified below.
 ## 1. Overview
 
 ### Product Summary
+
 ### Objective
+
 ### Market Differentiation
+
 ### Magic Moment
+
 ### Success Criteria
 ```
 
@@ -55,7 +59,7 @@ Use the exact heading structure specified below.
 
 **Success Criteria:** Measurable technical criteria for “done.” E.g. “Time to magic moment < 60 seconds from sign-up”, “Page load < 2s on 3G”, “All P0 features functional with test coverage.”
 
------
+---
 
 ### 2. Technical Architecture
 
@@ -63,11 +67,17 @@ Use the exact heading structure specified below.
 ## 2. Technical Architecture
 
 ### Architecture Overview
+
 ### Chosen Stack
+
 ### Stack Integration Guide
+
 ### Repository Structure
+
 ### Infrastructure & Deployment
+
 ### Security Considerations
+
 ### Cost Estimate
 ```
 
@@ -75,16 +85,16 @@ Use the exact heading structure specified below.
 
 **Chosen Stack:** A table listing every layer of the stack from the intake:
 
-|Layer   |Choice                     |Rationale                     |
-|--------|---------------------------|------------------------------|
-|Frontend|{techStack.frontend.choice}|{techStack.frontend.rationale}|
-|Backend |{techStack.backend.choice} |{techStack.backend.rationale} |
-|Database|{techStack.database.choice}|{techStack.database.rationale}|
-|Auth    |{techStack.auth.choice}    |{techStack.auth.rationale}    |
-|Payments|{techStack.payments.choice}|{techStack.payments.rationale}|
-|Analytics|{techStack.analytics.choice}|{techStack.analytics.rationale}|
-|Email   |{techStack.email.choice}   |{techStack.email.rationale}   |
-|Error tracking|{techStack.errorTracking.choice}|{techStack.errorTracking.rationale}|
+| Layer          | Choice                           | Rationale                           |
+| -------------- | -------------------------------- | ----------------------------------- |
+| Frontend       | {techStack.frontend.choice}      | {techStack.frontend.rationale}      |
+| Backend        | {techStack.backend.choice}       | {techStack.backend.rationale}       |
+| Database       | {techStack.database.choice}      | {techStack.database.rationale}      |
+| Auth           | {techStack.auth.choice}          | {techStack.auth.rationale}          |
+| Payments       | {techStack.payments.choice}      | {techStack.payments.rationale}      |
+| Analytics      | {techStack.analytics.choice}     | {techStack.analytics.rationale}     |
+| Email          | {techStack.email.choice}         | {techStack.email.rationale}         |
+| Error tracking | {techStack.errorTracking.choice} | {techStack.errorTracking.rationale} |
 
 Include the analytics, email, and error-tracking rows whenever the founder chose them in intake (defaults: PostHog, Resend, Sentry). Omit any row set to "None."
 
@@ -116,7 +126,7 @@ Adapt this to the actual stack chosen.
 
 **Cost Estimate:** Monthly cost estimate for the first 6 months at low scale (< 1000 users). Break down by service — include the supporting services (analytics, email, error tracking) the founder chose, noting each one's free-tier limit (e.g. PostHog 1M events/mo, Resend 3,000 emails/mo, Sentry's free error quota). Include free tier limits.
 
------
+---
 
 ### 3. Data Model
 
@@ -124,7 +134,9 @@ Adapt this to the actual stack chosen.
 ## 3. Data Model
 
 ### Entity Definitions
+
 ### Relationships
+
 ### Indexes
 ```
 
@@ -160,7 +172,7 @@ CREATE TABLE users (
 
 **Indexes:** Which fields need indexes for query performance. Explain why each index exists.
 
------
+---
 
 ### 4. API Specification
 
@@ -168,6 +180,7 @@ CREATE TABLE users (
 ## 4. API Specification
 
 ### API Design Philosophy
+
 ### Endpoints
 ```
 
@@ -204,7 +217,7 @@ Response 401: { error: "Unauthorized" }
 
 Cover all CRUD operations for each entity, plus any special operations (e.g. batch update, search, export).
 
------
+---
 
 ### 5. User Stories
 
@@ -221,6 +234,7 @@ Group by epic/feature area. Use this format:
 As a {primary persona name}, I want to {action} so that {outcome}.
 
 Acceptance Criteria:
+
 - [ ] Given [context], when [action], then [expected result]
 - [ ] Given [context], when [action], then [expected result]
 - [ ] Edge case: [scenario] → [expected behavior]
@@ -228,7 +242,7 @@ Acceptance Criteria:
 
 Cover all MVP features. Each story should map clearly to functional requirements.
 
------
+---
 
 ### 6. Functional Requirements
 
@@ -243,9 +257,10 @@ Use this format for each requirement:
 Priority: P0
 Description: [What the feature does — specific enough to implement]
 Acceptance Criteria:
+
 - [Criterion 1]
 - [Criterion 2]
-Related Stories: US-001, US-003
+  Related Stories: US-001, US-003
 ```
 
 Priority levels:
@@ -256,7 +271,7 @@ Priority levels:
 
 Organize by feature area. Number sequentially: FR-001 through FR-NNN.
 
------
+---
 
 ### 7. Non-Functional Requirements
 
@@ -264,9 +279,13 @@ Organize by feature area. Number sequentially: FR-001 through FR-NNN.
 ## 7. Non-Functional Requirements
 
 ### Performance
+
 ### Security
+
 ### Accessibility
+
 ### Scalability
+
 ### Reliability
 ```
 
@@ -278,7 +297,7 @@ Each requirement must have a **measurable threshold:**
 - **Scalability:** Support [x] concurrent users on [chosen infrastructure tier]
 - **Reliability:** 99.5% uptime target, graceful degradation when third-party services fail
 
------
+---
 
 ### 8. UI/UX Requirements
 
@@ -292,17 +311,20 @@ For each screen/page:
 
 ```markdown
 ### Screen: [Name]
+
 Route: /path
 Purpose: [What the user does here]
 Layout: [Description of the layout — header, sidebar, main content area, etc.]
 
 States:
+
 - **Empty:** [What shows when there's no data]
 - **Loading:** [Skeleton/spinner approach]
 - **Populated:** [Normal view with data]
 - **Error:** [What shows when something fails]
 
 Key Interactions:
+
 - [Interaction 1: trigger → behavior → result]
 - [Interaction 2: trigger → behavior → result]
 
@@ -313,7 +335,7 @@ Cover: all pages in the MVP, the onboarding flow, settings/account page, and any
 
 If `docs/design.md` does not yet exist, add a note at the top of this section: "Visual tokens not yet defined. Run the Design System skill before implementation begins."
 
------
+---
 
 ### 9. Auth Implementation
 
@@ -321,9 +343,13 @@ If `docs/design.md` does not yet exist, add a note at the top of this section: "
 ## 9. Auth Implementation
 
 ### Auth Flow
+
 ### Provider Configuration
+
 ### Protected Routes
+
 ### User Session Management
+
 ### Role-Based Access
 ```
 
@@ -338,7 +364,7 @@ Specific to the chosen auth provider ({techStack.auth.choice}). Include:
 
 Skip this section entirely if the auth choice is “None.” Instead, add a brief note: “This app does not require authentication. If auth is added later, revisit this section.”
 
------
+---
 
 ### 10. Payment Integration
 
@@ -346,9 +372,13 @@ Skip this section entirely if the auth choice is “None.” Instead, add a brie
 ## 10. Payment Integration
 
 ### Payment Flow
+
 ### Provider Setup
+
 ### Pricing Model Implementation
+
 ### Webhook Handling
+
 ### Subscription Management
 ```
 
@@ -365,7 +395,7 @@ For mobile in-app payments (RevenueCat, Superwall): include App Store Connect / 
 
 Skip this section entirely if the revenue model is “Free” or the payment choice is “None.”
 
------
+---
 
 ### 11. Edge Cases & Error Handling
 
@@ -377,14 +407,15 @@ For each major feature area, list:
 
 ```markdown
 ### Feature: [Name]
-| Scenario | Expected Behavior | Priority |
-|----------|-------------------|----------|
+
+| Scenario          | Expected Behavior        | Priority |
+| ----------------- | ------------------------ | -------- |
 | [What goes wrong] | [What the app should do] | P0/P1/P2 |
 ```
 
 Cover: network failures, auth expiry mid-session, invalid data, concurrent edits, rate limiting, payment failures, empty states, permission denied scenarios.
 
------
+---
 
 ### 12. Dependencies & Integrations
 
@@ -392,7 +423,9 @@ Cover: network failures, auth expiry mid-session, invalid data, concurrent edits
 ## 12. Dependencies & Integrations
 
 ### Core Dependencies
+
 ### Development Dependencies
+
 ### Third-Party Services
 ```
 
@@ -419,7 +452,7 @@ Cover: network failures, auth expiry mid-session, invalid data, concurrent edits
 
 **Third-Party Services:** Any external APIs or services, with: what it’s used for, pricing tier, API key requirements, rate limits. This includes the supporting services chosen in intake — analytics (default PostHog), transactional email (default Resend), and error tracking (default Sentry) — each with its required environment variables (e.g. `POSTHOG_KEY`, `RESEND_API_KEY`, `SENTRY_DSN`) and the events/emails it handles. Skip any the founder set to "None."
 
------
+---
 
 ### 13. Out of Scope
 
@@ -429,7 +462,7 @@ Cover: network failures, auth expiry mid-session, invalid data, concurrent edits
 
 Explicit list from product-vision.md § Product Strategy. For each item: what it is, why it’s excluded, and when to reconsider.
 
------
+---
 
 ### 14. Open Questions
 
@@ -439,7 +472,7 @@ Explicit list from product-vision.md § Product Strategy. For each item: what it
 
 Unresolved technical or product decisions. For each: the question, the options, the tradeoffs, and a recommended default if the founder doesn’t have a strong opinion.
 
------
+---
 
 ## Output Structure Example
 
@@ -447,18 +480,31 @@ Unresolved technical or product decisions. For each: the question, the options, 
 # PRD — {productName}
 
 ## 1. Overview
+
 ## 2. Technical Architecture
+
 ## 3. Data Model
+
 ## 4. API Specification
+
 ## 5. User Stories
+
 ## 6. Functional Requirements
+
 ## 7. Non-Functional Requirements
+
 ## 8. UI/UX Requirements
+
 ## 9. Auth Implementation
+
 ## 10. Payment Integration
+
 ## 11. Edge Cases & Error Handling
+
 ## 12. Dependencies & Integrations
+
 ## 13. Out of Scope
+
 ## 14. Open Questions
 ```
 

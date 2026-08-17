@@ -14,61 +14,61 @@ colors:
   # skips it): added so border-strong can clear the 3:1 non-text-contrast
   # minimum for component boundaries — gray-300 falls short at 2.25:1
   # against white, and gray-500 (5.49:1) reads too dark for a border.
-  blue-50: "#F8FBFD"
-  blue-100: "#E6F2F7"
-  blue-200: "#B5D8E7"
-  blue-300: "#77B8D2"
-  blue-500: "#087DAE"
-  blue-700: "#065E83"
-  blue-800: "#044560"
-  blue-900: "#032C3D"
-  blue-950: "#021923"
-  green-50: "#FBFDFA"
-  green-100: "#F3F9EF"
-  green-200: "#DBEECE"
-  green-300: "#BCE0A4"
-  green-500: "#86C65A"
-  green-700: "#659544"
-  green-800: "#4A6D32"
-  green-900: "#2F4520"
-  green-950: "#1B2812"
-  teal-50: "#F7FCFC"
-  teal-100: "#E6F5F6"
-  teal-200: "#B3E2E3"
-  teal-300: "#73CACB"
-  teal-500: "#009EA1"
-  teal-700: "#007679"
-  teal-800: "#005759"
-  teal-900: "#003738"
-  teal-950: "#002020"
-  orange-50: "#FFFAF9"
-  orange-100: "#FFEEEB"
-  orange-200: "#FECCC2"
-  orange-300: "#FCA28F"
-  orange-500: "#FA5633"
-  orange-700: "#BC4126"
-  orange-800: "#8A2F1C"
-  orange-900: "#581E12"
-  orange-950: "#32110A"
-  purple-50: "#FAFAFE"
-  purple-100: "#EEF0FD"
-  purple-200: "#CDD1F8"
-  purple-300: "#A3ABF2"
-  purple-500: "#5867E8"
-  purple-700: "#424DAE"
-  purple-800: "#303980"
-  purple-900: "#1F2451"
-  purple-950: "#12152E"
-  gray-50: "#FAFBFB"
-  gray-100: "#EFF0F2"
-  gray-200: "#CED3D7"
-  gray-300: "#A5AEB5"
-  gray-400: "#81909C"
-  gray-500: "#5B6B79"
-  gray-700: "#44505B"
-  gray-800: "#323B43"
-  gray-900: "#20252A"
-  gray-950: "#121518"
+  blue-50: '#F8FBFD'
+  blue-100: '#E6F2F7'
+  blue-200: '#B5D8E7'
+  blue-300: '#77B8D2'
+  blue-500: '#087DAE'
+  blue-700: '#065E83'
+  blue-800: '#044560'
+  blue-900: '#032C3D'
+  blue-950: '#021923'
+  green-50: '#FBFDFA'
+  green-100: '#F3F9EF'
+  green-200: '#DBEECE'
+  green-300: '#BCE0A4'
+  green-500: '#86C65A'
+  green-700: '#659544'
+  green-800: '#4A6D32'
+  green-900: '#2F4520'
+  green-950: '#1B2812'
+  teal-50: '#F7FCFC'
+  teal-100: '#E6F5F6'
+  teal-200: '#B3E2E3'
+  teal-300: '#73CACB'
+  teal-500: '#009EA1'
+  teal-700: '#007679'
+  teal-800: '#005759'
+  teal-900: '#003738'
+  teal-950: '#002020'
+  orange-50: '#FFFAF9'
+  orange-100: '#FFEEEB'
+  orange-200: '#FECCC2'
+  orange-300: '#FCA28F'
+  orange-500: '#FA5633'
+  orange-700: '#BC4126'
+  orange-800: '#8A2F1C'
+  orange-900: '#581E12'
+  orange-950: '#32110A'
+  purple-50: '#FAFAFE'
+  purple-100: '#EEF0FD'
+  purple-200: '#CDD1F8'
+  purple-300: '#A3ABF2'
+  purple-500: '#5867E8'
+  purple-700: '#424DAE'
+  purple-800: '#303980'
+  purple-900: '#1F2451'
+  purple-950: '#12152E'
+  gray-50: '#FAFBFB'
+  gray-100: '#EFF0F2'
+  gray-200: '#CED3D7'
+  gray-300: '#A5AEB5'
+  gray-400: '#81909C'
+  gray-500: '#5B6B79'
+  gray-700: '#44505B'
+  gray-800: '#323B43'
+  gray-900: '#20252A'
+  gray-950: '#121518'
 
   # Functional primitives — unlike blue/green/teal/orange/purple/gray above
   # (multi-purpose brand hues reused across several semantic tokens), these
@@ -78,72 +78,72 @@ colors:
   # and so `danger` finally has a real primitive instead of an off-palette
   # placeholder. `warning` deliberately keeps using the `orange` brand
   # primitive — nothing else claims that hue, so there's no collision to fix.
-  success-50: "#F8FBF9"
-  success-100: "#E8F2EC"
-  success-200: "#B9D9C5"
-  success-300: "#7EB994"
-  success-500: "#15803D"
-  success-700: "#10602E"
-  success-800: "#0C4622"
-  success-900: "#072D15"
-  success-950: "#041A0C"
-  danger-50: "#FEF8F8"
-  danger-100: "#FCE9E9"
-  danger-200: "#F4BEBE"
-  danger-300: "#EC8888"
-  danger-500: "#DC2626"
-  danger-700: "#A51C1C"
-  danger-800: "#791515"
-  danger-900: "#4D0D0D"
-  danger-950: "#2C0808"
-  info-50: "#F8FAFE"
-  info-100: "#E9EFFD"
-  info-200: "#BED0F9"
-  info-300: "#87A9F4"
-  info-500: "#2563EB"
-  info-700: "#1C4AB0"
-  info-800: "#143681"
-  info-900: "#0D2352"
-  info-950: "#071430"
+  success-50: '#F8FBF9'
+  success-100: '#E8F2EC'
+  success-200: '#B9D9C5'
+  success-300: '#7EB994'
+  success-500: '#15803D'
+  success-700: '#10602E'
+  success-800: '#0C4622'
+  success-900: '#072D15'
+  success-950: '#041A0C'
+  danger-50: '#FEF8F8'
+  danger-100: '#FCE9E9'
+  danger-200: '#F4BEBE'
+  danger-300: '#EC8888'
+  danger-500: '#DC2626'
+  danger-700: '#A51C1C'
+  danger-800: '#791515'
+  danger-900: '#4D0D0D'
+  danger-950: '#2C0808'
+  info-50: '#F8FAFE'
+  info-100: '#E9EFFD'
+  info-200: '#BED0F9'
+  info-300: '#87A9F4'
+  info-500: '#2563EB'
+  info-700: '#1C4AB0'
+  info-800: '#143681'
+  info-900: '#0D2352'
+  info-950: '#071430'
 
   # Semantic — aliases onto the primitives above (values copied literally
   # since this schema doesn't support in-block token references), plus a
   # handful of values outside the 5-hue brand palette (surface/background/
   # text neutrals).
-  primary: "#087DAE"
-  primary-hover: "#065E83"
-  primary-pressed: "#044560"
-  primary-soft: "#E6F2F7"
-  on-primary: "#FFFFFF"
+  primary: '#087DAE'
+  primary-hover: '#065E83'
+  primary-pressed: '#044560'
+  primary-soft: '#E6F2F7'
+  on-primary: '#FFFFFF'
   # primary-strong/-strong-hover: dedicated, previously-unused steps at the
   # dark end of the blue ramp — for solid high-emphasis CTA button fills,
   # which need more visual weight than `primary` (500) carries as a large
   # fill. Kept distinct from `primary` so that token keeps meaning "the
   # brand's identity color" (links, icons, focus rings) without doubling as
   # "the CTA button color" too.
-  primary-strong: "#032C3D"
-  primary-strong-hover: "#021923"
-  secondary: "#86C65A"
-  secondary-hover: "#659544"
-  secondary-soft: "#F3F9EF"
-  on-secondary: "#1F2A37"
+  primary-strong: '#032C3D'
+  primary-strong-hover: '#021923'
+  secondary: '#86C65A'
+  secondary-hover: '#659544'
+  secondary-soft: '#F3F9EF'
+  on-secondary: '#1F2A37'
   # secondary-subtle: a lighter, previously-unused step on the green ramp —
   # for button fills that want visible presence without `secondary`'s full
   # saturation. `secondary`/`secondary-hover` are reused as-is for this same
   # button's hover/pressed states, so no further new tokens were needed there.
-  secondary-subtle: "#BCE0A4"
-  accent: "#007679"
-  accent-soft: "#E6F5F6"
-  on-accent: "#FFFFFF"
-  surface: "#FFFFFF"
-  background: "#FAF9F7"
-  border-subtle: "#EFF0F2"
-  border: "#CED3D7"
-  border-strong: "#81909C"
-  border-disabled: "#EFF0F2"
-  border-danger: "#DC2626"
-  border-success: "#15803D"
-  border-info: "#2563EB"
+  secondary-subtle: '#BCE0A4'
+  accent: '#007679'
+  accent-soft: '#E6F5F6'
+  on-accent: '#FFFFFF'
+  surface: '#FFFFFF'
+  background: '#FAF9F7'
+  border-subtle: '#EFF0F2'
+  border: '#CED3D7'
+  border-strong: '#81909C'
+  border-disabled: '#EFF0F2'
+  border-danger: '#DC2626'
+  border-success: '#15803D'
+  border-info: '#2563EB'
   # text-primary/-secondary/-tertiary are direct aliases of gray steps
   # (gray-900/-500/-300) — consolidated from independently-set hex values
   # that predated the gray primitive scale, closing a real violation of the
@@ -152,22 +152,22 @@ colors:
   # matches content-primary-disabled exactly; text-secondary already was an
   # exact match for gray-500 (the scale's anchor point) and needed no value
   # change, just this explicit alias declaration.
-  text-primary: "#20252A"
-  text-secondary: "#5B6B79"
-  text-tertiary: "#A5AEB5"
-  text-on-primary: "#FFFFFF"
-  success: "#15803D"
-  success-soft: "#E8F2EC"
-  on-success: "#FFFFFF"
-  warning: "#BC4126"
-  warning-soft: "#FFEEEB"
-  on-warning: "#FFFFFF"
-  danger: "#DC2626"
-  danger-soft: "#FCE9E9"
-  on-danger: "#FFFFFF"
-  info: "#2563EB"
-  info-soft: "#E9EFFD"
-  on-info: "#FFFFFF"
+  text-primary: '#20252A'
+  text-secondary: '#5B6B79'
+  text-tertiary: '#A5AEB5'
+  text-on-primary: '#FFFFFF'
+  success: '#15803D'
+  success-soft: '#E8F2EC'
+  on-success: '#FFFFFF'
+  warning: '#BC4126'
+  warning-soft: '#FFEEEB'
+  on-warning: '#FFFFFF'
+  danger: '#DC2626'
+  danger-soft: '#FCE9E9'
+  on-danger: '#FFFFFF'
+  info: '#2563EB'
+  info-soft: '#E9EFFD'
+  on-info: '#FFFFFF'
 
   # Content — text/icon-specific semantic colors, distinct from the fill
   # colors above. `content-primary`/`content-secondary` are aliases of the
@@ -176,15 +176,15 @@ colors:
   # inventing a one-off gray. The functional trio reuses `danger`/
   # `success`/`warning` as-is, since those were already chosen specifically
   # for text/icon legibility.
-  content-primary: "#20252A"
-  content-primary-disabled: "#A5AEB5"
-  content-primary-inverted: "#FFFFFF"
-  content-secondary: "#5B6B79"
-  content-secondary-disabled: "#CED3D7"
-  content-secondary-inverted: "#EFF0F2"
-  content-danger: "#DC2626"
-  content-success: "#15803D"
-  content-warning: "#BC4126"
+  content-primary: '#20252A'
+  content-primary-disabled: '#A5AEB5'
+  content-primary-inverted: '#FFFFFF'
+  content-secondary: '#5B6B79'
+  content-secondary-disabled: '#CED3D7'
+  content-secondary-inverted: '#EFF0F2'
+  content-danger: '#DC2626'
+  content-success: '#15803D'
+  content-warning: '#BC4126'
 
 typography:
   # IBM Plex Sans (Plus Jakarta Sans for headline-1/2/3 only), 1.200 (minor third)
@@ -385,12 +385,12 @@ alpha:
   # standalone invented rgb triplet. This is how the "every color comes
   # from a primitive" rule accommodates transparency without spawning new
   # primitives for one-off effects.
-  shadow-ink-06: "rgba(32, 37, 42, 0.06)" # gray-900 @ 6%
-  shadow-ink-04: "rgba(32, 37, 42, 0.04)" # gray-900 @ 4%
-  shadow-ink-14: "rgba(32, 37, 42, 0.14)" # gray-900 @ 14%
-  shadow-ink-08: "rgba(32, 37, 42, 0.08)" # gray-900 @ 8%
-  surface-85: "rgba(255, 255, 255, 0.85)" # surface (white) @ 85%
-  scrim-48: "rgba(32, 37, 42, 0.48)" # gray-900 @ 48% — Modal's backdrop
+  shadow-ink-06: 'rgba(32, 37, 42, 0.06)' # gray-900 @ 6%
+  shadow-ink-04: 'rgba(32, 37, 42, 0.04)' # gray-900 @ 4%
+  shadow-ink-14: 'rgba(32, 37, 42, 0.14)' # gray-900 @ 14%
+  shadow-ink-08: 'rgba(32, 37, 42, 0.08)' # gray-900 @ 8%
+  surface-85: 'rgba(255, 255, 255, 0.85)' # surface (white) @ 85%
+  scrim-48: 'rgba(32, 37, 42, 0.48)' # gray-900 @ 48% — Modal's backdrop
 
 motion:
   # Duration + easing, both new — the only foundational token categories this
@@ -409,9 +409,9 @@ motion:
   duration-fast: 120ms
   duration-base: 150ms
   duration-slow: 250ms
-  easing-standard: "cubic-bezier(0.4, 0, 0.2, 1)"
-  easing-enter: "cubic-bezier(0, 0, 0.2, 1)"
-  easing-exit: "cubic-bezier(0.4, 0, 1, 1)"
+  easing-standard: 'cubic-bezier(0.4, 0, 0.2, 1)'
+  easing-enter: 'cubic-bezier(0, 0, 0.2, 1)'
+  easing-exit: 'cubic-bezier(0.4, 0, 1, 1)'
 
 z-index:
   # A layering scale, new — nothing in this doc used z-index before Modal
@@ -438,64 +438,64 @@ components:
   # see the `primary-strong`/`secondary-subtle` note above for the two new
   # ones this introduced.
   button-primary:
-    backgroundColor: "{colors.primary-strong}"
-    textColor: "{colors.on-primary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.primary-strong}'
+    textColor: '{colors.on-primary}'
+    rounded: '{rounded.pill}'
   button-primary-hover:
-    backgroundColor: "{colors.primary-strong-hover}"
-    textColor: "{colors.on-primary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.primary-strong-hover}'
+    textColor: '{colors.on-primary}'
+    rounded: '{rounded.pill}'
   button-primary-pressed:
-    backgroundColor: "{colors.primary-strong-hover}"
-    textColor: "{colors.on-primary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.primary-strong-hover}'
+    textColor: '{colors.on-primary}'
+    rounded: '{rounded.pill}'
     note: "same fill as hover (blue-950 is the ramp's last step); pressed is differentiated by a subtle inset shadow, not a further color change"
   button-primary-disabled:
-    backgroundColor: "{colors.border}"
-    textColor: "{colors.text-tertiary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.border}'
+    textColor: '{colors.text-tertiary}'
+    rounded: '{rounded.pill}'
   button-primary-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}"
-    note: "corrected — the original single-layer {colors.primary-soft} ring measured ~1.1:1 against a white/near-white surface, far under the 3:1 non-text contrast a focus indicator needs to be perceptible (WCAG 1.4.11/2.4.11). No light tint on any ramp clears 3:1 against white, so the fix is structural, not a lighter color: a {colors.surface} gap separates the ring from the element, then a solid {colors.primary} ring (4.61:1 against surface, 4.38:1 against background) carries the actual contrast. Applies to every focus-ring token below."
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
+    note: 'corrected — the original single-layer {colors.primary-soft} ring measured ~1.1:1 against a white/near-white surface, far under the 3:1 non-text contrast a focus indicator needs to be perceptible (WCAG 1.4.11/2.4.11). No light tint on any ramp clears 3:1 against white, so the fix is structural, not a lighter color: a {colors.surface} gap separates the ring from the element, then a solid {colors.primary} ring (4.61:1 against surface, 4.38:1 against background) carries the actual contrast. Applies to every focus-ring token below.'
   button-secondary:
-    backgroundColor: "{colors.secondary-subtle}"
-    textColor: "{colors.on-secondary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.secondary-subtle}'
+    textColor: '{colors.on-secondary}'
+    rounded: '{rounded.pill}'
   button-secondary-hover:
-    backgroundColor: "{colors.secondary}"
-    textColor: "{colors.on-secondary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.secondary}'
+    textColor: '{colors.on-secondary}'
+    rounded: '{rounded.pill}'
   button-secondary-pressed:
-    backgroundColor: "{colors.secondary-hover}"
-    textColor: "{colors.on-secondary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.secondary-hover}'
+    textColor: '{colors.on-secondary}'
+    rounded: '{rounded.pill}'
   button-secondary-disabled:
-    backgroundColor: "{colors.border}"
-    textColor: "{colors.text-tertiary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.border}'
+    textColor: '{colors.text-tertiary}'
+    rounded: '{rounded.pill}'
   button-secondary-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.secondary-hover}"
-    note: "secondary-hover (green-700), not secondary itself (green-500, which is only 2.05:1 against white and fails 3:1) — the same fix as button-primary-focus-ring, applied with the one ramp step on green that actually clears 3:1 (3.36:1 against background, 3.54:1 against surface)."
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.secondary-hover}'
+    note: 'secondary-hover (green-700), not secondary itself (green-500, which is only 2.05:1 against white and fails 3:1) — the same fix as button-primary-focus-ring, applied with the one ramp step on green that actually clears 3:1 (3.36:1 against background, 3.54:1 against surface).'
   button-tertiary:
     backgroundColor: transparent
-    textColor: "{colors.primary-strong}"
-    rounded: "{rounded.sm}"
+    textColor: '{colors.primary-strong}'
+    rounded: '{rounded.sm}'
   button-tertiary-hover:
     backgroundColor: transparent
-    textColor: "{colors.primary-strong}"
+    textColor: '{colors.primary-strong}'
     textDecoration: underline
-    rounded: "{rounded.sm}"
+    rounded: '{rounded.sm}'
   button-tertiary-pressed:
     backgroundColor: transparent
-    textColor: "{colors.primary-strong-hover}"
+    textColor: '{colors.primary-strong-hover}'
     textDecoration: underline
-    rounded: "{rounded.sm}"
+    rounded: '{rounded.sm}'
   button-tertiary-disabled:
     backgroundColor: transparent
-    textColor: "{colors.text-tertiary}"
-    rounded: "{rounded.sm}"
+    textColor: '{colors.text-tertiary}'
+    rounded: '{rounded.sm}'
   button-tertiary-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
   # Danger — a 4th variant, real and shipped in src/components/atoms/Button
   # (Button.module.css) since the src/ port, never back-ported here until
   # now. Kept for genuine destructive actions (delete, remove, revoke) —
@@ -507,37 +507,37 @@ components:
   # not an invented color, so this still satisfies the governing color rule
   # without adding a semantic alias the ramp doesn't otherwise need.
   button-danger:
-    backgroundColor: "{colors.danger}"
-    textColor: "{colors.on-danger}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.danger}'
+    textColor: '{colors.on-danger}'
+    rounded: '{rounded.pill}'
   button-danger-hover:
-    backgroundColor: "{colors.danger}"
-    textColor: "{colors.on-danger}"
-    rounded: "{rounded.pill}"
-    note: "same fill as enabled; a brightness(0.92) filter carries the hover feedback, not a color swap"
+    backgroundColor: '{colors.danger}'
+    textColor: '{colors.on-danger}'
+    rounded: '{rounded.pill}'
+    note: 'same fill as enabled; a brightness(0.92) filter carries the hover feedback, not a color swap'
   button-danger-pressed:
-    backgroundColor: "{colors.danger}"
-    textColor: "{colors.on-danger}"
-    rounded: "{rounded.pill}"
-    note: "brightness(0.85) filter, plus the same inset shadow button-primary-pressed uses"
+    backgroundColor: '{colors.danger}'
+    textColor: '{colors.on-danger}'
+    rounded: '{rounded.pill}'
+    note: 'brightness(0.85) filter, plus the same inset shadow button-primary-pressed uses'
   button-danger-disabled:
-    backgroundColor: "{colors.border}"
-    textColor: "{colors.text-tertiary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.border}'
+    textColor: '{colors.text-tertiary}'
+    rounded: '{rounded.pill}'
   button-danger-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.danger}"
-    note: "danger (4.83:1 against surface) clears 3:1 directly at its 500 step, unlike secondary — no darker substitute needed"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.danger}'
+    note: 'danger (4.83:1 against surface) clears 3:1 directly at its 500 step, unlike secondary — no darker substitute needed'
   button-size-lg:
-    typography: "{typography.button}"
-    padding: "{spacing.md} {spacing.xl}"
+    typography: '{typography.button}'
+    padding: '{spacing.md} {spacing.xl}'
     height: 56px
   button-size-md:
-    typography: "{typography.button}"
-    padding: "{spacing.sm} {spacing.lg}"
+    typography: '{typography.button}'
+    padding: '{spacing.sm} {spacing.lg}'
     height: 48px
   button-size-sm:
-    typography: "{typography.label-l-semibold}"
-    padding: "{spacing.xs} {spacing.md}"
+    typography: '{typography.label-l-semibold}'
+    padding: '{spacing.xs} {spacing.md}'
     height: 40px
   # Field — the shared outlined container behind Input, Select, and Date
   # Picker, plus its persistent label rendered above the field (not
@@ -547,142 +547,142 @@ components:
   # <input type="date">). Supersedes the old flat `input`/`input-focus`/
   # `input-error` set.
   field:
-    backgroundColor: "{colors.surface}"
-    borderColor: "{colors.border-strong}"
-    textColor: "{colors.text-primary}"
-    labelColor: "{colors.text-secondary}"
-    rounded: "{rounded.sm}"
+    backgroundColor: '{colors.surface}'
+    borderColor: '{colors.border-strong}'
+    textColor: '{colors.text-primary}'
+    labelColor: '{colors.text-secondary}'
+    rounded: '{rounded.sm}'
   field-hover:
-    borderColor: "{colors.text-secondary}"
+    borderColor: '{colors.text-secondary}'
   field-focus:
-    borderColor: "{colors.primary}"
-    labelColor: "{colors.primary}"
+    borderColor: '{colors.primary}'
+    labelColor: '{colors.primary}'
   field-error:
-    borderColor: "{colors.border-danger}"
-    labelColor: "{colors.content-danger}"
+    borderColor: '{colors.border-danger}'
+    labelColor: '{colors.content-danger}'
   field-disabled:
-    borderColor: "{colors.border-disabled}"
-    textColor: "{colors.text-tertiary}"
-    labelColor: "{colors.text-tertiary}"
+    borderColor: '{colors.border-disabled}'
+    textColor: '{colors.text-tertiary}'
+    labelColor: '{colors.text-tertiary}'
   field-size-lg:
-    typography: "{typography.paragraph-2-regular}"
-    padding: "0 {spacing.md}"
+    typography: '{typography.paragraph-2-regular}'
+    padding: '0 {spacing.md}'
     height: 56px
   field-size-md:
-    typography: "{typography.paragraph-2-regular}"
-    padding: "0 {spacing.md}"
+    typography: '{typography.paragraph-2-regular}'
+    padding: '0 {spacing.md}'
     height: 48px
   field-size-sm:
-    typography: "{typography.paragraph-1-regular}"
-    padding: "0 {spacing.sm}"
+    typography: '{typography.paragraph-1-regular}'
+    padding: '0 {spacing.sm}'
     height: 40px
   question-card:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.text-primary}"
-    typography: "{typography.paragraph-4-semibold}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.text-primary}'
+    typography: '{typography.paragraph-4-semibold}'
+    rounded: '{rounded.lg}'
+    padding: '{spacing.xl}'
   progress-stepper:
-    backgroundColor: "{colors.border}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.border}'
+    rounded: '{rounded.pill}'
     height: 8px
   progress-stepper-active:
-    backgroundColor: "{colors.primary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.primary}'
+    rounded: '{rounded.pill}'
     height: 8px
   score-card:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.text-primary}"
-    typography: "{typography.headline-1-semibold}"
-    rounded: "{rounded.xl}"
-    padding: "{spacing.xl}"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.text-primary}'
+    typography: '{typography.headline-1-semibold}'
+    rounded: '{rounded.xl}'
+    padding: '{spacing.xl}'
   nav-bar:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.text-secondary}"
-    typography: "{typography.label-l-regular}"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.text-secondary}'
+    typography: '{typography.label-l-regular}'
     height: 64px
   nav-bar-item-active:
-    backgroundColor: "{colors.primary-soft}"
-    textColor: "{colors.primary}"
-    typography: "{typography.label-l-regular}"
-    rounded: "{rounded.md}"
+    backgroundColor: '{colors.primary-soft}'
+    textColor: '{colors.primary}'
+    typography: '{typography.label-l-regular}'
+    rounded: '{rounded.md}'
   badge:
-    backgroundColor: "{colors.primary-soft}"
-    textColor: "{colors.primary}"
-    typography: "{typography.label-m-semibold}"
-    rounded: "{rounded.pill}"
-    padding: "{spacing.xs} {spacing.sm}"
+    backgroundColor: '{colors.primary-soft}'
+    textColor: '{colors.primary}'
+    typography: '{typography.label-m-semibold}'
+    rounded: '{rounded.pill}'
+    padding: '{spacing.xs} {spacing.sm}'
   badge-success:
-    backgroundColor: "{colors.success-soft}"
-    textColor: "{colors.success}"
-    typography: "{typography.label-m-semibold}"
-    rounded: "{rounded.pill}"
-    padding: "{spacing.xs} {spacing.sm}"
+    backgroundColor: '{colors.success-soft}'
+    textColor: '{colors.success}'
+    typography: '{typography.label-m-semibold}'
+    rounded: '{rounded.pill}'
+    padding: '{spacing.xs} {spacing.sm}'
   badge-encouraging:
-    backgroundColor: "{colors.secondary-soft}"
-    textColor: "{colors.secondary}"
-    typography: "{typography.label-m-semibold}"
-    rounded: "{rounded.pill}"
-    padding: "{spacing.xs} {spacing.sm}"
+    backgroundColor: '{colors.secondary-soft}'
+    textColor: '{colors.secondary}'
+    typography: '{typography.label-m-semibold}'
+    rounded: '{rounded.pill}'
+    padding: '{spacing.xs} {spacing.sm}'
   # Radio, Checkbox, Search, Toggle, Progress Bar — every value below is an
   # existing semantic token; nothing new was added to introduce these 5
   # components.
   radio:
-    borderColor: "{colors.border-strong}"
-    backgroundColor: "{colors.surface}"
+    borderColor: '{colors.border-strong}'
+    backgroundColor: '{colors.surface}'
   radio-hover:
-    borderColor: "{colors.text-secondary}"
+    borderColor: '{colors.text-secondary}'
   radio-checked:
-    borderColor: "{colors.primary}"
-    dotColor: "{colors.primary}"
+    borderColor: '{colors.primary}'
+    dotColor: '{colors.primary}'
   radio-checked-hover:
-    borderColor: "{colors.primary-hover}"
-    dotColor: "{colors.primary-hover}"
+    borderColor: '{colors.primary-hover}'
+    dotColor: '{colors.primary-hover}'
   radio-disabled:
-    borderColor: "{colors.border-disabled}"
-    dotColor: "{colors.text-tertiary}"
-    textColor: "{colors.text-tertiary}"
+    borderColor: '{colors.border-disabled}'
+    dotColor: '{colors.text-tertiary}'
+    textColor: '{colors.text-tertiary}'
   radio-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
     note: "corrected — see button-primary-focus-ring's note; the same low-contrast soft-ring defect applied here"
   checkbox:
-    borderColor: "{colors.border-strong}"
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.sm}"
+    borderColor: '{colors.border-strong}'
+    backgroundColor: '{colors.surface}'
+    rounded: '{rounded.sm}'
   checkbox-hover:
-    borderColor: "{colors.text-secondary}"
+    borderColor: '{colors.text-secondary}'
   checkbox-checked:
-    backgroundColor: "{colors.primary}"
-    borderColor: "{colors.primary}"
-    markColor: "{colors.on-primary}"
+    backgroundColor: '{colors.primary}'
+    borderColor: '{colors.primary}'
+    markColor: '{colors.on-primary}'
   checkbox-checked-hover:
-    backgroundColor: "{colors.primary-hover}"
-    borderColor: "{colors.primary-hover}"
+    backgroundColor: '{colors.primary-hover}'
+    borderColor: '{colors.primary-hover}'
   checkbox-error:
-    borderColor: "{colors.border-danger}"
+    borderColor: '{colors.border-danger}'
   checkbox-disabled:
-    borderColor: "{colors.border-disabled}"
-    backgroundColor: "{colors.surface}"
+    borderColor: '{colors.border-disabled}'
+    backgroundColor: '{colors.surface}'
   checkbox-disabled-checked:
-    backgroundColor: "{colors.border-disabled}"
-    markColor: "{colors.surface}"
+    backgroundColor: '{colors.border-disabled}'
+    markColor: '{colors.surface}'
   checkbox-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
   search:
-    backgroundColor: "{colors.surface}"
-    borderColor: "{colors.border-strong}"
-    textColor: "{colors.text-primary}"
-    iconColor: "{colors.text-tertiary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.surface}'
+    borderColor: '{colors.border-strong}'
+    textColor: '{colors.text-primary}'
+    iconColor: '{colors.text-tertiary}'
+    rounded: '{rounded.pill}'
   search-hover:
-    borderColor: "{colors.text-secondary}"
+    borderColor: '{colors.text-secondary}'
   search-focus:
-    borderColor: "{colors.primary}"
-    iconColor: "{colors.primary}"
+    borderColor: '{colors.primary}'
+    iconColor: '{colors.primary}'
   search-disabled:
-    borderColor: "{colors.border-disabled}"
-    textColor: "{colors.text-tertiary}"
-    iconColor: "{colors.text-tertiary}"
+    borderColor: '{colors.border-disabled}'
+    textColor: '{colors.text-tertiary}'
+    iconColor: '{colors.text-tertiary}'
   # search-clear — the trailing clear (×) button that appears once Search
   # has a value. Real bug fixed here: it previously had no documented (or
   # implemented) focus-visible state at all, unlike every other interactive
@@ -690,39 +690,39 @@ components:
   # feedback. It now shares the generic icon-button treatment (hover/focus/
   # disabled) used by Modal's close control below.
   search-clear:
-    iconColor: "{colors.text-tertiary}"
+    iconColor: '{colors.text-tertiary}'
   search-clear-hover:
-    iconColor: "{colors.text-secondary}"
+    iconColor: '{colors.text-secondary}'
   search-clear-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}'
   toggle-off:
-    backgroundColor: "{colors.border-strong}"
-    thumbColor: "{colors.surface}"
+    backgroundColor: '{colors.border-strong}'
+    thumbColor: '{colors.surface}'
   toggle-off-hover:
-    backgroundColor: "{colors.text-secondary}"
+    backgroundColor: '{colors.text-secondary}'
   toggle-on:
-    backgroundColor: "{colors.primary}"
-    thumbColor: "{colors.surface}"
+    backgroundColor: '{colors.primary}'
+    thumbColor: '{colors.surface}'
   toggle-on-hover:
-    backgroundColor: "{colors.primary-hover}"
+    backgroundColor: '{colors.primary-hover}'
   toggle-disabled-off:
-    backgroundColor: "{colors.border-disabled}"
-    thumbColor: "{colors.surface}"
+    backgroundColor: '{colors.border-disabled}'
+    thumbColor: '{colors.surface}'
   toggle-disabled-on:
-    backgroundColor: "{colors.primary-soft}"
-    thumbColor: "{colors.surface}"
+    backgroundColor: '{colors.primary-soft}'
+    thumbColor: '{colors.surface}'
   toggle-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
   progress-bar-track:
-    backgroundColor: "{colors.border}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.border}'
+    rounded: '{rounded.pill}'
     height: 8px
   progress-bar-fill:
-    backgroundColor: "{colors.primary}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.primary}'
+    rounded: '{rounded.pill}'
   progress-bar-fill-success:
-    backgroundColor: "{colors.success}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.success}'
+    rounded: '{rounded.pill}'
   # Textarea — a multi-line variant of the `field` container, not a new
   # container: same colors, same states, same border/label treatment. Two
   # deliberate departures from Input: height isn't pinned to the button
@@ -734,27 +734,27 @@ components:
   # box, so the handle is disabled (`resize: none`) and height stays fixed
   # at whatever `rows` sets.
   textarea:
-    backgroundColor: "{colors.surface}"
-    borderColor: "{colors.border-strong}"
-    textColor: "{colors.text-primary}"
-    labelColor: "{colors.text-secondary}"
-    typography: "{typography.paragraph-2-regular}"
-    rounded: "{rounded.sm}"
+    backgroundColor: '{colors.surface}'
+    borderColor: '{colors.border-strong}'
+    textColor: '{colors.text-primary}'
+    labelColor: '{colors.text-secondary}'
+    typography: '{typography.paragraph-2-regular}'
+    rounded: '{rounded.sm}'
     minHeight: 120px
-    padding: "{spacing.sm} {spacing.md}"
+    padding: '{spacing.sm} {spacing.md}'
     resize: none
   textarea-hover:
-    borderColor: "{colors.text-secondary}"
+    borderColor: '{colors.text-secondary}'
   textarea-focus:
-    borderColor: "{colors.primary}"
-    labelColor: "{colors.primary}"
+    borderColor: '{colors.primary}'
+    labelColor: '{colors.primary}'
   textarea-error:
-    borderColor: "{colors.border-danger}"
-    labelColor: "{colors.content-danger}"
+    borderColor: '{colors.border-danger}'
+    labelColor: '{colors.content-danger}'
   textarea-disabled:
-    borderColor: "{colors.border-disabled}"
-    textColor: "{colors.text-tertiary}"
-    labelColor: "{colors.text-tertiary}"
+    borderColor: '{colors.border-disabled}'
+    textColor: '{colors.text-tertiary}'
+    labelColor: '{colors.text-tertiary}'
   # Tag / Chip — distinct from Badge above: Badge communicates a fixed
   # status the user doesn't control ("New", "Improving"); Tag is a
   # user-manipulable unit — a selected filter, a removable value in a
@@ -763,30 +763,30 @@ components:
   # once selected/active, exactly the same restraint the rest of this
   # system applies to color. Every value is an existing token; nothing new.
   tag:
-    backgroundColor: "{colors.border-subtle}"
-    textColor: "{colors.text-primary}"
-    typography: "{typography.label-l-regular}"
-    rounded: "{rounded.pill}"
-    padding: "{spacing.xs} {spacing.sm}"
+    backgroundColor: '{colors.border-subtle}'
+    textColor: '{colors.text-primary}'
+    typography: '{typography.label-l-regular}'
+    rounded: '{rounded.pill}'
+    padding: '{spacing.xs} {spacing.sm}'
   tag-hover:
-    backgroundColor: "{colors.border}"
+    backgroundColor: '{colors.border}'
   tag-removable-icon:
-    iconColor: "{colors.text-tertiary}"
+    iconColor: '{colors.text-tertiary}'
   tag-removable-icon-hover:
-    iconColor: "{colors.text-secondary}"
+    iconColor: '{colors.text-secondary}'
   tag-selected:
-    backgroundColor: "{colors.primary-soft}"
-    textColor: "{colors.primary}"
-    borderColor: "{colors.primary}"
+    backgroundColor: '{colors.primary-soft}'
+    textColor: '{colors.primary}'
+    borderColor: '{colors.primary}'
   tag-selected-hover:
-    backgroundColor: "{colors.primary-soft}"
-    textColor: "{colors.primary-hover}"
-    borderColor: "{colors.primary-hover}"
+    backgroundColor: '{colors.primary-soft}'
+    textColor: '{colors.primary-hover}'
+    borderColor: '{colors.primary-hover}'
   tag-disabled:
-    backgroundColor: "{colors.border-disabled}"
-    textColor: "{colors.text-tertiary}"
+    backgroundColor: '{colors.border-disabled}'
+    textColor: '{colors.text-tertiary}'
   tag-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}'
   # Modal / Dialog — the highest-value gap in the system: `alpha.scrim-48`
   # and `elevation`'s `shadow-modal` were both already defined (the Shapes
   # section already named `rounded.xl` for "modals, the score card"), but
@@ -801,24 +801,24 @@ components:
   # `motion.easing-enter`/`-exit` — this is the first thing in the system
   # both foundational categories actually back.
   modal-backdrop:
-    backgroundColor: "{alpha.scrim-48}"
+    backgroundColor: '{alpha.scrim-48}'
   modal-panel:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.xl}"
-    elevation: "{elevation.shadow-modal}"
-    padding: "{spacing.xl}"
+    backgroundColor: '{colors.surface}'
+    rounded: '{rounded.xl}'
+    elevation: '{elevation.shadow-modal}'
+    padding: '{spacing.xl}'
   modal-title:
-    textColor: "{colors.text-primary}"
-    typography: "{typography.headline-4-semibold}"
+    textColor: '{colors.text-primary}'
+    typography: '{typography.headline-4-semibold}'
   modal-body:
-    textColor: "{colors.text-secondary}"
-    typography: "{typography.paragraph-2-regular}"
+    textColor: '{colors.text-secondary}'
+    typography: '{typography.paragraph-2-regular}'
   modal-close-icon:
-    iconColor: "{colors.text-tertiary}"
+    iconColor: '{colors.text-tertiary}'
   modal-close-icon-hover:
-    iconColor: "{colors.text-secondary}"
+    iconColor: '{colors.text-secondary}'
   modal-close-focus-ring:
-    ring: "0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}"
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}'
   modal-size-sm:
     maxWidth: 400px
   modal-size-md:
@@ -833,7 +833,7 @@ components:
   # shipped since the prototype session but was never exercised against a
   # real destructive flow either — see the session report's open items).
   modal-confirm-danger-button:
-    ref: "{components.button-danger}"
+    ref: '{components.button-danger}'
 ---
 
 # Engagement app Design System
@@ -861,7 +861,7 @@ Nine hue ramps, each running `50` (lightest tint) through `950` (darkest shade),
 
 Every semantic color is either a direct alias of one primitive step, or, for `warning`, a brand hue (`orange`) that isn't claimed by anything else.
 
-`primary` is `blue-500` (`#087DAE`) — Linus's confirmed brand blue. `secondary` is `green-500` (`#86C65A`) — the confirmed brand green, used as a solid fill color (paired with dark `on-secondary` text, not white — see below). `accent` is `teal-700` (`#007679`), not the brighter `teal-500`: the base teal reads fine as a *background* fill but falls short of AA contrast as small foreground text, so the semantic `accent` token uses the darker, legible step; the brighter `teal-500` primitive is still there directly for anyone building a solid teal fill. `warning` is `orange-700` (`#BC4126`), one step darker than the family's `500` base for the same legibility reason (`orange-500` itself is only 3.3:1 as foreground text — under the 4.5:1 line). Note: `orange-500` was originally `#FAF633`, a color that read as bright yellow rather than orange despite its Figma label; it's since been corrected to `#FA5633`, a true orange-red, and the entire ramp was rederived from that corrected base.
+`primary` is `blue-500` (`#087DAE`) — Linus's confirmed brand blue. `secondary` is `green-500` (`#86C65A`) — the confirmed brand green, used as a solid fill color (paired with dark `on-secondary` text, not white — see below). `accent` is `teal-700` (`#007679`), not the brighter `teal-500`: the base teal reads fine as a _background_ fill but falls short of AA contrast as small foreground text, so the semantic `accent` token uses the darker, legible step; the brighter `teal-500` primitive is still there directly for anyone building a solid teal fill. `warning` is `orange-700` (`#BC4126`), one step darker than the family's `500` base for the same legibility reason (`orange-500` itself is only 3.3:1 as foreground text — under the 4.5:1 line). Note: `orange-500` was originally `#FAF633`, a color that read as bright yellow rather than orange despite its Figma label; it's since been corrected to `#FA5633`, a true orange-red, and the entire ramp was rederived from that corrected base.
 
 `primary-strong` (`blue-900`, `#032C3D`) and `primary-strong-hover` (`blue-950`, `#021923`) exist specifically for the solid, high-emphasis CTA button family below — `primary` itself stays reserved for "the brand's identity color" (links, icons, a focus ring), while these darker, previously-unused ramp steps carry the visual weight a large solid button fill needs. `secondary-subtle` (`green-300`, `#BCE0A4`) is the lighter counterpart on the green ramp, for a button fill with visible presence short of `secondary`'s full saturation; that same button's hover/pressed states reuse `secondary`/`secondary-hover` as-is, so no further new tokens were needed.
 

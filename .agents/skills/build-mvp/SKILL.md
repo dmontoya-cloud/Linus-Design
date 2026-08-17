@@ -4,7 +4,7 @@ description: Use inside a product repository when the user wants the full MVP bu
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Build MVP

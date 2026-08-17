@@ -11,7 +11,7 @@ Default comparison data for the Product Planner tech stack questions. Use these 
 
 When you research, evaluate candidates with the same lens used here: maturity and community size, AI-coding-tool familiarity, integration with the rest of the chosen stack, pricing and free tier, and operational burden for a small team. Present researched options in the same comparison format so the founder can weigh them against the defaults.
 
------
+---
 
 ## Frontend Frameworks
 
@@ -147,7 +147,7 @@ When you research, evaluate candidates with the same lens used here: maturity an
 - ✗ Apps don't follow native platform UI conventions by default
 - **Best for:** Projects that need a single codebase across mobile AND desktop. Not recommended for desktop-only apps — Electron or Tauri are better choices there.
 
------
+---
 
 ## Backend
 
@@ -223,7 +223,7 @@ When you research, evaluate candidates with the same lens used here: maturity an
 - ✗ Separate language from a JS frontend if you go SPA
 - **Best for:** Founders who know Rails, or server-rendered CRUD-heavy products where one framework doing everything is an advantage.
 
------
+---
 
 ## Database
 
@@ -295,7 +295,7 @@ When you research, evaluate candidates with the same lens used here: maturity an
 - ✗ No server-side logic or shared data
 - **Best for:** Mobile apps that are primarily tools (calculators, trackers, utilities), offline-first apps, or MVPs that don't need shared data. Consider adding a backend later if the product grows.
 
------
+---
 
 ## Auth Providers
 
@@ -372,7 +372,7 @@ When you research, evaluate candidates with the same lens used here: maturity an
 - ✗ Can't gate features behind subscription tiers (without device-level checks)
 - **Best for:** Mobile utility apps, offline tools, calculators, single-player experiences, or MVPs testing core value before adding accounts. Can always add auth later.
 
------
+---
 
 ## Payment Providers
 
@@ -460,7 +460,7 @@ For mobile apps distributed through the App Store or Google Play, in-app purchas
 - ✗ Adding payments later requires an app update and review
 - **Best for:** Free utility apps, apps exploring product-market fit before monetizing, or apps monetized through other channels (ads, enterprise contracts, etc.).
 
------
+---
 
 ## Supporting Services
 
@@ -526,7 +526,7 @@ Three services most products want by launch, even though they aren't part of the
 - ✗ Flying blind: no usage data, no error alerts, or manual email wiring later
 - **Best for:** The earliest throwaway prototypes. For anything real, analytics and error tracking are cheap insurance — recommend at least PostHog and Sentry.
 
------
+---
 
 ## Researching Beyond This List
 

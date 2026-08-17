@@ -52,10 +52,14 @@ describe('PrivacyPolicyPage', () => {
   it('leaves Continue disabled from the optional checkbox alone, enables only via the required one, then hands off to /consent', async () => {
     const user = userEvent.setup()
     renderPrivacyPolicyPage()
-    await user.click(screen.getByRole('checkbox', { name: /Send me free, actionable brain health tips/ }))
+    await user.click(
+      screen.getByRole('checkbox', { name: /Send me free, actionable brain health tips/ }),
+    )
     expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeDisabled()
 
-    await user.click(screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }))
+    await user.click(
+      screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }),
+    )
     expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeEnabled()
 
     await user.click(screen.getByRole('button', { name: 'Agree and continue' }))

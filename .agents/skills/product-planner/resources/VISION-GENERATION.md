@@ -34,10 +34,15 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 ## 1. Vision & Mission
 
 ### Vision Statement
+
 ### Mission Statement
+
 ### Founder's Why
+
 ### Core Values
+
 ### Strategic Pillars
+
 ### Success Looks Like
 ```
 
@@ -53,7 +58,7 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 
 **Success Looks Like:** A vivid paragraph describing what this product and business looks like in 12 months if everything goes right. Specific numbers, specific milestones, specific feelings.
 
------
+---
 
 ### 2. User Research
 
@@ -61,11 +66,17 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 ## 2. User Research
 
 ### Primary Persona
+
 ### Secondary Personas
+
 ### Jobs To Be Done
+
 ### Pain Points
+
 ### Current Alternatives & Competitive Landscape
+
 ### Key Assumptions to Validate
+
 ### User Journey Map
 ```
 
@@ -83,7 +94,7 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 
 **User Journey Map:** A narrative walkthrough of the primary persona’s experience from first hearing about the product through becoming a regular user. Include: awareness → consideration → first use → magic moment → habit formation → advocacy. Note emotions and friction points at each stage.
 
------
+---
 
 ### 3. Product Strategy
 
@@ -91,13 +102,21 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 ## 3. Product Strategy
 
 ### Product Principles
+
 ### Market Differentiation
+
 ### Magic Moment Design
+
 ### MVP Definition
+
 ### Explicitly Out of Scope
+
 ### Feature Priority (MoSCoW)
+
 ### Core User Flows
+
 ### Success Metrics
+
 ### Risks
 ```
 
@@ -119,7 +138,7 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 
 **Risks:** 5–8 risks that could derail the product. For each: the risk, its likelihood, its impact, and a mitigation strategy. Include both market risks and execution risks.
 
------
+---
 
 ### 4. Brand Strategy
 
@@ -127,10 +146,15 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 ## 4. Brand Strategy
 
 ### Positioning Statement
+
 ### Brand Personality
+
 ### Voice & Tone Guide
+
 ### Messaging Framework
+
 ### Elevator Pitches
+
 ### Competitive Differentiation Narrative
 ```
 
@@ -146,7 +170,7 @@ Use the exact heading structure below. Write in complete prose paragraphs — av
 
 **Competitive Differentiation Narrative:** Build on the founder’s own words about differentiation. Write a compelling paragraph that a founder could use in a pitch deck or investor conversation. Be specific about what competitors do, what they miss, and why this product’s approach is better.
 
------
+---
 
 ## Visual Design
 
@@ -162,7 +186,7 @@ Visual design tokens (colors, typography, spacing, components, motion) live in `
 
 Do not duplicate or pre-fill design tokens here. The PRD and roadmap will reference `docs/design.md` for implementation values.
 
------
+---
 
 ## Output Structure Example
 
@@ -172,41 +196,70 @@ The final document should follow this header structure exactly:
 # Product Vision — {productName}
 
 ## 1. Vision & Mission
+
 ### Vision Statement
+
 ### Mission Statement
+
 ### Founder's Why
+
 ### Core Values
+
 ### Strategic Pillars
+
 ### Success Looks Like
 
 ## 2. User Research
+
 ### Primary Persona
+
 ### Secondary Personas
+
 ### Jobs To Be Done
+
 ### Pain Points
+
 ### Current Alternatives & Competitive Landscape
+
 ### Key Assumptions to Validate
+
 ### User Journey Map
 
 ## 3. Product Strategy
+
 ### Product Principles
+
 ### Market Differentiation
+
 ### Magic Moment Design
+
 ### MVP Definition
+
 ### Explicitly Out of Scope
+
 ### Feature Priority (MoSCoW)
+
 ### Core User Flows
+
 ### Success Metrics
+
 ### Risks
 
 ## 4. Brand Strategy
+
 ### Positioning Statement
+
 ### Brand Personality
+
 ### Voice & Tone Guide
+
 ### Messaging Framework
+
 ### Elevator Pitches
+
 ### Competitive Differentiation Narrative
 
 ## 5. Visual Design
+
 (Pointer to docs/design.md — see "Visual Design" section above.)
 ```

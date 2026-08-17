@@ -4,7 +4,7 @@ description: Use when the user's product is built (or nearly built) and they wan
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Launch Checklist
@@ -48,7 +48,7 @@ Write the guide to `docs/launch-checklist.md` (create the folder if needed). Str
 **Every step must have:**
 
 - A checkbox, a 🧑/🤖/🤝 marker, and a time estimate.
-- Plain-language instructions. Explain every technical term inline on first use — e.g. *"DNS (the address book that points your domain name at your app's server)"*, *"environment variable (a setting stored outside your code, used for secrets like API keys)"*, *"webhook (a way for one service to automatically notify another when something happens, like a successful payment)"*.
+- Plain-language instructions. Explain every technical term inline on first use — e.g. _"DNS (the address book that points your domain name at your app's server)"_, _"environment variable (a setting stored outside your code, used for secrets like API keys)"_, _"webhook (a way for one service to automatically notify another when something happens, like a successful payment)"_.
 - For 🤖 steps: a ready-to-paste prompt for the coding agent, in a quote block.
 - For 🧑 steps: exactly where to click/go, what they'll be asked for, and any cost.
 - A "**You'll know it worked when...**" line so the founder can verify each step without guessing.

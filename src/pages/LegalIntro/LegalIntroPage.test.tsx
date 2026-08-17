@@ -29,9 +29,7 @@ function renderLegalIntroPage() {
 describe('LegalIntroPage', () => {
   it('greets generically and prompts for a name before any is entered', () => {
     renderLegalIntroPage()
-    expect(
-      screen.getByRole('heading', { name: "Hey, we're glad to have you" }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
     expect(
       screen.getByText('Before we start, we need you to agree to a few things.'),
     ).toBeInTheDocument()
@@ -59,9 +57,7 @@ describe('LegalIntroPage', () => {
     expect(screen.getByRole('heading', { name: 'Hey, Ada' })).toBeInTheDocument()
 
     await user.clear(nameField)
-    expect(
-      screen.getByRole('heading', { name: "Hey, we're glad to have you" }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
   })
 
   it("sends Let's go to /terms whether or not a name was entered", async () => {

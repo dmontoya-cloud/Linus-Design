@@ -4,7 +4,7 @@ description: Use when building features with **Claude Code** in any codebase and
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Claude Code Build Loop

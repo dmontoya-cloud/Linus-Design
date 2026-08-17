@@ -45,7 +45,9 @@ describe('GenderIdentityPage', () => {
   it('renders both section titles and selects, with a disabled Continue button', () => {
     renderGenderIdentityPage()
     expect(screen.getByRole('heading', { name: 'How do you identify?' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'What sex were you assigned at birth?' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'What sex were you assigned at birth?' }),
+    ).toBeInTheDocument()
     expect(screen.getByLabelText('Gender')).toBeInTheDocument()
     expect(screen.getByLabelText('Sex assigned at birth')).toBeInTheDocument()
   })

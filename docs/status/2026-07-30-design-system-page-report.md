@@ -14,18 +14,18 @@ pulling real content from the "Linus Mobile - Design System" Figma file.
 ## What we found in Figma
 
 The Figma file turned out to be much thinner than expected — it really only has a cover slide and
-a page of buttons. The full color palette lives in a *different* Figma file ("Linus - Universal
+a page of buttons. The full color palette lives in a _different_ Figma file ("Linus - Universal
 Design System"), and even there, most of the ~52 core color swatches couldn't be read by the
 tools available in this session (their values sit inside the design file in a way the automated
 tools can't extract, and the live "click to select in Figma" method didn't work either, in two
 different files). Rather than guess at colors, the page shows those as an honest "not available
 yet" placeholder.
 
-What *did* come through as real, verified data:
+What _did_ come through as real, verified data:
 
 - The primary brand blue, `#087DAE`, confirmed from a designer's note in the file.
 - A full set of chart/graph colors with real values.
-- Nine color *names* used for text (like "Text/Success", "Text/Warning") — names only, not the
+- Nine color _names_ used for text (like "Text/Success", "Text/Warning") — names only, not the
   actual colors yet.
 - A complete, real button system: 4 styles (Primary, Secondary, Specialty, Text), 3 states
   (Default, Pressed, Disabled), 2 sizes, and 5 icon-placement options — sourced from the Figma

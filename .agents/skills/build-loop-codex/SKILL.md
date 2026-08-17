@@ -4,7 +4,7 @@ description: Use when building features with **Codex** (OpenAI Codex CLI) in any
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Codex Build Loop

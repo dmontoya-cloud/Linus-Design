@@ -6,7 +6,8 @@
  */
 const FONT_FAMILY = "'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
 /** headline-1/2/3 only — the largest titles get a distinct accent face; everything else stays on FONT_FAMILY. */
-const FONT_FAMILY_SERIF = "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+const FONT_FAMILY_SERIF =
+  "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
 
 export interface TextStyle {
   fontFamily: string

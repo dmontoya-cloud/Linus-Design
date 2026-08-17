@@ -91,7 +91,9 @@ export function VerifyEmailPage() {
             </div>
             <div className={styles.resendRow}>
               <p className={styles.resendHint} role="status" aria-live="polite">
-                {secondsLeft > 0 ? `You can request a new link in ${secondsLeft}s` : "Didn't get it?"}
+                {secondsLeft > 0
+                  ? `You can request a new link in ${secondsLeft}s`
+                  : "Didn't get it?"}
               </p>
               {secondsLeft <= 0 && (
                 <Button

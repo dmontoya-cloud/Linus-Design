@@ -29,8 +29,8 @@ Every task MUST use this exact format:
 
 ```markdown
 - [ ] **TASK-001** — Description of what to do
-  Files: `file1.ts`, `file2.ts`, `file3.tsx`
-  Notes: Specific implementation details, config values, gotchas.
+      Files: `file1.ts`, `file2.ts`, `file3.tsx`
+      Notes: Specific implementation details, config values, gotchas.
 ```
 
 The three-line structure is: checkbox + ID + description, indented file list, indented notes.
@@ -57,7 +57,7 @@ Each task should represent roughly one coding agent session — approximately 15
 
 The founder’s magic moment (from `docs/VISION.md` and `product-vision.md`) must be achievable by the end of the core MVP phase(s). If it can’t be, the task breakdown needs restructuring until it can. This is the most important design constraint for the roadmap.
 
------
+---
 
 ## Section Requirements
 
@@ -75,7 +75,7 @@ The founder’s magic moment (from `docs/VISION.md` and `product-vision.md`) mus
 
 The status line should be set to `0/Y tasks complete` and `Phase 0` when first generated. The coding agent updates this as it works.
 
------
+---
 
 ### 1. Build Philosophy
 
@@ -92,7 +92,7 @@ The status line should be set to `0/Y tasks complete` and `Phase 0` when first g
 
 Adapt these principles to the specific product but keep all 6. Add 1–2 product-specific principles if relevant.
 
------
+---
 
 ### 2. Phases
 
@@ -116,15 +116,17 @@ Every phase MUST follow this structure:
 > **Goal:** One sentence describing what's true when this phase is complete.
 
 **Reference sections — read these before starting this phase:**
+
 - PRD: § Technical Architecture, § Data Model, § Auth Implementation
 - Design: docs/design.md (token YAML + Components prose)
 
 **Phase prompt — give this to your coding agent:**
+
 > "Read docs/product-roadmap.md and find Phase {N}. Then read only the Reference sections listed above from docs/prd.md, docs/product-vision.md, and docs/design.md. Continue from the first unchecked task. After each task, mark it complete in the roadmap. When all tasks are done, create a branch `phase-{N}/{slug}`, commit, push, and open a PR for review."
 
 - [ ] **TASK-XXX** — ...
-  Files: ...
-  Notes: ...
+      Files: ...
+      Notes: ...
 ```
 
 Every phase needs:
@@ -215,7 +217,7 @@ Name phases by what they accomplish, not by number alone. Good names tell the fo
 - Phase 5: Polish & Launch Prep (error handling, empty states, landing page, analytics)
 - Phase 6: Post-Launch (P2 features, advanced search, integrations, scale)
 
------
+---
 
 ### Phase Review Workflow
 
@@ -226,6 +228,7 @@ After completing every phase, the coding agent pushes the work as a pull request
 Create a branch per phase: `phase-{N}/{phase-slug}` — the slug is the phase title in lowercase kebab-case.
 
 Examples:
+
 - `phase-0/foundation-and-setup`
 - `phase-1/core-search-experience`
 - `phase-3/payments-and-subscription-gating`
@@ -255,6 +258,7 @@ Body:
 The PR should be reviewed by an automated review agent before merging. Recommend [CodeRabbit](https://coderabbit.ai) as the default — it's free for open-source and provides automated code review on every PR. Other options (GitHub Copilot code review, Codacy, etc.) work too. The key is that each phase gets external eyes before the next phase builds on top of it.
 
 If the review agent flags issues:
+
 1. Address the feedback in follow-up commits on the same branch
 2. Let the review agent re-review
 3. Merge only when the review is clean
@@ -267,7 +271,7 @@ If the user isn't using GitHub or doesn't want PR-based review, skip this step. 
 
 When generating `docs/product-roadmap.md`, include a brief note about the Phase Review workflow in the Build Philosophy section and in the Agent Session Guide. The phase prompt templates should remind the user to open a PR after completing the phase. This way the generated roadmap itself documents the workflow, not just these instructions.
 
------
+---
 
 ### 3. Agent Session Guide
 
@@ -294,19 +298,23 @@ When generating `docs/product-roadmap.md`, include a brief note about the Phase 
 ### Prompt Templates
 
 **Starting a new phase:**
+
 > "Read docs/product-roadmap.md and find the current phase. Read only the Reference sections listed for that phase from docs/prd.md, docs/product-vision.md, and docs/design.md. Start working on the first unchecked task. After completing each task, update the checkbox to [x] in the roadmap file. Continue through the phase."
 
 **Resuming after a break:**
+
 > "Read docs/product-roadmap.md. Find where we left off (first unchecked task). Read only the Reference sections listed for the current phase from docs/prd.md, docs/product-vision.md, and docs/design.md. Continue from the first unchecked task."
 
 **After completing a phase:**
+
 > "Phase [N] is complete. Create a branch called phase-{N}/{slug}, commit all work, push, and open a PR targeting main. Title it 'Phase {N}: {Title}' and include the phase goal and completed task count in the body."
 
 **Fixing an issue:**
+
 > "There's a problem with [description]. Read the relevant section of docs/prd.md for the expected behavior and fix it. Don't mark any new tasks complete until the fix is verified."
 ```
 
------
+---
 
 ## Task Writing Guidelines
 
@@ -322,7 +330,7 @@ When writing individual tasks, follow these principles:
 
 **Reference PRD sections:** When a task implements a specific feature, reference the PRD section. E.g. “Notes: Implement per FR-012 in docs/prd.md. See § UI/UX Requirements > Dashboard for layout spec.”
 
------
+---
 
 ## Output Structure
 
@@ -336,12 +344,15 @@ When writing individual tasks, follow these principles:
 **Current Phase:** Phase 0 — {Foundation Title}
 
 ## Build Philosophy
+
 ...
 
 ## Phase 0: {Foundation Title}
+
 > Goal: ...
 
 Reference sections:
+
 - PRD: § ...
 - Vision: § ...
 
@@ -349,28 +360,33 @@ Reference sections:
 
 - [ ] **TASK-001** — ...
 - [ ] **TASK-002** — ...
-...
+      ...
 
 ## Phase 1: {Core MVP Title}
+
 > Goal: ...
 
 Reference sections:
+
 - PRD: § ...
 - Vision: § ...
 
 > Phase prompt: ...
 
 - [ ] **TASK-0XX** — ...
-...
+      ...
 
 ## Phase {N}: {Title}
+
 ...
 (as many phases as the project requires)
 ...
 
 ## Phase {last}: {Polish / Post-Launch Title}
+
 ...
 
 ## Agent Session Guide
+
 ...
 ```

@@ -4,7 +4,7 @@ description: Use when building features with **Cursor** in any codebase and the 
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Cursor Build Loop

@@ -30,23 +30,22 @@ const SECTIONS = [
 const FULL_TEXT = [
   <>
     <strong>1. Information we collect.</strong> We collect your name, email, date of birth,
-    education level, and sex assigned at birth, plus the answers and results from every check-in
-    you complete. Gender is the only optional field, and it is used solely to determine how we
-    address you — it has no effect on your results. We do not collect any other personal
-    information beyond what is described here.
+    education level, and sex assigned at birth, plus the answers and results from every check-in you
+    complete. Gender is the only optional field, and it is used solely to determine how we address
+    you — it has no effect on your results. We do not collect any other personal information beyond
+    what is described here.
   </>,
   <>
     <strong>2. Why we need each piece.</strong> Your name and email attach your identity to your
-    report so it can be returned to you. Your date of birth, education level, and sex assigned
-    at birth are used only to place your results in an appropriate comparison group, since brain
-    health check-ins are read relative to people of similar age, background, and education.
+    report so it can be returned to you. Your date of birth, education level, and sex assigned at
+    birth are used only to place your results in an appropriate comparison group, since brain health
+    check-ins are read relative to people of similar age, background, and education.
   </>,
   <>
-    <strong>3. How we use your information.</strong> Your information is used only to generate
-    your report and to operate the Thrive service itself — for example, to remember your
-    check-in history so your report can show change over time. We do not use your information to
-    build an advertising profile, and we do not use it for any purpose you have not agreed to
-    here.
+    <strong>3. How we use your information.</strong> Your information is used only to generate your
+    report and to operate the Thrive service itself — for example, to remember your check-in history
+    so your report can show change over time. We do not use your information to build an advertising
+    profile, and we do not use it for any purpose you have not agreed to here.
   </>,
   <>
     <strong>4. We never sell your information.</strong> We do not sell your information to
@@ -55,37 +54,37 @@ const FULL_TEXT = [
     Section 1, without exception.
   </>,
   <>
-    <strong>5. Who sees it.</strong> Access to your information is limited to our team members
-    who need it to operate Thrive, and to trusted service providers bound by contract to the
-    same protections described in this policy. We disclose your information to anyone else —
-    including a doctor or family member — only at your explicit request.
+    <strong>5. Who sees it.</strong> Access to your information is limited to our team members who
+    need it to operate Thrive, and to trusted service providers bound by contract to the same
+    protections described in this policy. We disclose your information to anyone else — including a
+    doctor or family member — only at your explicit request.
   </>,
   <>
     <strong>6. Data retention.</strong> We keep your information for as long as your account is
-    active, so that your report can reflect your full check-in history. If you close your
-    account, we delete your personal information within a reasonable period, except where we are
-    required to retain it for a legal or regulatory reason.
+    active, so that your report can reflect your full check-in history. If you close your account,
+    we delete your personal information within a reasonable period, except where we are required to
+    retain it for a legal or regulatory reason.
   </>,
   <>
     <strong>7. Your rights and choices.</strong> You can review, correct, or request deletion of
     your information at any time by contacting us. If you opted in to marketing emails, you can
-    unsubscribe at any time using the link in any email we send, with no effect on your ability
-    to use Thrive.
+    unsubscribe at any time using the link in any email we send, with no effect on your ability to
+    use Thrive.
   </>,
   <>
-    <strong>8. Children&apos;s privacy.</strong> Thrive is intended for adults aged 18 and over
-    and is not directed at children. We do not knowingly collect information from anyone under
-    18; if we learn that we have, we will delete it promptly.
+    <strong>8. Children&apos;s privacy.</strong> Thrive is intended for adults aged 18 and over and
+    is not directed at children. We do not knowingly collect information from anyone under 18; if we
+    learn that we have, we will delete it promptly.
   </>,
   <>
     <strong>9. Changes to this policy.</strong> If we make a material change to how we collect or
-    use your information, we will let you know before it takes effect, the same way we would for
-    a material change to our Terms of Use.
+    use your information, we will let you know before it takes effect, the same way we would for a
+    material change to our Terms of Use.
   </>,
   <>
-    <strong>10. Contact us.</strong> If you have questions about this policy or want to exercise
-    any of the rights described in Section 7, you can reach us through the contact details
-    provided in the Thrive app or on the Linus Health website.
+    <strong>10. Contact us.</strong> If you have questions about this policy or want to exercise any
+    of the rights described in Section 7, you can reach us through the contact details provided in
+    the Thrive app or on the Linus Health website.
   </>,
 ]
 

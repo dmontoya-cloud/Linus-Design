@@ -13,7 +13,7 @@ description: |
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
   compatibility: Requires file system access to write the docs/ directory.
 ---
 
@@ -47,7 +47,7 @@ If the user just says "help me plan something" or "I want to build something", u
 
 **Validation nudge:** If `docs/product-idea.md` exists but `docs/validation-report.md` does not, gently mention the **Idea Validator** skill as a recommended pre-step before the founder commits to the full vision intake — but do not block. Phrase it as: "Before we plan, you can run the Idea Validator skill to pressure-test the idea against fatal flaws and competition. It usually surfaces a sharper target user and a smaller MVP. Want to validate first, or proceed straight to the intake?" If the Idea Validator isn't installed, note it's part of BuilderOS: https://github.com/BuildGreatProducts/builder-os. Honor the founder's choice without arguing.
 
------
+---
 
 ## Vision Intake
 
@@ -137,7 +137,7 @@ See [resources/INTAKE-GUIDE.md](./resources/INTAKE-GUIDE.md) for the complete qu
 
 > "Your vision is captured and validated. Ready to generate your product documents? This will create product-vision.md, prd.md, and product-roadmap.md in the docs/ directory."
 
------
+---
 
 ## Document Generation
 
@@ -224,8 +224,8 @@ See [resources/ROADMAP-GENERATION.md](./resources/ROADMAP-GENERATION.md) for the
 
 ```markdown
 - [ ] **TASK-001** — Description of what to do
-  Files: `file1.ts`, `file2.ts`
-  Notes: Specific implementation details, config values, gotchas.
+      Files: `file1.ts`, `file2.ts`
+      Notes: Specific implementation details, config values, gotchas.
 ```
 
 When the coding agent completes a task, it MUST change `- [ ]` to `- [x]` in this file. The roadmap is a living document that tracks progress.
@@ -252,13 +252,14 @@ When all three documents are written, tell the user:
 > Visual design tokens (colors, typography, spacing, components) live in `docs/design.md`. Run the **Design System** skill with image references when you're ready to lock in the look and feel.
 >
 > Next steps:
+>
 > - Run the **Design System** skill to generate your design system from image references
 > - Run a **Build Loop** skill to start building from the roadmap
 > - Run the **Launch Checklist** skill when you're ready to go live"
 
 If any of those skills aren't installed, note they're all part of BuilderOS: https://github.com/BuildGreatProducts/builder-os.
 
------
+---
 
 ## Refreshing Documents
 

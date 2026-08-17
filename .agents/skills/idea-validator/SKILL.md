@@ -13,7 +13,7 @@ description: |
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.0"
+  version: '1.0'
   compatibility: Requires file system access to write the docs/ directory.
 ---
 
@@ -36,6 +36,7 @@ Validate runs **one mode**: a full diagnosis. Every run produces the complete re
 ## Entry Paths
 
 **`docs/product-idea.md` exists** (the common path after Idea):
+
 1. Read the file.
 2. Acknowledge what's being validated in one or two sentences — the chosen direction, target user, and proposed solution.
 3. Ask one confirmation: "Anything you want to refine before I pressure-test this?" Make any edits the founder requests, then run validation.
@@ -50,7 +51,7 @@ Wait for the response. If any of the three are missing or vague, ask once for th
 
 **Partial session:** If a previous Validate run produced a `docs/validation-report.md` and the founder is back, ask whether they want to re-validate (idea has changed), refine the existing report, or move on to planning.
 
------
+---
 
 ## Voice
 
@@ -60,38 +61,40 @@ You test real behavior, not compliments or hypothetical intent. When you write d
 
 You do not invent market data. If a market fact would change the verdict and you don't know it, name it as something to verify rather than guessing.
 
------
+---
 
 ## Step 1: Identify the Core Assumption
 
 State, in one sentence, the single thing that must be true for the business to work. Not three things. Not a list. The one assumption that, if false, kills the idea.
 
 Examples of well-formed core assumptions:
+
 - "Freelance bookkeepers will pay $40/month to cut invoice reconciliation from 3 hours to 30 minutes."
 - "Indie creators will record product demos if captioning is free, local, and one click."
 - "Solo dentists will switch appointment software if migration is done for them in under a day."
 
 If you can't compress the assumption into one sentence, the idea is bundled — separate it before continuing.
 
------
+---
 
 ## Step 2: Find Fatal Flaws
 
 List up to 3 fatal flaws, ranked by severity. For each, write:
 
 | Risk | Severity | Why It Matters | Fast Test |
-|---|---|---|---|
+| ---- | -------- | -------------- | --------- |
 
 - **Severity** is High / Medium / Low.
 - **Why it matters** is one sentence, specific to this idea.
 - **Fast test** is the cheapest behavioral test that would prove or kill the flaw.
 
 Rules:
+
 - Every flaw must be specific to this idea. No generic startup advice.
 - If there are fewer than 3 real flaws, list fewer. Do not pad.
 - Distribution flaws and pricing flaws count as fatal — list them.
 
------
+---
 
 ## Step 3: Problem Reality
 
@@ -103,7 +106,7 @@ Three bullets, no more:
 
 If the founder doesn't know who the early adopter is by name, role, or community, that is itself a fatal flaw — surface it in Step 2.
 
------
+---
 
 ## Step 4: Competition Map
 
@@ -115,20 +118,21 @@ Three bullets:
 
 "We have no competition" is always wrong. If the founder says it, current behavior is the competition.
 
------
+---
 
 ## Step 5: First 10 Customers
 
 Three actions, in order, that the founder can do this week to find the first 10 paying or actively-using customers manually. No ads, no automation, no mass outreach.
 
 Each action specifies:
+
 - Where the customers are now (community, forum, network, directory, event)
 - What the founder does to reach them
 - What success looks like (a conversation, a pilot, a paid pre-order)
 
 The first message asks for a conversation, not a sale.
 
------
+---
 
 ## Step 6: MVP
 
@@ -140,24 +144,24 @@ Three bullets:
 
 If the assumption fails the test, name the pivot it suggests.
 
------
+---
 
 ## Step 7: Scorecard
 
 Six rows, each scored 1–5 with one-line evidence-based justification. Scores must reference the founder's actual inputs, not vibes.
 
-| Area | Score | Read |
-|---|---:|---|
-| Pain intensity | n/5 | ... |
-| Buyer clarity | n/5 | ... |
-| Urgency | n/5 | ... |
-| Differentiation | n/5 | ... |
-| Speed to validate | n/5 | ... |
-| Founder advantage | n/5 | ... |
+| Area              | Score | Read |
+| ----------------- | ----: | ---- |
+| Pain intensity    |   n/5 | ...  |
+| Buyer clarity     |   n/5 | ...  |
+| Urgency           |   n/5 | ...  |
+| Differentiation   |   n/5 | ...  |
+| Speed to validate |   n/5 | ...  |
+| Founder advantage |   n/5 | ...  |
 
 This scorecard is **separate from** the candidate scorecard in `docs/product-idea.md` (which scores 3–5 candidate ideas on five different axes). Both are preserved. The Idea scorecard ranks options; this one stress-tests the chosen one.
 
------
+---
 
 ## Step 8: Verdict
 
@@ -169,7 +173,7 @@ Two or three sentences. One of:
 
 No softening. No "but I believe in you." A weak verdict is useful information, not a failure.
 
------
+---
 
 ## Step 9: Direction Check
 
@@ -180,15 +184,19 @@ Ask only the questions the findings actually raise. If Step 3 didn't shift the e
 Possible questions, by area:
 
 - **Target user** — If Step 3 surfaced a tighter or different early adopter:
+
   > "Step 3 pointed at [specific persona] as the real early adopter. Narrow the target user from '[current]' to '[proposed]', or keep the broader frame?"
 
 - **Problem framing** — If Step 3 surfaced different language for the pain:
+
   > "I want to swap the problem statement to the user's actual words: '[proposed phrasing]'. Use that, or keep the current framing?"
 
 - **MVP shape** — If Step 6 recommended a different MVP shape (e.g. concierge vs. productized):
+
   > "Step 6 suggests a [manual/concierge] test over a [productized/SaaS] one. Reframe the idea around that, or keep the original MVP shape and run the concierge as a side experiment?"
 
 - **Pivot direction** — When the verdict is **Pivot required**:
+
   > "The verdict points at '[pivot direction]'. Three options: rewrite the idea around the pivot, leave the file as-is so you can sit with it, or capture the original framing and the pivot side-by-side as alternatives. Which?"
 
 - **Risky assumptions** — Always confirm before replacing:
@@ -204,7 +212,7 @@ Behavior rules:
 
 When the founder has answered, summarize the chosen direction in one or two sentences and move to Step 10.
 
------
+---
 
 ## Step 10: Apply Sharpened Edits to `docs/product-idea.md`
 
@@ -215,6 +223,7 @@ Apply the edits the founder agreed to in Step 9. The choices are already made �
 After applying, tell the founder which fields were updated, in plain language. Example:
 
 > Updated `docs/product-idea.md`:
+>
 > - **Target user** — narrowed from "small business owners" to "freelance bookkeepers managing 10–30 SMB clients" (Step 3 finding, confirmed in Step 9)
 > - **Smallest testable version** — reframed as a manual concierge service rather than a SaaS product (Step 6 finding, confirmed in Step 9)
 > - **Risky assumptions** — replaced with the three from the validation report
@@ -223,7 +232,7 @@ After applying, tell the founder which fields were updated, in plain language. E
 
 If `docs/product-idea.md` does not exist (standalone Validate run) and the verdict is **Strong** or **Pivot required**, write a fresh `docs/product-idea.md` from the validated answers and the direction the founder chose in Step 9 so the Product Planner can pick it up. Use the same structure as the Idea skill's Step 6, but mark `## Candidates considered` as "Not applicable — direct validation run." On a **Weak** verdict, do not write `docs/product-idea.md` — recommend more discovery first.
 
------
+---
 
 ## Step 11: Write `docs/validation-report.md`
 
@@ -235,70 +244,82 @@ Write the full report to `docs/validation-report.md`. Use this structure:
 _Generated: [ISO date]_
 
 ## Verdict
+
 **[Strong / Weak / Pivot required]**
 
 [2–3 sentence direct verdict.]
 
 ## Scorecard
-| Area | Score | Read |
-|---|---:|---|
-| Pain intensity | n/5 | ... |
-| Buyer clarity | n/5 | ... |
-| Urgency | n/5 | ... |
-| Differentiation | n/5 | ... |
-| Speed to validate | n/5 | ... |
-| Founder advantage | n/5 | ... |
+
+| Area              | Score | Read |
+| ----------------- | ----: | ---- |
+| Pain intensity    |   n/5 | ...  |
+| Buyer clarity     |   n/5 | ...  |
+| Urgency           |   n/5 | ...  |
+| Differentiation   |   n/5 | ...  |
+| Speed to validate |   n/5 | ...  |
+| Founder advantage |   n/5 | ...  |
 
 ## Core Assumption
+
 [One sentence.]
 
 ## Fatal Flaws
+
 | Risk | Severity | Why It Matters | Fast Test |
-|---|---|---|---|
-| ... | High | ... | ... |
+| ---- | -------- | -------------- | --------- |
+| ...  | High     | ...            | ...       |
 
 ## Problem Reality
+
 - Pain: ...
 - Early adopter: ...
 - Vitamin or painkiller: ...
 
 ## Competition
+
 - Current behavior: ...
 - Real enemy: ...
 - Differentiation needed: ...
 
 ## First 10 Customers
+
 1. ...
 2. ...
 3. ...
 
 ## MVP
+
 - Build: ...
 - Cut: ...
 - 2-week test: ...
 
 ## Edits Applied to product-idea.md
+
 - [Field] — [what changed and why]
 - ...
 
 (Or "Created docs/product-idea.md from this validation run" / "No product-idea.md edits — verdict was Weak.")
 
 ## Next Step
+
 [One sentence pointing to the Product Planner skill, more discovery, or a pivot conversation.]
 ```
 
 Verify the write succeeded before confirming. If the write fails, surface a clear error message tied to the cause (permission denied, no space, existing read-only file) and ask how to proceed. Only confirm "saved" after verification.
 
------
+---
 
 ## Step 12: Handoff
 
 After writing the report and applying edits, route based on verdict:
 
 - **Strong** →
+
   > "The idea holds up. `docs/validation-report.md` has the full diagnosis, and I sharpened `docs/product-idea.md` with what we learned. Ready to plan it? Run the **Product Planner** skill and its intake will pick up from here."
 
 - **Pivot required** →
+
   > "The current framing has a fatal flaw, but the inputs point toward [pivot direction]. Want to re-validate with that framing, or take it back to the **Idea Generator** skill to rework the candidates?"
 
 - **Weak** →
@@ -310,11 +331,12 @@ If the Product Planner or Idea Generator skill isn't installed and you reference
 
 If the founder wants to continue to planning immediately and the verdict is Strong or Pivot, hand off to the Product Planner skill — it will use `docs/product-idea.md` as pre-filled context.
 
------
+---
 
 ## Re-running Validate
 
 If `docs/validation-report.md` already exists and the founder runs Validate again:
+
 - Read the previous report first.
 - Ask what changed since last time (new discovery, a pivot, a competitor found, a price test).
 - Re-run all 12 steps with the new context. Don't try to "patch" the old report — overwrite it cleanly.

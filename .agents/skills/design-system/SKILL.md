@@ -17,7 +17,7 @@ description: |
 license: MIT
 metadata:
   author: BuilderOS
-  version: "1.1"
+  version: '1.1'
   compatibility: Requires file system access to write the docs/ directory. Optional Figma MCP for Figma URLs.
 ---
 
@@ -25,7 +25,7 @@ metadata:
 
 This skill takes an image (or a set of image references) and translates them into a design system captured as **two mirrored files**:
 
-- **`docs/design.md`** — a YAML token block in [Google's open design.md format](https://github.com/google-labs-code/design.md) that gives a coding agent exact implementation values, plus prose rationale explaining the *why*. This is the **source of truth**.
+- **`docs/design.md`** — a YAML token block in [Google's open design.md format](https://github.com/google-labs-code/design.md) that gives a coding agent exact implementation values, plus prose rationale explaining the _why_. This is the **source of truth**.
 - **`docs/design.html`** — a self-contained, human-readable style guide that renders every token and component live in a browser, styled directly from the same token values. This is the **mirror** the human reads.
 
 Same design system, two audiences: the agent reads the `.md`, the human opens the `.html`. They must always be written and updated together so they never drift.
@@ -45,7 +45,7 @@ Same design system, two audiences: the agent reads the `.md`, the human opens th
 
 **Partial conversation:** If the session is interrupted mid-flow, note where you left off and resume from that step. Don't restart.
 
------
+---
 
 ## Voice
 
@@ -53,7 +53,7 @@ You are a senior design director with strong taste. You're observant — you des
 
 Don't flatter weak references. If the imagery is conflicting, contradictory, or thin, say so and ask which direction to anchor on.
 
------
+---
 
 ## Step 0: Image Intake
 
@@ -72,7 +72,7 @@ If only one image is provided, treat it as the primary anchor. If multiple, conf
 
 If the founder provides no image after one prompt, offer a fallback: "I can draft a starter design.md from a text description of the brand and we'll refine from there — but the result will be weaker than working from imagery. Want to proceed that way, or grab a reference first?"
 
------
+---
 
 ## Step 1: Image Analysis
 
@@ -90,7 +90,7 @@ For each image, extract and note:
 
 Then summarize what you saw to the founder in 5–8 tight bullets. Be specific. Mirror back the imagery's actual character. If two references conflict, name the conflict.
 
------
+---
 
 ## Step 2: Context Questions
 
@@ -109,7 +109,7 @@ Ask questions one at a time. Offer 3 tailored suggestions for each (drawn from y
 
 If an answer is vague, push back gently with a recommendation rather than another open-ended question.
 
------
+---
 
 ## Step 3: Token Derivation
 
@@ -123,7 +123,7 @@ name: <product-or-design-system-name>
 description: <one-sentence description>
 
 colors:
-  <semantic-token>: "#RRGGBB"
+  <semantic-token>: '#RRGGBB'
 
 typography:
   <scale-token>:
@@ -143,10 +143,10 @@ spacing:
 
 components:
   <component-name>:
-    backgroundColor: "{colors.<token>}"
-    textColor: "{colors.<token>}"
-    typography: "{typography.<token>}"
-    rounded: "{rounded.<token>}"
+    backgroundColor: '{colors.<token>}'
+    textColor: '{colors.<token>}'
+    typography: '{typography.<token>}'
+    rounded: '{rounded.<token>}'
     padding: <dimension or token reference>
     size: <dimension, optional>
     height: <dimension, optional>
@@ -163,11 +163,11 @@ components:
 - **Valid component property names** (per spec): `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`. Unknown properties are accepted by parsers but trigger warnings — avoid them unless deliberate.
 - **No duplicate `##` headings** in the prose (the spec rejects files with duplicates).
 
------
+---
 
 ## Step 4: Prose Drafting
 
-Draft prose for the eight canonical sections, in this exact order. Each section should be tight (3–8 sentences). Don't pad. Don't restate the YAML — explain the *why* behind it so a coding agent can make sound choices in cases the tokens don't cover.
+Draft prose for the eight canonical sections, in this exact order. Each section should be tight (3–8 sentences). Don't pad. Don't restate the YAML — explain the _why_ behind it so a coding agent can make sound choices in cases the tokens don't cover.
 
 1. **Overview** — Product, audience, emotional response, and one or two anti-patterns. The brand-and-style north star.
 2. **Colors** — Palette intent. What `primary`, `accent`, `surface`, and semantic colors do, and why those specific values. Note contrast considerations (WCAG AA at minimum for text).
@@ -178,7 +178,7 @@ Draft prose for the eight canonical sections, in this exact order. Each section 
 7. **Components** — How buttons, inputs, chips, cards behave. Variant rules and state behavior. Reference the YAML tokens by name.
 8. **Do's and Don'ts** — 4–6 do's and 4–6 don'ts. Specific and enforceable. Drawn from the anti-patterns and aesthetic intent.
 
------
+---
 
 ## Step 5: Confirm and Write
 
@@ -196,42 +196,45 @@ Ask for any last edits. Then write to `docs/design.md`. Create the `docs/` direc
 version: alpha
 name: <Name>
 description: <One-sentence description>
-colors:
-  ...
-typography:
-  ...
-rounded:
-  ...
-spacing:
-  ...
-components:
-  ...
+colors: ...
+typography: ...
+rounded: ...
+spacing: ...
+components: ...
 ---
 
 # <Name> Design System
 
 ## Overview
+
 ...
 
 ## Colors
+
 ...
 
 ## Typography
+
 ...
 
 ## Layout
+
 ...
 
 ## Elevation & Depth
+
 ...
 
 ## Shapes
+
 ...
 
 ## Components
+
 ...
 
 ## Do's and Don'ts
+
 ...
 ```
 
@@ -244,11 +247,11 @@ After writing, verify the write succeeded before confirming. If the write fails,
 
 Only confirm "saved" after the write is verified successful, then proceed to Step 6 to build the matching `design.html`.
 
------
+---
 
 ## Step 6: Build the design.html mirror
 
-`docs/design.html` is the human-readable twin of `docs/design.md`. Same system, two audiences: the `.md` gives the coding agent exact tokens and rationale; the `.html` lets a person *see* the system in a browser — every token and component rendered live in its real styling. They are mirrors and must never drift: **`design.md` is the source of truth; `design.html` is generated from it.** Build the HTML from the token values you just wrote, not from a fresh interpretation of the imagery.
+`docs/design.html` is the human-readable twin of `docs/design.md`. Same system, two audiences: the `.md` gives the coding agent exact tokens and rationale; the `.html` lets a person _see_ the system in a browser — every token and component rendered live in its real styling. They are mirrors and must never drift: **`design.md` is the source of truth; `design.html` is generated from it.** Build the HTML from the token values you just wrote, not from a fresh interpretation of the imagery.
 
 Build a single self-contained `.html` file to these requirements:
 
@@ -272,13 +275,14 @@ Keep the page's own chrome (layout, labels, section headers) clean and neutral �
 
 Write to `docs/design.html`. Verify the write succeeded using the same error handling as the `.md` write (permission denied, no space, existing-file conflict, other — report and ask how to proceed). The `.md` and `.html` are always written together — never leave one updated and the other stale.
 
------
+---
 
 ## Step 7: Handoff
 
 After writing both files, say:
 
 > "Your design system is captured in two mirrored files:
+>
 > - **`docs/design.md`** — YAML tokens + prose for any coding agent to implement from (the source of truth).
 > - **`docs/design.html`** — a human-readable style guide; open it in a browser to see every token and component rendered live.
 >
@@ -292,7 +296,7 @@ Then suggest the natural next step based on project state:
 
 If the Product Planner skill isn't installed, mention that it's part of BuilderOS: https://github.com/BuildGreatProducts/builder-os.
 
------
+---
 
 ## Editing the design system
 
