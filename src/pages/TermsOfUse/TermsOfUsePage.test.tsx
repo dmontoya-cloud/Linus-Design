@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -29,21 +29,42 @@ function renderTermsOfUsePage() {
 }
 
 describe('TermsOfUsePage', () => {
-  it('renders the summary sections and a disabled Continue button', () => {
+  it('renders the summary sections, the scrollable full text, and a disabled Continue button', () => {
     renderTermsOfUsePage()
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
     expect(screen.getByText('What Thrive does')).toBeInTheDocument()
+    expect(screen.getByText(/1\. Acceptance of these Terms\./)).toBeInTheDocument()
     expect(screen.getByRole('checkbox')).not.toBeChecked()
     expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeDisabled()
   })
 
-  it('opens and closes the full legal text modal', async () => {
-    const user = userEvent.setup()
-    renderTermsOfUsePage()
-    expect(screen.queryByRole('heading', { name: 'Full Terms of Use' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Read full terms of use' }))
-    expect(screen.getByRole('heading', { name: 'Full Terms of Use' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Close dialog' }))
+  it('keeps the agree checkbox disabled until scrolled to the end of the full text, then enables it', () => {
+    // jsdom reports every element's scrollHeight/clientHeight as 0, which would otherwise make
+    // the "already at the end" mount check fire immediately — mock real overflow dimensions so
+    // the disabled-until-scrolled behavior is actually exercised, not skipped.
+    const scrollHeightSpy = vi
+      .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
+      .mockReturnValue(500)
+    const clientHeightSpy = vi
+      .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
+      .mockReturnValue(100)
+
+    try {
+      renderTermsOfUsePage()
+      const checkbox = screen.getByRole('checkbox')
+      expect(checkbox).toBeDisabled()
+      expect(screen.getByText('Scroll to the end above to enable.')).toBeInTheDocument()
+
+      const scrollBox = screen.getByText(/1\. Acceptance of these Terms\./).closest('div')
+      expect(scrollBox).not.toBeNull()
+      fireEvent.scroll(scrollBox as HTMLDivElement, { target: { scrollTop: 450 } })
+
+      expect(checkbox).toBeEnabled()
+      expect(screen.queryByText('Scroll to the end above to enable.')).not.toBeInTheDocument()
+    } finally {
+      scrollHeightSpy.mockRestore()
+      clientHeightSpy.mockRestore()
+    }
   })
 
   it('enables Continue only once the agree checkbox is checked, then hands off to /privacy', async () => {

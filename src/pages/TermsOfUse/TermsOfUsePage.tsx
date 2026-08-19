@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Checkbox } from '@/components/atoms/Checkbox'
 import { Button } from '@/components/atoms/Button'
-import { Modal } from '@/components/atoms/Modal'
 import { LegalLayout } from '../LegalLayout'
 import { SummaryCard } from '../SummaryCard'
+import { ScrollGatedLegalText } from '../ScrollGatedLegalText'
+import { CheckboxCard } from '../CheckboxCard'
 import { cascadeDelay } from '../cascade'
 import styles from './TermsOfUsePage.module.css'
 
@@ -108,16 +109,18 @@ const FULL_TEXT = [
 
 /**
  * Terms of Use — step 1 of the pre-registration legal flow (Terms of Use,
- * Privacy Policy, Consent), reached from the Legal Intro heads-up. Agreement
- * is required to continue; the full legal text is a longer, more formal
- * version of the summary above — real Terms of Use run well past a short
- * plain-language recap, so the modal shows its own, separate content and
- * scrolls internally to accommodate it.
+ * then Privacy Policy), reached from the Legal Intro heads-up. The full
+ * legal text — a longer, more formal version of the summary above — sits
+ * inline in a scrollable box rather than behind a "Read full text" link or
+ * Modal, and the agreement checkbox stays disabled until the visitor has
+ * actually scrolled to the end of it (or immediately, if the text is short
+ * enough to never need scrolling) — agreeing to text you never saw isn't
+ * real agreement.
  */
 export function TermsOfUsePage() {
   const navigate = useNavigate()
   const [agreed, setAgreed] = useState(false)
-  const [fullTextOpen, setFullTextOpen] = useState(false)
+  const [hasReadFullText, setHasReadFullText] = useState(false)
 
   return (
     <LegalLayout
@@ -125,34 +128,36 @@ export function TermsOfUsePage() {
       title="Terms of Use"
       subtitle="Here is a plain summary of the terms. The full text is below."
     >
-      <SummaryCard
-        sections={SECTIONS}
-        footer={
-          <button
-            type="button"
-            className={styles.fullTextLink}
-            onClick={() => setFullTextOpen(true)}
-          >
-            Read full terms of use
-          </button>
-        }
-      />
+      <SummaryCard sections={SECTIONS} />
 
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 1) }}>
-        <Checkbox
-          label={
-            <>
-              I have read and agree to the Terms of Use. <strong>Required.</strong>
-            </>
-          }
-          checked={agreed}
-          onChange={(event) => setAgreed(event.target.checked)}
+        <ScrollGatedLegalText
+          paragraphs={FULL_TEXT}
+          onScrolledToEnd={() => setHasReadFullText(true)}
         />
+      </div>
+
+      <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 2) }}>
+        <CheckboxCard>
+          <Checkbox
+            label={
+              <>
+                I have read and agree to the Terms of Use. <strong>Required.</strong>
+                {!hasReadFullText && (
+                  <span className={styles.scrollHint}> Scroll to the end above to enable.</span>
+                )}
+              </>
+            }
+            checked={agreed}
+            disabled={!hasReadFullText}
+            onChange={(event) => setAgreed(event.target.checked)}
+          />
+        </CheckboxCard>
       </div>
 
       <div
         className={[styles.actions, styles.reveal].join(' ')}
-        style={{ animationDelay: cascadeDelay(SECTIONS.length + 2) }}
+        style={{ animationDelay: cascadeDelay(SECTIONS.length + 3) }}
       >
         <Button type="button" variant="outline" size="lg" onClick={() => navigate('/legal-intro')}>
           Back
@@ -161,12 +166,6 @@ export function TermsOfUsePage() {
           Agree and continue
         </Button>
       </div>
-
-      <Modal open={fullTextOpen} onClose={() => setFullTextOpen(false)} title="Full Terms of Use">
-        {FULL_TEXT.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
-      </Modal>
     </LegalLayout>
   )
 }

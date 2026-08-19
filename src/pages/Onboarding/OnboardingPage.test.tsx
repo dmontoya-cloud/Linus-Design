@@ -26,7 +26,7 @@ function GenderIdentityProbe() {
 }
 
 /** Test-only harness — sets AuthContext's `preferredName` and offers a link onward, standing
- * in for Legal Intro's "How should we call you?" field. Setting the name and mounting
+ * in for Legal Intro's "Preferred name (optional)" field. Setting the name and mounting
  * OnboardingPage must happen in two separate steps (set here, then navigate), not both in the
  * same render pass — OnboardingPage's first-mount state needs `preferredName` already in
  * context by the time it mounts, exactly like the real Legal Intro → ... → Onboarding flow,

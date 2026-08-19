@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -31,27 +31,22 @@ describe('LegalIntroPage', () => {
     renderLegalIntroPage()
     expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
     expect(
-      screen.getByText('Before we start, we need you to agree to a few things.'),
+      screen.getByText(
+        "Before we go any further, let's confirm we can set you up in thrive. You must be over the age of eighteen.",
+      ),
     ).toBeInTheDocument()
-    expect(screen.getByLabelText('How should we call you?')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: "Let's go" })).toBeInTheDocument()
-  })
-
-  it('lists the three things being agreed to', () => {
-    renderLegalIntroPage()
-    // "listitem" doesn't support name-from-content in the ARIA spec, so <li> items have no
-    // computed accessible name — assert on text content within the list instead.
-    const list = screen.getByRole('list')
-    expect(within(list).getByText('Terms of Use')).toBeInTheDocument()
-    expect(within(list).getByText('Privacy Policy')).toBeInTheDocument()
-    expect(within(list).getByText('Consent')).toBeInTheDocument()
-    expect(list.children).toHaveLength(3)
+    expect(
+      screen.getByText("Let's keep things casual. How would you like to be called?"),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Preferred name (optional)')).toBeInTheDocument()
+    expect(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" })).not.toBeChecked()
+    expect(screen.getByRole('button', { name: "Let's go" })).toBeDisabled()
   })
 
   it('swaps the greeting to the typed name live, and back when cleared', async () => {
     const user = userEvent.setup()
     renderLegalIntroPage()
-    const nameField = screen.getByLabelText('How should we call you?')
+    const nameField = screen.getByLabelText('Preferred name (optional)')
 
     await user.type(nameField, 'Ada')
     expect(screen.getByRole('heading', { name: 'Hey, Ada' })).toBeInTheDocument()
@@ -60,9 +55,14 @@ describe('LegalIntroPage', () => {
     expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
   })
 
-  it("sends Let's go to /terms whether or not a name was entered", async () => {
+  it("keeps Let's go disabled until the age checkbox is checked, then sends to /terms whether or not a name was entered", async () => {
     const user = userEvent.setup()
     renderLegalIntroPage()
+    await user.click(screen.getByRole('button', { name: "Let's go" }))
+    expect(screen.queryByText('Terms screen')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" }))
+    expect(screen.getByRole('button', { name: "Let's go" })).toBeEnabled()
     await user.click(screen.getByRole('button', { name: "Let's go" }))
     expect(screen.getByText('Terms screen')).toBeInTheDocument()
   })

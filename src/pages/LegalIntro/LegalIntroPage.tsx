@@ -1,52 +1,66 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { Button } from '@/components/atoms/Button'
 import { Field } from '@/components/atoms/Field'
+import { Checkbox } from '@/components/atoms/Checkbox'
 import { LegalLayout } from '../LegalLayout'
+import { CheckboxCard } from '../CheckboxCard'
 import styles from './LegalIntroPage.module.css'
 
 const DEFAULT_GREETING = "we're glad to have you"
 
-const AGREEMENTS = ['Terms of Use', 'Privacy Policy', 'Consent']
-
 /**
  * Legal Intro — a brief, conversational heads-up shown right after Verify
- * Account, before the three-step Terms of Use / Privacy Policy / Consent
- * flow. Shares LegalLayout's chrome with those three steps for visual
- * continuity, at step 0 — the progress bar previews the journey ahead empty
- * rather than counting this heads-up as a step of its own. The greeting
- * starts generic ("Hey, we're glad to have you") and swaps live to "Hey,
- * <name>" the moment the visitor types their own name into the field below —
- * there's no reliable way to derive a real human name from an email address,
- * so this just asks instead. The name lives in AuthContext (not local state),
- * so Registration's first name field can pre-fill from it later. Right below
- * the subtitle, a plain list names the three things that's actually about —
- * Terms of Use, Privacy Policy, Consent — matching the three-step flow ahead
- * rather than leaving "a few things" unspecified. Its own text fades/rises
- * in on a stagger, the same subtle entrance Verify Account uses for its
- * logo/spinner/message.
+ * Account, before the two-step Terms of Use / Privacy Policy flow. Shares
+ * LegalLayout's chrome with those two steps for visual continuity, at step
+ * 0 — the progress bar previews the journey ahead empty rather than
+ * counting this heads-up as a step of its own. The greeting starts generic
+ * ("Hey, we're glad to have you") and swaps live to "Hey, <name>" the
+ * moment the visitor types their own name into the field below — there's no
+ * reliable way to derive a real human name from an email address, so this
+ * just asks instead. The name lives in AuthContext (not local state), so
+ * Registration's first name field can pre-fill from it later. There's no
+ * separate Consent step: Privacy Policy's own checkbox covers
+ * assessment-results consent, and the age-18+ attestation sits right here,
+ * right after the subtitle — required before "Let's go" will proceed. It
+ * sits in its own full-width white card (the same surface/radius/shadow
+ * recipe as SummaryCard) so a single checkbox doesn't read as floating
+ * loose on the page background. A second, smaller title — "Let's keep
+ * things casual. How would you like to be called?" — introduces the name
+ * field below it, which is explicitly optional (unlike the age checkbox,
+ * it doesn't gate "Let's go"). Its own text fades/rises in on a stagger,
+ * the same subtle entrance Verify Account uses for its logo/spinner/message.
  */
 export function LegalIntroPage() {
   const navigate = useNavigate()
   const { preferredName, setPreferredName } = useAuth()
   const name = preferredName ?? ''
+  const [overEighteen, setOverEighteen] = useState(false)
 
   return (
     <LegalLayout
       step={0}
       title={`Hey, ${name.trim() || DEFAULT_GREETING}`}
-      subtitle="Before we start, we need you to agree to a few things."
+      subtitle="Before we go any further, let's confirm we can set you up in thrive. You must be over the age of eighteen."
       titleClassName={styles.fadeTitle}
       subtitleClassName={styles.fadeSubtitle}
     >
-      <ul className={styles.fadeList}>
-        {AGREEMENTS.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+      <div className={styles.fadeCheckbox}>
+        <CheckboxCard>
+          <Checkbox
+            label="I'm over the age of eighteen"
+            checked={overEighteen}
+            onChange={(event) => setOverEighteen(event.target.checked)}
+          />
+        </CheckboxCard>
+      </div>
+      <p className={[styles.personalPromptTitle, styles.fadePersonalPrompt].join(' ')}>
+        Let&apos;s keep things casual. How would you like to be called?
+      </p>
       <div className={styles.fadeField}>
         <Field
-          label="How should we call you?"
+          label="Preferred name (optional)"
           value={name}
           onChange={(event) => setPreferredName(event.target.value)}
         />
@@ -55,6 +69,7 @@ export function LegalIntroPage() {
         type="button"
         size="lg"
         className={styles.fadeButton}
+        disabled={!overEighteen}
         onClick={() => navigate('/terms')}
       >
         Let&apos;s go

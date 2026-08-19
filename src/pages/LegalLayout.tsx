@@ -5,10 +5,12 @@ import { LanguageToggle } from '@/components/atoms/LanguageToggle'
 import { useLanguage } from '@/language'
 import styles from './LegalLayout.module.css'
 
-/** Terms of Use, Privacy Policy, then Consent — one 3-step progress, distinct
- * from OnboardingLayout's later steps, since these are legal-agreement steps
- * that happen before registration, not part of "the process" itself. */
-export const LEGAL_TOTAL_STEPS = 3
+/** Terms of Use, then Privacy Policy — one 2-step progress, distinct from
+ * OnboardingLayout's later steps, since these are legal-agreement steps that
+ * happen before registration, not part of "the process" itself. Privacy
+ * Policy's own consent checkbox covers what used to be a separate Consent
+ * step. */
+export const LEGAL_TOTAL_STEPS = 2
 
 interface LegalLayoutProps {
   /** 0 renders the progress bar empty — used by the Legal Intro heads-up, which
@@ -24,9 +26,9 @@ interface LegalLayoutProps {
   subtitleClassName?: string
 }
 
-/** Shared chrome for the Legal Intro / Terms of Use / Privacy Policy / Consent
- * flow: logo (its own asset already carries the "by Linus Health" byline, so
- * no separate tagline here), an EN/ES language toggle, a 3-step progress bar
+/** Shared chrome for the Legal Intro / Terms of Use / Privacy Policy flow:
+ * logo (its own asset already carries the "by Linus Health" byline, so no
+ * separate tagline here), an EN/ES language toggle, a 2-step progress bar
  * sitting right below the header (visual only — the step count is still
  * announced to screen readers via ProgressBar's own `label`/`aria-label`,
  * just no longer shown as text), and a title/subtitle pair. */

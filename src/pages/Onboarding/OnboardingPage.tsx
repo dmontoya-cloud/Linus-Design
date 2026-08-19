@@ -35,10 +35,11 @@ const MONTHS = [
  * should we call you?" field, still fully editable here. Every field on this form is
  * required, so the usual per-field asterisk is suppressed (`hideRequiredMark`) — with
  * nothing optional to contrast against, it wouldn't tell the visitor anything. Fields
- * cascade in the same rhythm as Terms of Use / Privacy Policy / Consent — see
+ * cascade in the same rhythm as Terms of Use / Privacy Policy — see
  * src/pages/cascade.ts. Doesn't call `saveProfile` itself — these fields ride along in
  * router state to Gender & Identity, which collects the rest of the Profile and saves it
- * all at once.
+ * all at once. The age-18+ attestation lives on Legal Intro instead, alongside the other
+ * "here's what you're about to accept" content, not here.
  */
 export function OnboardingPage() {
   const { preferredName } = useAuth()
