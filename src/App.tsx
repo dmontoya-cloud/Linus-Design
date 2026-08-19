@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom'
 import { ThemeProvider } from '@/tokens'
 import { AuthProvider, useAuth } from '@/auth'
@@ -13,27 +13,34 @@ import { TermsOfUsePage } from '@/pages/TermsOfUse/TermsOfUsePage'
 import { PrivacyPolicyPage } from '@/pages/PrivacyPolicy/PrivacyPolicyPage'
 import { OnboardingPage } from '@/pages/Onboarding/OnboardingPage'
 import { GenderIdentityPage } from '@/pages/GenderIdentity/GenderIdentityPage'
-import { ConsentPage } from '@/pages/Consent/ConsentPage'
+import { EducationPage } from '@/pages/Education/EducationPage'
 import { SettingUpPage } from '@/pages/SettingUp/SettingUpPage'
+import { ThanksPage } from '@/pages/Thanks/ThanksPage'
+import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
 import './App.css'
 
 /**
  * Login → Verify Email (magic-link mock) → Legal Intro → Terms of Use →
- * Privacy Policy → Consent → Setting Up (spinner) → Onboarding (registration)
- * → Gender & Identity → Dashboard are real screens, gated by AuthContext's
- * mock auth. Legal Intro is a brief, conversational heads-up ("you'll need
- * to agree to some things") before the three-step Terms/Privacy/Consent
- * flow, not a step of its own. Terms/Privacy/Consent all sit before
- * registration — agree to the legal stuff first, then give assessment
- * consent, then fill in your profile; Setting Up is a brief non-interactive
- * beat between consenting and landing on the registration form. Registration
- * and Gender & Identity together make up the Profile: Registration collects
- * name/date of birth and passes it forward in router state, Gender &
- * Identity collects gender/sex assigned at birth and saves the whole thing
- * at once. Paywall/Assessment/Report are still PoD-4 stubs, as are
- * History/Settings (reachable only from Dashboard's own nav, not listed in
- * this funnel).
+ * Privacy Policy → Setting Up (spinner) → Thanks (spinner) → Onboarding
+ * (registration) → Gender & Identity → Dashboard are real screens, gated by
+ * AuthContext's mock auth. Legal Intro is a brief, conversational heads-up
+ * ("you'll need to agree to some things") before the two-step Terms/Privacy
+ * flow, not a step of its own. There is no separate Consent step: Privacy
+ * Policy's own "I consent to Linus Health using my assessment results"
+ * checkbox covers that (see PrivacyPolicyPage), and the age-18+ checkbox
+ * now lives on Registration, next to date of birth. Setting Up and Thanks
+ * are both brief non-interactive beats between agreeing to Privacy Policy
+ * and landing on the registration form — Setting Up marks that consent was
+ * recorded, Thanks greets the visitor by the preferred name they gave on
+ * Legal Intro. Registration, Gender & Identity, and Education together make
+ * up the Profile: Registration collects name/date of birth and Gender &
+ * Identity collects gender/sex assigned at birth, both passing their answers
+ * forward in router state; Education collects education level and saves the
+ * whole thing at once, then hands off to Loading — a last spinner beat
+ * before Dashboard appears. Paywall/Assessment/Report are still PoD-4
+ * stubs, as are History/Settings (reachable only from Dashboard's own nav,
+ * not listed in this funnel).
  */
 const FUNNEL_STEPS = [
   { path: '/login', label: 'Login' },
@@ -41,10 +48,12 @@ const FUNNEL_STEPS = [
   { path: '/legal-intro', label: 'Legal Intro' },
   { path: '/terms', label: 'Terms of Use' },
   { path: '/privacy', label: 'Privacy Policy' },
-  { path: '/consent', label: 'Consent' },
   { path: '/setting-up', label: 'Setting Up' },
+  { path: '/thanks', label: 'Thanks' },
   { path: '/onboarding', label: 'Onboarding' },
   { path: '/gender-identity', label: 'Gender & Identity' },
+  { path: '/education', label: 'Education' },
+  { path: '/loading', label: 'Loading' },
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/paywall', label: 'Paywall / Subscription' },
   { path: '/assessment', label: 'Assessment Intro' },
@@ -57,10 +66,12 @@ const REAL_STEP_PATHS = [
   '/legal-intro',
   '/terms',
   '/privacy',
-  '/consent',
   '/setting-up',
+  '/thanks',
   '/onboarding',
   '/gender-identity',
+  '/education',
+  '/loading',
   '/dashboard',
 ]
 
@@ -105,6 +116,17 @@ function BackToStart() {
   )
 }
 
+/** React Router's client-side navigation doesn't reset scroll position the way a real page
+ * load does — without this, landing on a new step while scrolled down (e.g. Terms of Use's
+ * scroll-gated text) carries that same scroll position into the next step. */
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 /** /login redirects straight to /legal-intro if already authenticated, so the Login screen never re-shows mid-flow. */
 function LoginRoute() {
   const { isAuthenticated } = useAuth()
@@ -119,8 +141,8 @@ function Home() {
     <main className="screen-placeholder">
       <h1>Linus Patient Engagement — Prototype</h1>
       <p>
-        Login, Legal Intro, Terms of Use, Privacy Policy, Consent, Setting Up, Onboarding, and
-        Gender &amp; Identity are real. Mock data only.
+        Login, Legal Intro, Terms of Use, Privacy Policy, Setting Up, Thanks, Onboarding, Gender
+        &amp; Identity, Education, and Loading are real. Mock data only.
       </p>
       <nav aria-label="Phase 1 funnel">
         <ul>
@@ -154,6 +176,7 @@ export default function App() {
       <BrowserRouter basename="/web">
         <LanguageProvider>
           <AuthProvider>
+            <ScrollToTop />
             <BackToStart />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -186,18 +209,18 @@ export default function App() {
                 }
               />
               <Route
-                path="/consent"
-                element={
-                  <RequireAuth>
-                    <ConsentPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
                 path="/setting-up"
                 element={
                   <RequireAuth>
                     <SettingUpPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/thanks"
+                element={
+                  <RequireAuth>
+                    <ThanksPage />
                   </RequireAuth>
                 }
               />
@@ -214,6 +237,22 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <GenderIdentityPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/education"
+                element={
+                  <RequireAuth>
+                    <EducationPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/loading"
+                element={
+                  <RequireAuth>
+                    <LoadingPage />
                   </RequireAuth>
                 }
               />

@@ -1,24 +1,27 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import styles from './SettingUpPage.module.css'
+import { useAuth } from '@/auth'
+import styles from './ThanksPage.module.css'
 
 /** Total time this screen stays up before handing off to /onboarding. */
-const SETTING_UP_DURATION_MS = 2000
+const THANKS_DURATION_MS = 2000
 
 /**
- * Setting Up — a brief, non-interactive interstitial shown right after
- * Privacy Policy, before Thanks and Registration ("Tell us about
- * yourself"). Mirrors Verify Account's spinner pattern: no user action,
- * just a beat to mark that consent was recorded (Privacy Policy's own
- * checkbox) before handing off to the Thanks screen.
+ * Thanks — a brief, non-interactive interstitial shown right after Setting
+ * Up, before Registration ("Tell us about yourself"). Mirrors Setting Up's
+ * own spinner pattern: no user action, just a beat that greets the visitor
+ * by the preferred name they gave on Legal Intro before the registration
+ * form appears.
  */
-export function SettingUpPage() {
+export function ThanksPage() {
+  const { preferredName } = useAuth()
+  const name = (preferredName ?? '').trim()
   const navigate = useNavigate()
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      navigate('/thanks', { replace: true })
-    }, SETTING_UP_DURATION_MS)
+      navigate('/onboarding', { replace: true })
+    }, THANKS_DURATION_MS)
     return () => window.clearTimeout(timer)
   }, [navigate])
 
@@ -31,7 +34,7 @@ export function SettingUpPage() {
           </div>
         </div>
         <p className={styles.message} role="status" aria-live="polite">
-          Setting up your account
+          {name ? `Thanks, ${name}!` : 'Thanks!'}
         </p>
       </div>
     </main>

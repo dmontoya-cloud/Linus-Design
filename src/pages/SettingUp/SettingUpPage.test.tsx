@@ -4,8 +4,8 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
 import { SettingUpPage } from './SettingUpPage'
 
-function OnboardingProbe() {
-  return <p>Onboarding screen</p>
+function ThanksProbe() {
+  return <p>Thanks screen</p>
 }
 
 function renderSettingUpPage() {
@@ -13,7 +13,7 @@ function renderSettingUpPage() {
     <MemoryRouter initialEntries={['/setting-up']}>
       <Routes>
         <Route path="/setting-up" element={<SettingUpPage />} />
-        <Route path="/onboarding" element={<OnboardingProbe />} />
+        <Route path="/thanks" element={<ThanksProbe />} />
       </Routes>
     </MemoryRouter>,
   )
@@ -25,9 +25,9 @@ describe('SettingUpPage', () => {
     expect(screen.getByText('Setting up your account')).toBeInTheDocument()
   })
 
-  it('navigates to /onboarding once the timer completes', async () => {
+  it('navigates to /thanks once the timer completes', async () => {
     renderSettingUpPage()
-    await waitFor(() => expect(screen.getByText('Onboarding screen')).toBeInTheDocument(), {
+    await waitFor(() => expect(screen.getByText('Thanks screen')).toBeInTheDocument(), {
       timeout: 3500,
     })
   }, 5000)

@@ -11,6 +11,7 @@ const testProfile: Profile = {
   dateOfBirth: '1988-01-01',
   gender: 'female',
   sexAssignedAtBirth: 'female',
+  educationLevel: 'bachelors-degree',
 }
 
 function Consumer() {

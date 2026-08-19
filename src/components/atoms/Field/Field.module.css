@@ -73,6 +73,19 @@
   padding: 0 var(--space-sm, 8px);
 }
 
+/* A number field reads as a regular text field here, not a stepper — no up/down arrows for
+   incrementing/decrementing a date-of-birth digit. */
+.field input[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.field input[type='number']::-webkit-inner-spin-button,
+.field input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .field:hover {
   border-color: var(--color-text-secondary, #5b6b79);
 }
