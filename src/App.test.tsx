@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
@@ -20,10 +20,12 @@ describe('App', () => {
       'Legal Intro',
       'Terms of Use',
       'Privacy Policy',
-      'Consent',
       'Setting Up',
+      'Thanks',
       'Onboarding',
       'Gender & Identity',
+      'Education',
+      'Loading',
       'Dashboard',
       'Paywall / Subscription',
       'Assessment Intro',
@@ -42,6 +44,18 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /prototype/i })).toBeInTheDocument()
   })
 
+  it('scrolls back to the top on every route change', async () => {
+    const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const user = userEvent.setup()
+    render(<App />)
+    scrollToSpy.mockClear() // drop the initial-mount call, only care about navigation
+
+    await user.click(screen.getByRole('link', { name: 'Paywall / Subscription' }))
+    expect(scrollToSpy).toHaveBeenCalledWith(0, 0)
+
+    scrollToSpy.mockRestore()
+  })
+
   it('navigates to the real Login screen, not a placeholder', async () => {
     const user = userEvent.setup()
     render(<App />)
@@ -56,7 +70,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
   })
 
-  it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Consent → Setting Up → Onboarding → Gender & Identity → Dashboard happy path', async () => {
+  it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Setting Up → Thanks → Onboarding → Gender & Identity → Education → Loading → Dashboard happy path', async () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
@@ -87,6 +101,7 @@ describe('App', () => {
         ).toBeInTheDocument(),
       { timeout: 4500 },
     )
+    await user.click(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" }))
     await user.click(screen.getByRole('button', { name: "Let's go" }))
 
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
@@ -97,19 +112,19 @@ describe('App', () => {
     await user.click(
       screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }),
     )
-    await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
-
-    expect(screen.getByRole('heading', { name: 'Consent' })).toBeInTheDocument()
     await user.click(
       screen.getByRole('checkbox', {
-        name: 'I consent to Linus Health using my assessment results as described above',
+        name: /I consent to Linus Health using my assessment results/,
       }),
     )
-    await user.click(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" }))
-    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
 
     await waitFor(() => expect(screen.getByText('Setting up your account')).toBeInTheDocument(), {
       timeout: 1000,
+    })
+
+    await waitFor(() => expect(screen.getByText('Thanks!')).toBeInTheDocument(), {
+      timeout: 3000,
     })
 
     await waitFor(
@@ -129,7 +144,20 @@ describe('App', () => {
     await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
-    expect(screen.getByRole('heading', { name: 'Welcome back, Ada' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Which best describes your educational background?' }),
+    ).toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText('Education background'), 'bachelors-degree')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+
+    await waitFor(() => expect(screen.getByText('Loading')).toBeInTheDocument(), {
+      timeout: 1000,
+    })
+
+    await waitFor(
+      () => expect(screen.getByRole('heading', { name: 'Welcome back, Ada' })).toBeInTheDocument(),
+      { timeout: 3000 },
+    )
     expect(screen.getByRole('link', { name: 'Assessment' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'History' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument()

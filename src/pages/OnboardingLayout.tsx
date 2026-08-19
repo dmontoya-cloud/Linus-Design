@@ -5,10 +5,10 @@ import { LanguageToggle } from '@/components/atoms/LanguageToggle'
 import { useLanguage } from '@/language'
 import styles from './OnboardingLayout.module.css'
 
-/** Total steps in the intended flow — Registration, Gender & Identity, Assessment, Report.
- * Login, Terms of Use, Privacy Policy, and Consent are all part of the pre-registration
- * legal flow and carry LegalLayout's own, separate 3-step progress bar instead of this one. */
-export const ONBOARDING_TOTAL_STEPS = 4
+/** Total steps in the intended flow — Registration, Gender & Identity, Education, Assessment,
+ * Report. Login, Terms of Use, and Privacy Policy are all part of the pre-registration legal
+ * flow and carry LegalLayout's own, separate 2-step progress bar instead of this one. */
+export const ONBOARDING_TOTAL_STEPS = 5
 
 interface OnboardingLayoutProps {
   step: number
@@ -17,7 +17,7 @@ interface OnboardingLayoutProps {
   children: ReactNode
 }
 
-/** Shared chrome for every step after Consent — keeps Registration and later Assessment/
+/** Shared chrome for every step after Privacy Policy — keeps Registration and later Assessment/
  * Report visually consistent, and matches LegalLayout's structure (logo + language toggle
  * header, full-width progress bar right below it, title/subtitle content column) so the
  * whole funnel reads as one continuous design rather than two different layouts stitched

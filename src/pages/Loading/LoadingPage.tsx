@@ -1,24 +1,23 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import styles from './SettingUpPage.module.css'
+import styles from './LoadingPage.module.css'
 
-/** Total time this screen stays up before handing off to /onboarding. */
-const SETTING_UP_DURATION_MS = 2000
+/** Total time this screen stays up before handing off to /dashboard. */
+const LOADING_DURATION_MS = 2000
 
 /**
- * Setting Up — a brief, non-interactive interstitial shown right after
- * Privacy Policy, before Thanks and Registration ("Tell us about
- * yourself"). Mirrors Verify Account's spinner pattern: no user action,
- * just a beat to mark that consent was recorded (Privacy Policy's own
- * checkbox) before handing off to the Thanks screen.
+ * Loading — a brief, non-interactive interstitial shown right after Education, the last
+ * onboarding step, before Dashboard. Mirrors Setting Up's and Thanks's own spinner
+ * pattern: no user action, just a beat while the mock Profile "finishes saving" before
+ * Dashboard appears.
  */
-export function SettingUpPage() {
+export function LoadingPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      navigate('/thanks', { replace: true })
-    }, SETTING_UP_DURATION_MS)
+      navigate('/dashboard', { replace: true })
+    }, LOADING_DURATION_MS)
     return () => window.clearTimeout(timer)
   }, [navigate])
 
@@ -31,7 +30,7 @@ export function SettingUpPage() {
           </div>
         </div>
         <p className={styles.message} role="status" aria-live="polite">
-          Setting up your account
+          Loading
         </p>
       </div>
     </main>

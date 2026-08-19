@@ -22,7 +22,7 @@ function toPercent(value: number, max: number): number {
  * `success`-filled variant for a completed state. Exposed as a native
  * `progressbar` role so screen readers announce the step and percentage.
  *
- * Each step of a funnel (Terms of Use, Privacy Policy, Consent, ...) is its
+ * Each step of a funnel (Terms of Use, Privacy Policy, ...) is its
  * own page/route, so a fresh `ProgressBar` mounts on every step rather than
  * one instance living across navigation — a plain CSS `transition` on width
  * never fires in that case, since there's no prior on-screen value to

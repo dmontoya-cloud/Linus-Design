@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth, type Gender, type SexAssignedAtBirth } from '@/auth'
+import type { Gender, SexAssignedAtBirth } from '@/auth'
 import { Select } from '@/components/atoms/Select'
 import { Button } from '@/components/atoms/Button'
 import { OnboardingLayout } from '../OnboardingLayout'
@@ -25,13 +25,15 @@ interface RegistrationState {
 /**
  * Gender & Identity — step 2 of the onboarding flow, reached from Registration. Two
  * field groups, each with its own section title matching Registration's pattern: "How do
- * you identify?" (a gender select) and "What sex were you assigned at birth?" (female or
- * male only — a distinct question from gender, not a duplicate of it). This is the page
- * that actually calls `saveProfile`, combining these answers with the first
- * name/last name/date of birth Registration passed along in router state.
+ * you identify?" (a gender select) and "What sex were you assigned at birth?" (female,
+ * male, or intersex — a distinct question from gender, not a duplicate of it). Choosing
+ * Male or Female for gender auto-fills the matching value below (still editable) and
+ * shows a note explaining why — Non-binary and Prefer not to say have no corresponding
+ * sex-assigned-at-birth value, so neither auto-fills anything nor shows the note. Doesn't
+ * call `saveProfile` itself — these answers ride along in router state to Education, which
+ * collects the last piece (education level) and saves the whole Profile at once.
  */
 export function GenderIdentityPage() {
-  const { saveProfile } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const registration = (location.state as RegistrationState | null) ?? {
@@ -42,11 +44,22 @@ export function GenderIdentityPage() {
   const [gender, setGender] = useState<Gender | ''>('')
   const [sexAssignedAtBirth, setSexAssignedAtBirth] = useState<SexAssignedAtBirth | ''>('')
 
+  /** Only Male and Female have a directly corresponding sex-assigned-at-birth value —
+   * Non-binary and Prefer not to say don't imply one, so they leave the field as the
+   * visitor's own separate choice instead of guessing at it. */
+  function handleGenderChange(value: Gender) {
+    setGender(value)
+    if (value === 'male' || value === 'female') {
+      setSexAssignedAtBirth(value)
+    }
+  }
+
+  const prefilledSex = gender === 'male' || gender === 'female' ? gender : null
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!gender || !sexAssignedAtBirth) return
-    saveProfile({ ...registration, gender, sexAssignedAtBirth })
-    navigate('/dashboard')
+    navigate('/education', { state: { ...registration, gender, sexAssignedAtBirth } })
   }
 
   return (
@@ -59,7 +72,7 @@ export function GenderIdentityPage() {
             required
             hideRequiredMark
             value={gender}
-            onChange={(e) => setGender(e.target.value as Gender)}
+            onChange={(e) => handleGenderChange(e.target.value as Gender)}
           >
             <option value="" hidden>
               Choose one
@@ -86,7 +99,18 @@ export function GenderIdentityPage() {
             </option>
             <option value="female">Female</option>
             <option value="male">Male</option>
+            <option value="intersex">Intersex</option>
           </Select>
+          {prefilledSex ? (
+            <div className={styles.prefillNote}>
+              <p className={styles.prefillNoteTitle}>We filled this in from your last answer</p>
+              <p className={styles.prefillNoteBody}>
+                We selected {prefilledSex === 'male' ? 'Male' : 'Female'} from your last answer.
+                Please change it if that is not right. This places your results against the right
+                biology-based norms. It does not change how we speak to you here.
+              </p>
+            </div>
+          ) : null}
         </div>
 
         <Button

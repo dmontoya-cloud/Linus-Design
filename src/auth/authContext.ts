@@ -2,7 +2,15 @@ import { createContext } from 'react'
 
 export type Gender = 'female' | 'male' | 'non-binary' | 'prefer-not-to-say'
 
-export type SexAssignedAtBirth = 'female' | 'male'
+export type SexAssignedAtBirth = 'female' | 'male' | 'intersex'
+
+export type EducationLevel =
+  | 'less-than-high-school'
+  | 'high-school'
+  | 'some-college'
+  | 'associate-degree'
+  | 'bachelors-degree'
+  | 'graduate-degree'
 
 export interface Profile {
   firstName: string
@@ -11,6 +19,7 @@ export interface Profile {
   dateOfBirth: string
   gender: Gender
   sexAssignedAtBirth: SexAssignedAtBirth
+  educationLevel: EducationLevel
 }
 
 export interface ConsentRecord {

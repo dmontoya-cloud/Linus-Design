@@ -12,6 +12,7 @@ const TEST_PROFILE: Profile = {
   dateOfBirth: '1988-01-01',
   gender: 'female',
   sexAssignedAtBirth: 'female',
+  educationLevel: 'bachelors-degree',
 }
 
 function WithProfile({ children }: { children: ReactNode }) {

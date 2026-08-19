@@ -1,20 +1,6 @@
-.fullTextLink {
-  font-family: var(--font-family, system-ui, sans-serif);
-  font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-primary, #087dae);
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-}
-.fullTextLink:hover {
-  color: var(--color-primary-hover, #065e83);
-}
-.fullTextLink:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
-  border-radius: var(--radius-sm, 8px);
+.scrollHint {
+  font-style: italic;
+  color: var(--color-text-tertiary, #94a3ad);
 }
 
 .actions {

@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/auth'
 import { Checkbox } from '@/components/atoms/Checkbox'
 import { Button } from '@/components/atoms/Button'
-import { Modal } from '@/components/atoms/Modal'
 import { LegalLayout } from '../LegalLayout'
 import { SummaryCard } from '../SummaryCard'
+import { ScrollGatedLegalText } from '../ScrollGatedLegalText'
+import { CheckboxCard } from '../CheckboxCard'
 import { cascadeDelay } from '../cascade'
 import styles from './PrivacyPolicyPage.module.css'
 
@@ -90,14 +92,32 @@ const FULL_TEXT = [
 
 /**
  * Privacy Policy — step 2 of the pre-registration legal flow (Terms of Use,
- * Privacy Policy, Consent), reached from Terms of Use. Agreement is required
- * to continue; the optional marketing checkbox does not gate Continue.
+ * then Privacy Policy), reached from Terms of Use. The full legal text sits
+ * inline in a scrollable box rather than behind a "Read full text" link or
+ * Modal, and the Privacy Policy agreement checkbox stays disabled until the
+ * visitor has actually scrolled to the end of it — agreeing to text you
+ * never saw isn't real agreement. There is no separate Consent step: this
+ * page's own assessment-results checkbox covers that, and both it and the
+ * (scroll-gated) Privacy Policy agreement are required to continue. The
+ * optional marketing checkbox does not gate Continue, and isn't gated by
+ * the scroll read either. The age-18+ checkbox that used to live on
+ * Consent now lives on Legal Intro, right after the greeting (see
+ * LegalIntroPage). Each checkbox here sits in its own full-width white
+ * card (the same CheckboxCard used there), so none of them read as
+ * floating loose on the page background.
  */
 export function PrivacyPolicyPage() {
   const navigate = useNavigate()
+  const { giveConsent } = useAuth()
   const [agreed, setAgreed] = useState(false)
+  const [assessmentConsent, setAssessmentConsent] = useState(false)
   const [marketingOptIn, setMarketingOptIn] = useState(false)
-  const [fullTextOpen, setFullTextOpen] = useState(false)
+  const [hasReadFullText, setHasReadFullText] = useState(false)
+
+  function handleAgreeAndContinue() {
+    giveConsent()
+    navigate('/setting-up')
+  }
 
   return (
     <LegalLayout
@@ -105,60 +125,77 @@ export function PrivacyPolicyPage() {
       title="Privacy Policy"
       subtitle="Here is a plain summary of how we handle your information. The full policy is below."
     >
-      <SummaryCard
-        sections={SECTIONS}
-        footer={
-          <button
-            type="button"
-            className={styles.fullTextLink}
-            onClick={() => setFullTextOpen(true)}
-          >
-            Read full privacy policy
-          </button>
-        }
-      />
+      <SummaryCard sections={SECTIONS} />
 
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 1) }}>
-        <Checkbox
-          label={
-            <>
-              Send me free, actionable brain health tips by email.{' '}
-              <em>Optional, unsubscribe any time</em>
-            </>
-          }
-          checked={marketingOptIn}
-          onChange={(event) => setMarketingOptIn(event.target.checked)}
+        <ScrollGatedLegalText
+          paragraphs={FULL_TEXT}
+          onScrolledToEnd={() => setHasReadFullText(true)}
         />
       </div>
+
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 2) }}>
-        <Checkbox
-          label={
-            <>
-              I have read and agree to the Privacy Policy. <strong>Required.</strong>
-            </>
-          }
-          checked={agreed}
-          onChange={(event) => setAgreed(event.target.checked)}
-        />
+        <CheckboxCard>
+          <Checkbox
+            label={
+              <>
+                Send me free, actionable brain health tips by email.{' '}
+                <em>Optional, unsubscribe any time</em>
+              </>
+            }
+            checked={marketingOptIn}
+            onChange={(event) => setMarketingOptIn(event.target.checked)}
+          />
+        </CheckboxCard>
+      </div>
+      <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 3) }}>
+        <CheckboxCard>
+          <Checkbox
+            label={
+              <>
+                I have read and agree to the Privacy Policy. <strong>Required.</strong>
+                {!hasReadFullText && (
+                  <span className={styles.scrollHint}> Scroll to the end above to enable.</span>
+                )}
+              </>
+            }
+            checked={agreed}
+            disabled={!hasReadFullText}
+            onChange={(event) => setAgreed(event.target.checked)}
+          />
+        </CheckboxCard>
+      </div>
+      <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 4) }}>
+        <CheckboxCard>
+          <Checkbox
+            label={
+              <>
+                I consent to Linus Health using my assessment results as described above.{' '}
+                <strong>Required.</strong>
+              </>
+            }
+            checked={assessmentConsent}
+            onChange={(event) => setAssessmentConsent(event.target.checked)}
+          />
+        </CheckboxCard>
       </div>
 
       <div
         className={[styles.actions, styles.reveal].join(' ')}
-        style={{ animationDelay: cascadeDelay(SECTIONS.length + 3) }}
+        style={{ animationDelay: cascadeDelay(SECTIONS.length + 5) }}
       >
         <Button type="button" variant="outline" size="lg" onClick={() => navigate('/terms')}>
           Back
         </Button>
-        <Button type="button" size="lg" disabled={!agreed} onClick={() => navigate('/consent')}>
+        <Button
+          type="button"
+          size="lg"
+          disabled={!agreed || !assessmentConsent}
+          onClick={handleAgreeAndContinue}
+        >
           Agree and continue
         </Button>
       </div>
-
-      <Modal open={fullTextOpen} onClose={() => setFullTextOpen(false)} title="Full Privacy Policy">
-        {FULL_TEXT.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
-      </Modal>
     </LegalLayout>
   )
 }

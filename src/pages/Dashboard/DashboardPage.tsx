@@ -43,7 +43,7 @@ function initialsFor(firstName: string, lastName: string) {
 
 /**
  * Dashboard — the post-onboarding home screen, reached once Login →
- * Onboarding → Consent all complete. Deliberately minimal: a quiet nav bar
+ * Onboarding → Gender & Identity all complete. Deliberately minimal: a quiet nav bar
  * (logo, centered primary links, user info) over a short welcome message.
  * Assessment/History/Settings are still PoD-4+ stubs, same as the other
  * placeholders reachable from the prototype index.
