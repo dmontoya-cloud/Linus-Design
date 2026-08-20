@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -8,10 +8,6 @@ import { VerifyEmailPage } from './VerifyEmailPage'
 
 function VerifyAccountProbe() {
   return <p>Verifying account</p>
-}
-
-function LoginProbe() {
-  return <p>Login screen</p>
 }
 
 function renderVerifyEmailPage(email?: string) {
@@ -23,18 +19,22 @@ function renderVerifyEmailPage(email?: string) {
         <Routes>
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/verify-account" element={<VerifyAccountProbe />} />
-          <Route path="/login" element={<LoginProbe />} />
         </Routes>
       </MemoryRouter>
     </AuthProvider>,
   )
 }
 
-describe('VerifyEmailPage', () => {
-  afterEach(() => {
-    vi.useRealTimers()
-  })
+function codeInputs(): [HTMLInputElement, HTMLInputElement, HTMLInputElement, HTMLInputElement] {
+  return [
+    screen.getByLabelText('Digit 1 of 4') as HTMLInputElement,
+    screen.getByLabelText('Digit 2 of 4') as HTMLInputElement,
+    screen.getByLabelText('Digit 3 of 4') as HTMLInputElement,
+    screen.getByLabelText('Digit 4 of 4') as HTMLInputElement,
+  ]
+}
 
+describe('VerifyEmailPage', () => {
   it('shows the email passed via route state', () => {
     renderVerifyEmailPage('david@pi.tech')
     expect(screen.getByText('david@pi.tech')).toBeInTheDocument()
@@ -45,43 +45,88 @@ describe('VerifyEmailPage', () => {
     expect(screen.getByText('your email address')).toBeInTheDocument()
   })
 
-  it('sends "Try a different email address" back to Login', async () => {
+  it('clears the code and refocuses the first box when "Resend verification code" is clicked', async () => {
     const user = userEvent.setup()
     renderVerifyEmailPage('david@pi.tech')
-    await user.click(screen.getByRole('button', { name: 'Try a different email address' }))
-    expect(screen.getByText('Login screen')).toBeInTheDocument()
+    const [first, second, third, fourth] = codeInputs()
+
+    await user.click(first)
+    await user.keyboard('1234')
+    expect(fourth).toHaveValue('4')
+
+    await user.click(screen.getByRole('button', { name: 'Resend verification code' }))
+    ;[first, second, third, fourth].forEach((input) => expect(input).toHaveValue(''))
+    expect(first).toHaveFocus()
   })
 
-  it('lets the prototype-only "Continue" link skip straight to /verify-account without waiting', async () => {
+  it('renders 4 empty digit boxes and an enabled (but inert) Confirm code button', () => {
+    renderVerifyEmailPage('david@pi.tech')
+    codeInputs().forEach((input) => expect(input).toHaveValue(''))
+    expect(screen.getByRole('button', { name: 'Confirm code' })).toBeEnabled()
+  })
+
+  it('does not navigate when Confirm code is clicked with an incomplete code', async () => {
     const user = userEvent.setup()
     renderVerifyEmailPage('david@pi.tech')
-    await user.click(screen.getByRole('button', { name: 'Continue' }))
-    expect(screen.getByText('Verifying account')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Confirm code' }))
+    expect(screen.queryByText('Verifying account')).not.toBeInTheDocument()
   })
 
-  it('shows "Send new link" only once the 15s countdown reaches zero, then hands off to /verify-account', () => {
-    vi.useFakeTimers()
+  it('auto-advances focus as each digit is typed', async () => {
+    const user = userEvent.setup()
     renderVerifyEmailPage('david@pi.tech')
+    const [first, second, third, fourth] = codeInputs()
 
-    expect(screen.getByText('You can request a new link in 15s')).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Send new link' })).not.toBeInTheDocument()
+    await user.click(first)
+    await user.keyboard('1')
+    expect(second).toHaveFocus()
+    await user.keyboard('2')
+    expect(third).toHaveFocus()
+    await user.keyboard('3')
+    expect(fourth).toHaveFocus()
+    await user.keyboard('4')
+    expect(fourth).toHaveValue('4')
+  })
 
-    // Advance one second at a time so React commits the state update and re-schedules
-    // the next tick between each — advancing the full 15000ms in one shot only fires
-    // the first timer, since later ticks aren't queued until the effect re-runs.
-    for (let i = 0; i < 15; i += 1) {
-      act(() => {
-        vi.advanceTimersByTime(1000)
-      })
-    }
+  it('moves focus to the previous box on backspace when the current box is empty', async () => {
+    const user = userEvent.setup()
+    renderVerifyEmailPage('david@pi.tech')
+    const [first, second] = codeInputs()
 
-    // The hint stays on screen — its text just changes, it doesn't disappear.
-    expect(screen.queryByText(/You can request a new link/)).not.toBeInTheDocument()
-    expect(screen.getByText("Didn't get it?")).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Send new link' })).toBeInTheDocument()
+    await user.click(first)
+    await user.keyboard('1')
+    expect(second).toHaveFocus()
+    await user.keyboard('{Backspace}')
+    expect(first).toHaveFocus()
+  })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Send new link' }))
+  it('ignores non-numeric characters', async () => {
+    const user = userEvent.setup()
+    renderVerifyEmailPage('david@pi.tech')
+    const [first] = codeInputs()
+
+    await user.click(first)
+    await user.keyboard('a')
+    expect(first).toHaveValue('')
+  })
+
+  it('only confirms once all 4 digits are filled, and any complete code succeeds', async () => {
+    const user = userEvent.setup()
+    renderVerifyEmailPage('david@pi.tech')
+    const [first, second, third, fourth] = codeInputs()
+    const confirmButton = screen.getByRole('button', { name: 'Confirm code' })
+
+    await user.click(first)
+    await user.keyboard('123')
+    await user.click(confirmButton)
+    expect(screen.queryByText('Verifying account')).not.toBeInTheDocument()
+
+    await user.click(fourth)
+    await user.keyboard('7')
+    await user.click(confirmButton)
     expect(screen.getByText('Verifying account')).toBeInTheDocument()
+    // Sanity check the values actually typed, not just the count.
+    expect([first, second, third, fourth].map((input) => input.value)).toEqual(['1', '2', '3', '7'])
   })
 
   it('has no automatically detectable accessibility violations (axe)', async () => {

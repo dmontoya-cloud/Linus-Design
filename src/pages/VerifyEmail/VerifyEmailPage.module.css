@@ -46,12 +46,6 @@
   margin-bottom: var(--space-lg, 24px);
 }
 
-.envelopeIcon {
-  width: 32px;
-  height: 32px;
-  color: var(--color-primary, #087dae);
-}
-
 .title {
   font-family: var(--font-headline-2-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-headline-2-semibold-size, 2.5rem);
@@ -73,61 +67,88 @@
   color: var(--color-text-primary, #1f2a37);
 }
 
-.spinner {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-left: var(--space-xs, 4px);
-  vertical-align: middle;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  opacity: 0.85;
-  animation: verify-email-spin 0.6s linear infinite;
-}
-
-@keyframes verify-email-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.rulesList {
-  font-family: var(--font-family, system-ui, sans-serif);
-  font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
-  line-height: 1.5;
-  margin: 0;
-  padding-left: var(--space-lg, 24px);
-}
-
-.linkRow {
+.codeSection {
   display: flex;
-  align-items: center;
-  gap: var(--space-md, 16px);
-  margin-bottom: var(--space-xl, 32px);
-}
-
-.resendRow {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-md, 16px);
 }
 
-.resendHint {
-  font-family: var(--font-family, system-ui, sans-serif);
-  font-size: var(--font-label-l-regular-size, 0.8125rem);
-  color: var(--color-text-tertiary, #94a3ad);
+.codeLabel {
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
   margin: 0;
+}
+
+/* Sits the boxes and "Confirm code" side by side rather than stacked — the button is the
+   same lg size/height as the code boxes and as Login's own submit button, so this row reads
+   as one continuous control. */
+.codeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 16px);
+  flex-wrap: wrap;
+}
+
+/* Stays enabled (clickable, full color) even before all 4 digits are filled — only the
+   cursor hints that clicking won't do anything yet, rather than the button going gray. */
+.confirmCodeIncomplete {
+  cursor: not-allowed;
+}
+
+.codeBoxes {
+  display: flex;
+  gap: var(--space-sm, 8px);
+}
+
+.codeBox {
+  width: 48px;
+  height: 56px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border-strong, #81909c);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-surface, #fff);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2a37);
+  text-align: center;
+  outline: none;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.codeBox:hover {
+  border-color: var(--color-text-secondary, #5b6b79);
+}
+.codeBox:focus-visible {
+  border-color: var(--color-primary, #087dae);
+  box-shadow: inset 0 0 0 1px var(--color-primary, #087dae);
+}
+
+/* Same field-error border color as Field's own error variant. */
+.codeBoxError {
+  border-color: var(--color-border-danger, #dc2626);
+}
+.codeBoxError:hover,
+.codeBoxError:focus-visible {
+  border-color: var(--color-border-danger, #dc2626);
+}
+
+.codeError {
+  margin: 0;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-m-regular-size, 0.6875rem);
+  color: var(--color-content-danger, #dc2626);
+}
+
+/* Reserves the height this message takes up so `.formContent`'s vertical centering doesn't
+   reflow-shift everything above it depending on whether the message is currently showing —
+   same technique, and same reason, as LoginPage's *Slot classes. */
+.codeErrorSlot {
+  min-height: 17px;
 }
 
 .textLink {

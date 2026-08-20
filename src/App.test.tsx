@@ -61,7 +61,7 @@ describe('App', () => {
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
     expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Send magic link' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Log in to thrive' })).toBeInTheDocument()
   })
 
   it('redirects /onboarding to /login when not authenticated', () => {
@@ -75,21 +75,20 @@ describe('App', () => {
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
     await user.type(screen.getByLabelText('Email address*'), 'ada@example.com')
-    await user.click(screen.getByRole('button', { name: 'Send magic link' }))
+    await user.click(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ }))
+    await user.click(screen.getByRole('button', { name: 'Log in to thrive' }))
 
     await waitFor(
       () => expect(screen.getByRole('heading', { name: 'Check your email!' })).toBeInTheDocument(),
       { timeout: 2000 },
     )
 
-    // No code to enter — "Send new link" only appears once the resend countdown
-    // reaches zero, then hands off to Verify Account.
-    expect(screen.queryByRole('button', { name: 'Send new link' })).not.toBeInTheDocument()
-    await waitFor(
-      () => expect(screen.getByRole('button', { name: 'Send new link' })).toBeInTheDocument(),
-      { timeout: 20000 },
-    )
-    await user.click(screen.getByRole('button', { name: 'Send new link' }))
+    // Any complete 4-digit code confirms — this repo is mock-data-only. Confirm code stays
+    // enabled throughout; clicking it early is just a no-op.
+    const confirmButton = screen.getByRole('button', { name: 'Confirm code' })
+    await user.click(screen.getByLabelText('Digit 1 of 4'))
+    await user.keyboard('1234')
+    await user.click(confirmButton)
     await waitFor(() => expect(screen.getByText('Logging you in')).toBeInTheDocument(), {
       timeout: 4500,
     })
@@ -101,8 +100,8 @@ describe('App', () => {
         ).toBeInTheDocument(),
       { timeout: 4500 },
     )
-    await user.click(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" }))
-    await user.click(screen.getByRole('button', { name: "Let's go" }))
+    await user.type(screen.getByLabelText('Preferred name'), 'Ada')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
     await user.click(screen.getByRole('checkbox'))
@@ -112,18 +111,13 @@ describe('App', () => {
     await user.click(
       screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }),
     )
-    await user.click(
-      screen.getByRole('checkbox', {
-        name: /I consent to Linus Health using my assessment results/,
-      }),
-    )
     await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
 
     await waitFor(() => expect(screen.getByText('Setting up your account')).toBeInTheDocument(), {
       timeout: 1000,
     })
 
-    await waitFor(() => expect(screen.getByText('Thanks!')).toBeInTheDocument(), {
+    await waitFor(() => expect(screen.getByText('Thanks, Ada!')).toBeInTheDocument(), {
       timeout: 3000,
     })
 
@@ -132,7 +126,8 @@ describe('App', () => {
         expect(screen.getByRole('heading', { name: 'Tell us about yourself' })).toBeInTheDocument(),
       { timeout: 3000 },
     )
-    await user.type(screen.getByLabelText('First name'), 'Ada')
+    // First name is already pre-filled with the preferred name entered on Legal Intro.
+    expect(screen.getByLabelText('First name')).toHaveValue('Ada')
     await user.type(screen.getByLabelText('Last name'), 'Lovelace')
     await user.selectOptions(screen.getByLabelText('Month'), '01')
     await user.type(screen.getByLabelText('Day'), '1')

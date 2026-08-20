@@ -72,8 +72,40 @@
   gap: var(--space-md, 16px);
 }
 
+/* Reserves enough height for the email Field plus its error helper text, so the checkbox
+   below never shifts position depending on whether that helper text is currently showing —
+   only measured/adjusted empirically, not derived from any token. */
+.emailFieldSlot {
+  min-height: 96px;
+}
+
 .magicLinkSubmit {
   align-self: flex-end;
+}
+
+/* Reserves enough height for the checkbox card plus its error message, so the rest of the
+   vertically-centered form content never reflow-shifts depending on whether that message is
+   currently showing (25px bare vs. 43.5px with the message, measured empirically). */
+.ageCheckboxSlot {
+  min-height: 48px;
+}
+
+/* Same card recipe as CheckboxCard's default, minus the shadow and padding — this page's
+   checkbox sits directly under the email field rather than floating over other content, so
+   the shadow read as an unnecessary extra layer, and no padding keeps it left-aligned with
+   the email field above it instead of inset. */
+.ageCheckboxCard {
+  padding: 0;
+  box-shadow: none;
+}
+
+/* On request: the checkbox's own border stays neutral (never border-danger, no error
+   background either) — this message below it is the only error cue. */
+.ageCheckboxError {
+  margin: var(--space-xs, 4px) 0 0;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-m-regular-size, 0.6875rem);
+  color: var(--color-content-danger, #dc2626);
 }
 
 /* Reserved for a real photo/illustration — a placeholder gradient stands in

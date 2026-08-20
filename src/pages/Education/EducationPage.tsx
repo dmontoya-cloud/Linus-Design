@@ -8,12 +8,15 @@ import { cascadeDelay } from '../cascade'
 import styles from './EducationPage.module.css'
 
 const EDUCATION_OPTIONS: Array<{ value: EducationLevel; label: string }> = [
-  { value: 'less-than-high-school', label: 'Less than high school' },
-  { value: 'high-school', label: 'High school diploma or GED' },
-  { value: 'some-college', label: 'Some college' },
-  { value: 'associate-degree', label: 'Associate degree' },
-  { value: 'bachelors-degree', label: "Bachelor's degree" },
-  { value: 'graduate-degree', label: 'Graduate or professional degree' },
+  { value: 'none', label: 'None / Not in school' },
+  { value: 'elementary-school', label: 'Elementary School (Grades 1–5)' },
+  { value: 'middle-school', label: 'Middle School (Grades 6–8)' },
+  { value: 'high-school', label: 'High School (Grades 9–12)' },
+  { value: 'some-college', label: 'Some College' },
+  { value: 'bachelors-degree', label: "Bachelor's Degree" },
+  { value: 'some-graduate-education', label: 'Some Graduate Education' },
+  { value: 'masters-degree', label: "Master's Degree" },
+  { value: 'doctoral-degree', label: 'Doctoral Degree' },
 ]
 
 /** Everything Registration and Gender & Identity collected together, carried forward in
@@ -23,7 +26,8 @@ interface PriorState {
   firstName: string
   lastName: string
   dateOfBirth: string
-  gender: Gender
+  /** Optional — left `''` if the visitor didn't answer on Gender & Identity. */
+  gender: Gender | ''
   sexAssignedAtBirth: SexAssignedAtBirth
 }
 
@@ -33,7 +37,12 @@ interface PriorState {
  * same way date of birth and sex assigned at birth are: to place results in the right
  * comparison group, not to change how the visitor is addressed. This is the page that
  * actually calls `saveProfile`, combining this answer with everything Registration and
- * Gender & Identity passed along in router state.
+ * Gender & Identity passed along in router state. The form has `noValidate`, and the
+ * select uses its own documented `field-error` variant (border-danger border, red helper
+ * text below) if Continue is clicked while it's still on "Please choose" — rather than the
+ * browser's native "Please select an item in the list." bubble — matching the same
+ * treatment already used on Gender & Identity's two dropdowns. The select sits in its own
+ * `min-height` slot so that message doesn't push Continue down when it appears.
  */
 export function EducationPage() {
   const { saveProfile } = useAuth()
@@ -41,10 +50,16 @@ export function EducationPage() {
   const location = useLocation()
   const prior = location.state as PriorState | null
   const [educationLevel, setEducationLevel] = useState<EducationLevel | ''>('')
+  const [showValidation, setShowValidation] = useState(false)
+
+  const educationInvalid = showValidation && !educationLevel
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!prior || !educationLevel) return
+    if (!prior || !educationLevel) {
+      setShowValidation(true)
+      return
+    }
     saveProfile({ ...prior, educationLevel })
     navigate('/loading')
   }
@@ -55,24 +70,28 @@ export function EducationPage() {
       title="Which best describes your educational background?"
       subtitle="Education gives helpful context for your results. It is part of how we choose the right norms."
     >
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.reveal} style={{ animationDelay: cascadeDelay(0) }}>
-          <Select
-            label="Education background"
-            required
-            hideRequiredMark
-            value={educationLevel}
-            onChange={(e) => setEducationLevel(e.target.value as EducationLevel)}
-          >
-            <option value="" hidden>
-              Please choose
-            </option>
-            {EDUCATION_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+          <div className={styles.selectSlot}>
+            <Select
+              label="Education background"
+              required
+              hideRequiredMark
+              error={educationInvalid}
+              helperText={educationInvalid ? 'Please select an education background.' : undefined}
+              value={educationLevel}
+              onChange={(e) => setEducationLevel(e.target.value as EducationLevel)}
+            >
+              <option value="" hidden>
+                Please choose
               </option>
-            ))}
-          </Select>
+              {EDUCATION_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </div>
         </div>
 
         <Button

@@ -26,6 +26,14 @@
   margin-top: var(--space-sm, 8px);
 }
 
+/* Reserves enough height for First/Last name plus their own "Please enter a ___." error, so
+   nothing below ever shifts position depending on whether that message is currently showing
+   — same technique as the date-of-birth fields' own slots below (91.4px with the message,
+   measured empirically). */
+.nameFieldSlot {
+  min-height: 92px;
+}
+
 /* Resets the browser's default fieldset chrome (border/padding/min-width) so this reads as
    a plain grouped section, not a boxed-in form control — the legend alone carries the
    "these three fields are one question" relationship. */
@@ -58,6 +66,42 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg, 24px);
+}
+
+/* Reserves enough height for the Month select plus its own "Please select a month." error —
+   same technique as Day/Year below (91.4px with the message, measured empirically). */
+.monthFieldSlot {
+  min-height: 92px;
+}
+
+/* Reserves enough height for the Day field plus its own "must be ≤ 31" error, so Month and
+   Year (which never grow) don't visually stretch and the fields below never shift position
+   depending on whether that message is currently showing — see LoginPage's .emailFieldSlot
+   for the same technique (91.4px with the message, measured empirically). */
+.dayFieldSlot {
+  min-height: 92px;
+}
+
+/* Same technique, for Year's own "must be higher than 1910" error (91.4px with the message,
+   measured empirically). */
+.yearFieldSlot {
+  min-height: 92px;
+}
+
+/* Reserves enough height for the under-18 error message, so Continue below never shifts
+   position depending on whether that message is currently showing — see LoginPage's
+   .ageCheckboxSlot for the same technique. */
+.dobErrorSlot {
+  min-height: 17px;
+}
+
+/* On the same quiet treatment as Login's age checkbox: the date-of-birth fields stay
+   neutral (never border-danger) — this message below them is the only error cue. */
+.dobError {
+  margin: 0;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-m-regular-size, 0.6875rem);
+  color: var(--color-content-danger, #dc2626);
 }
 
 @media (min-width: 480px) {

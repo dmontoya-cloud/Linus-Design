@@ -4,7 +4,7 @@ import { Checkbox } from '@/components/atoms/Checkbox'
 import { Button } from '@/components/atoms/Button'
 import { LegalLayout } from '../LegalLayout'
 import { SummaryCard } from '../SummaryCard'
-import { ScrollGatedLegalText } from '../ScrollGatedLegalText'
+import { LegalTextBox } from '../LegalTextBox'
 import { CheckboxCard } from '../CheckboxCard'
 import { cascadeDelay } from '../cascade'
 import styles from './TermsOfUsePage.module.css'
@@ -111,16 +111,32 @@ const FULL_TEXT = [
  * Terms of Use — step 1 of the pre-registration legal flow (Terms of Use,
  * then Privacy Policy), reached from the Legal Intro heads-up. The full
  * legal text — a longer, more formal version of the summary above — sits
- * inline in a scrollable box rather than behind a "Read full text" link or
- * Modal, and the agreement checkbox stays disabled until the visitor has
- * actually scrolled to the end of it (or immediately, if the text is short
- * enough to never need scrolling) — agreeing to text you never saw isn't
- * real agreement.
+ * inline as plain text (`LegalTextBox`) rather than behind a "Read full
+ * text" link or Modal, so it's visible without an extra click. The
+ * agreement checkbox is enabled from the start — it used to stay disabled
+ * until scrolled to the end of the full text, but that scroll-gate was
+ * removed on request. "Agree and continue" stays enabled at all times too —
+ * clicking it without checking the box reveals a `content-danger` message
+ * below the checkbox (same quiet treatment as Login's age checkbox: the
+ * checkbox itself never turns red) rather than the button silently
+ * refusing to respond. The checkbox card sits in its own `min-height` slot
+ * sized to fit the card with its error message showing, so that message
+ * never changes the card's height and pushes Back/Agree and continue down.
  */
 export function TermsOfUsePage() {
   const navigate = useNavigate()
   const [agreed, setAgreed] = useState(false)
-  const [hasReadFullText, setHasReadFullText] = useState(false)
+  const [showValidation, setShowValidation] = useState(false)
+
+  const agreedInvalid = showValidation && !agreed
+
+  function handleAgreeAndContinue() {
+    if (!agreed) {
+      setShowValidation(true)
+      return
+    }
+    navigate('/privacy')
+  }
 
   return (
     <LegalLayout
@@ -131,28 +147,29 @@ export function TermsOfUsePage() {
       <SummaryCard sections={SECTIONS} />
 
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 1) }}>
-        <ScrollGatedLegalText
-          paragraphs={FULL_TEXT}
-          onScrolledToEnd={() => setHasReadFullText(true)}
-        />
+        <LegalTextBox paragraphs={FULL_TEXT} />
       </div>
 
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 2) }}>
-        <CheckboxCard>
-          <Checkbox
-            label={
-              <>
-                I have read and agree to the Terms of Use. <strong>Required.</strong>
-                {!hasReadFullText && (
-                  <span className={styles.scrollHint}> Scroll to the end above to enable.</span>
-                )}
-              </>
-            }
-            checked={agreed}
-            disabled={!hasReadFullText}
-            onChange={(event) => setAgreed(event.target.checked)}
-          />
-        </CheckboxCard>
+        <div className={styles.agreeCheckboxSlot}>
+          <CheckboxCard>
+            <Checkbox
+              label={
+                <>
+                  I have read and agree to the Terms of Use. <strong>Required.</strong>
+                </>
+              }
+              checked={agreed}
+              aria-describedby={agreedInvalid ? 'agree-checkbox-error' : undefined}
+              onChange={(event) => setAgreed(event.target.checked)}
+            />
+            {agreedInvalid ? (
+              <p id="agree-checkbox-error" className={styles.agreeCheckboxError}>
+                Please confirm you agree to the Terms of Use.
+              </p>
+            ) : null}
+          </CheckboxCard>
+        </div>
       </div>
 
       <div
@@ -162,7 +179,7 @@ export function TermsOfUsePage() {
         <Button type="button" variant="outline" size="lg" onClick={() => navigate('/legal-intro')}>
           Back
         </Button>
-        <Button type="button" size="lg" disabled={!agreed} onClick={() => navigate('/privacy')}>
+        <Button type="button" size="lg" onClick={handleAgreeAndContinue}>
           Agree and continue
         </Button>
       </div>

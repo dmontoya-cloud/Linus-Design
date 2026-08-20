@@ -61,6 +61,15 @@ describe('GenderIdentityPage', () => {
     expect(screen.getByLabelText('Sex assigned at birth')).toBeInTheDocument()
   })
 
+  it('renders the biology-norms subtitle below the title', () => {
+    renderGenderIdentityPage()
+    expect(
+      screen.getByText(
+        'Your results are compared with norms based on biology. This helps us use the right ones.',
+      ),
+    ).toBeInTheDocument()
+  })
+
   it('offers Female, Male, and Intersex for sex assigned at birth, and different options for gender', () => {
     renderGenderIdentityPage()
     const sexSelect = screen.getByLabelText('Sex assigned at birth') as HTMLSelectElement
@@ -72,8 +81,15 @@ describe('GenderIdentityPage', () => {
     const genderSelect = screen.getByLabelText('Gender') as HTMLSelectElement
     const genderOptionLabels = Array.from(genderSelect.options)
       .map((option) => option.textContent)
-      .filter((text) => text !== 'Choose one')
+      .filter((text) => text !== 'Choose one - Optional')
     expect(genderOptionLabels).toEqual(['Female', 'Male', 'Non-binary', 'Prefer not to say'])
+  })
+
+  it('marks the Gender placeholder as optional and leaves the select enabled without an error', () => {
+    renderGenderIdentityPage()
+    const genderSelect = screen.getByLabelText('Gender') as HTMLSelectElement
+    expect(genderSelect.options.item(0)?.textContent).toBe('Choose one - Optional')
+    expect(genderSelect).not.toHaveAttribute('required')
   })
 
   it('auto-fills sex assigned at birth and shows the pre-fill note when gender is Male', async () => {
@@ -137,13 +153,46 @@ describe('GenderIdentityPage', () => {
     ).toBeInTheDocument()
   })
 
-  it('does not navigate when gender or sex assigned at birth is left unselected', async () => {
+  it('does not navigate when sex assigned at birth is left unselected, even though gender is optional', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
     // Non-binary doesn't auto-fill sex assigned at birth, so it's left genuinely unselected.
     await user.selectOptions(screen.getByLabelText('Gender'), 'non-binary')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(screen.getByLabelText('Sex assigned at birth')).toHaveValue('')
+  })
+
+  it('hands off with an empty gender when left on "Choose one - Optional", as long as sex assigned at birth is answered', async () => {
+    const user = userEvent.setup()
+    renderGenderIdentityPage()
+    await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(screen.getByText('Handoff state: Ada Lovelace 1988-01-01 female')).toBeInTheDocument()
+  })
+
+  it('shows an error on sex assigned at birth when Continue is clicked unanswered, using the field-error variant rather than a native validation bubble, and never shows one for the optional Gender', async () => {
+    const user = userEvent.setup()
+    renderGenderIdentityPage()
+    const genderSelect = screen.getByLabelText('Gender')
+    const sexSelect = screen.getByLabelText('Sex assigned at birth')
+    expect(screen.queryByText('Please select a sex assigned at birth.')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(genderSelect).not.toHaveAttribute('aria-invalid', 'true')
+    expect(sexSelect).toHaveAttribute('aria-invalid', 'true')
+    expect(screen.getByText('Please select a sex assigned at birth.')).toBeInTheDocument()
+    expect(screen.queryByText('Handoff state:', { exact: false })).not.toBeInTheDocument()
+  })
+
+  it('clears the sex-assigned-at-birth error once auto-filled by picking Male or Female', async () => {
+    const user = userEvent.setup()
+    renderGenderIdentityPage()
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(screen.getByText('Please select a sex assigned at birth.')).toBeInTheDocument()
+
+    await user.selectOptions(screen.getByLabelText('Gender'), 'male')
+    expect(screen.queryByText('Please select a sex assigned at birth.')).not.toBeInTheDocument()
   })
 
   it('has no automatically detectable accessibility violations (axe)', async () => {

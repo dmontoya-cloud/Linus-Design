@@ -9,6 +9,14 @@
   margin-top: var(--space-sm, 8px);
 }
 
+/* Reserves enough height for the select plus its own "Please select..." error, so Continue
+   below never shifts position depending on whether that message is currently showing — see
+   OnboardingPage's .dayFieldSlot / GenderIdentityPage's .selectSlot for the same technique
+   (91.4px with the message, measured empirically). */
+.selectSlot {
+  min-height: 92px;
+}
+
 /* Cascades in the same rhythm as Terms of Use / Privacy Policy / Registration / Gender &
    Identity — see src/pages/cascade.ts. */
 .reveal {

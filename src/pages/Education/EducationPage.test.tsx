@@ -69,12 +69,15 @@ describe('EducationPage', () => {
       .map((option) => option.textContent)
       .filter((text) => text !== 'Please choose')
     expect(optionLabels).toEqual([
-      'Less than high school',
-      'High school diploma or GED',
-      'Some college',
-      'Associate degree',
-      "Bachelor's degree",
-      'Graduate or professional degree',
+      'None / Not in school',
+      'Elementary School (Grades 1–5)',
+      'Middle School (Grades 6–8)',
+      'High School (Grades 9–12)',
+      'Some College',
+      "Bachelor's Degree",
+      'Some Graduate Education',
+      "Master's Degree",
+      'Doctoral Degree',
     ])
   })
 
@@ -93,6 +96,33 @@ describe('EducationPage', () => {
     renderEducationPage()
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(screen.getByLabelText('Education background')).toHaveValue('')
+  })
+
+  it('shows an error on the select, using the field-error variant rather than a native validation bubble, when Continue is clicked without a selection', async () => {
+    const user = userEvent.setup()
+    renderEducationPage()
+    const select = screen.getByLabelText('Education background')
+    expect(screen.queryByText('Please select an education background.')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(select).toHaveAttribute('aria-invalid', 'true')
+    expect(screen.getByText('Please select an education background.')).toBeInTheDocument()
+  })
+
+  it('clears the error once an option is selected, then navigates', async () => {
+    const user = userEvent.setup()
+    renderEducationPage()
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(screen.getByText('Please select an education background.')).toBeInTheDocument()
+
+    await user.selectOptions(screen.getByLabelText('Education background'), 'bachelors-degree')
+    expect(screen.queryByText('Please select an education background.')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(
+      screen.getByText('Profile: Ada Lovelace 1988-01-01 non-binary female bachelors-degree'),
+    ).toBeInTheDocument()
   })
 
   it('has no automatically detectable accessibility violations (axe)', async () => {

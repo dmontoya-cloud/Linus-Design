@@ -9,6 +9,13 @@
   margin-top: var(--space-sm, 8px);
 }
 
+/* Reserves enough height for the Select plus its own "Please select..." error, so nothing
+   below ever shifts position depending on whether that message is currently showing — see
+   OnboardingPage's .dayFieldSlot for the same technique. */
+.selectSlot {
+  min-height: 63px;
+}
+
 /* Same headline-5-semibold used by Registration's "What's your name?" / "When were you
    born?" — see docs/design.md and OnboardingPage.module.css's own note on why this tier
    exists. */
