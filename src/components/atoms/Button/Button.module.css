@@ -1,4 +1,5 @@
 .button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -161,7 +162,21 @@
   box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
 }
 
-/* Loading */
+/* Loading — the label stays in the DOM (just invisible) so it keeps occupying its normal
+   layout space; the spinner overlays on top via the button's own position: relative, so
+   swapping to the spinner never changes the button's resting width or height. */
+.labelHidden {
+  visibility: hidden;
+}
+
+.spinnerOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .spinner {
   width: 18px;
   height: 18px;

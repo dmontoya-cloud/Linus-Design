@@ -9,16 +9,6 @@
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
 
-/* Full width of the content column (align-self: stretch — .fadeField's own max-width doesn't
-   apply here). Extra margin-bottom on top of .content's own --space-md gap — this page wants
-   more breathing room after the card than the others sharing CheckboxCard. */
-.fadeCheckbox {
-  align-self: stretch;
-  margin-bottom: var(--space-lg, 24px);
-  opacity: 0;
-  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-}
-
 /* docs/design.md's smallest title tier — headline-5-semibold — same token used for
    Registration's "What's your name?" / "When were you born?" section titles. Reads as a
    small heading introducing the name field below it, not more body copy. */
@@ -33,19 +23,19 @@
 
 .fadePersonalPrompt {
   opacity: 0;
-  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 }
 
 .fadeField {
   align-self: stretch;
   opacity: 0;
-  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
 }
 
 .fadeButton {
   align-self: flex-end;
   opacity: 0;
-  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
 }
 
 @keyframes fade-rise {

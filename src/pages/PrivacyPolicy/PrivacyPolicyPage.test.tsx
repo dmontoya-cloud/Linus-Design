@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -32,74 +32,61 @@ function renderPrivacyPolicyPage() {
 }
 
 describe('PrivacyPolicyPage', () => {
-  it('renders the summary sections, the scrollable full text, the optional and required checkboxes, and a disabled Continue', () => {
+  it('renders the summary sections, the full text as plain content, the optional and required checkboxes (both enabled from the start), and an always-enabled Continue', () => {
     renderPrivacyPolicyPage()
     expect(screen.getByRole('heading', { name: 'Privacy Policy' })).toBeInTheDocument()
     expect(screen.getByText('What we collect')).toBeInTheDocument()
     expect(screen.getByText(/1\. Information we collect\./)).toBeInTheDocument()
-    expect(
-      screen.getByRole('checkbox', { name: /Send me free, actionable brain health tips/ }),
-    ).not.toBeChecked()
-    expect(
-      screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }),
-    ).not.toBeChecked()
-    expect(
-      screen.getByRole('checkbox', {
-        name: /I consent to Linus Health using my assessment results/,
-      }),
-    ).not.toBeChecked()
-    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeDisabled()
+
+    const marketingCheckbox = screen.getByRole('checkbox', {
+      name: /I agree to receive marketing communications from Linus Health/,
+    })
+    const agreeCheckbox = screen.getByRole('checkbox', {
+      name: /I have read and agree to the Privacy Policy/,
+    })
+    expect(marketingCheckbox).not.toBeChecked()
+    expect(agreeCheckbox).not.toBeChecked()
+    // Neither checkbox is scroll-gated — both enabled from the start.
+    expect(marketingCheckbox).toBeEnabled()
+    expect(agreeCheckbox).toBeEnabled()
+    // Continue stays enabled at all times — clicking it with the agreement box unchecked
+    // reveals an error instead.
+    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeEnabled()
   })
 
-  it('keeps the Privacy Policy agreement checkbox disabled until scrolled to the end of the full text, then enables it', () => {
-    // See TermsOfUsePage.test.tsx — jsdom reports scrollHeight/clientHeight as 0 for every
-    // element, which would otherwise skip the disabled-until-scrolled behavior entirely.
-    const scrollHeightSpy = vi
-      .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
-      .mockReturnValue(500)
-    const clientHeightSpy = vi
-      .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
-      .mockReturnValue(100)
+  it('shows an error below the agreement checkbox when Continue is clicked unchecked, without turning the checkbox itself invalid', async () => {
+    const user = userEvent.setup()
+    renderPrivacyPolicyPage()
+    const agreeCheckbox = screen.getByRole('checkbox', {
+      name: /I have read and agree to the Privacy Policy/,
+    })
+    expect(
+      screen.queryByText('Please confirm you agree to the Privacy Policy.'),
+    ).not.toBeInTheDocument()
 
-    try {
-      renderPrivacyPolicyPage()
-      const agreeCheckbox = screen.getByRole('checkbox', {
-        name: /I have read and agree to the Privacy Policy/,
-      })
-      expect(agreeCheckbox).toBeDisabled()
-      expect(screen.getByText('Scroll to the end above to enable.')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
 
-      const scrollBox = screen.getByText(/1\. Information we collect\./).closest('div')
-      expect(scrollBox).not.toBeNull()
-      fireEvent.scroll(scrollBox as HTMLDivElement, { target: { scrollTop: 450 } })
-
-      expect(agreeCheckbox).toBeEnabled()
-      expect(screen.queryByText('Scroll to the end above to enable.')).not.toBeInTheDocument()
-    } finally {
-      scrollHeightSpy.mockRestore()
-      clientHeightSpy.mockRestore()
-    }
+    expect(agreeCheckbox).not.toHaveAttribute('aria-invalid')
+    expect(agreeCheckbox).toHaveAttribute('aria-describedby', 'agree-checkbox-error')
+    expect(screen.getByText('Please confirm you agree to the Privacy Policy.')).toBeInTheDocument()
+    expect(screen.queryByText('Setting up screen')).not.toBeInTheDocument()
   })
 
-  it('leaves Continue disabled from the optional checkbox alone, requires both the Privacy Policy agreement and the assessment-consent checkbox, then hands off to /setting-up', async () => {
+  it('checking the agreement box clears the error, then Continue hands off to /setting-up, independently of the optional marketing checkbox', async () => {
     const user = userEvent.setup()
     renderPrivacyPolicyPage()
     await user.click(
-      screen.getByRole('checkbox', { name: /Send me free, actionable brain health tips/ }),
+      screen.getByRole('checkbox', { name: /I agree to receive marketing communications/ }),
     )
-    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
+    expect(screen.getByText('Please confirm you agree to the Privacy Policy.')).toBeInTheDocument()
 
     await user.click(
       screen.getByRole('checkbox', { name: /I have read and agree to the Privacy Policy/ }),
     )
-    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeDisabled()
-
-    await user.click(
-      screen.getByRole('checkbox', {
-        name: /I consent to Linus Health using my assessment results/,
-      }),
-    )
-    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeEnabled()
+    expect(
+      screen.queryByText('Please confirm you agree to the Privacy Policy.'),
+    ).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
     expect(screen.getByText('Setting up screen')).toBeInTheDocument()

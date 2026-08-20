@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -29,49 +29,47 @@ function renderTermsOfUsePage() {
 }
 
 describe('TermsOfUsePage', () => {
-  it('renders the summary sections, the scrollable full text, and a disabled Continue button', () => {
+  it('renders the summary sections, the full text as plain content, and an always-enabled Continue button', () => {
     renderTermsOfUsePage()
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
     expect(screen.getByText('What Thrive does')).toBeInTheDocument()
     expect(screen.getByText(/1\. Acceptance of these Terms\./)).toBeInTheDocument()
-    expect(screen.getByRole('checkbox')).not.toBeChecked()
-    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeDisabled()
+    const checkbox = screen.getByRole('checkbox')
+    expect(checkbox).not.toBeChecked()
+    // The agree checkbox is enabled from the start — no scroll-to-read gate.
+    expect(checkbox).toBeEnabled()
+    // Continue stays enabled at all times — clicking it unchecked reveals an error instead.
+    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeEnabled()
   })
 
-  it('keeps the agree checkbox disabled until scrolled to the end of the full text, then enables it', () => {
-    // jsdom reports every element's scrollHeight/clientHeight as 0, which would otherwise make
-    // the "already at the end" mount check fire immediately — mock real overflow dimensions so
-    // the disabled-until-scrolled behavior is actually exercised, not skipped.
-    const scrollHeightSpy = vi
-      .spyOn(HTMLElement.prototype, 'scrollHeight', 'get')
-      .mockReturnValue(500)
-    const clientHeightSpy = vi
-      .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
-      .mockReturnValue(100)
-
-    try {
-      renderTermsOfUsePage()
-      const checkbox = screen.getByRole('checkbox')
-      expect(checkbox).toBeDisabled()
-      expect(screen.getByText('Scroll to the end above to enable.')).toBeInTheDocument()
-
-      const scrollBox = screen.getByText(/1\. Acceptance of these Terms\./).closest('div')
-      expect(scrollBox).not.toBeNull()
-      fireEvent.scroll(scrollBox as HTMLDivElement, { target: { scrollTop: 450 } })
-
-      expect(checkbox).toBeEnabled()
-      expect(screen.queryByText('Scroll to the end above to enable.')).not.toBeInTheDocument()
-    } finally {
-      scrollHeightSpy.mockRestore()
-      clientHeightSpy.mockRestore()
-    }
-  })
-
-  it('enables Continue only once the agree checkbox is checked, then hands off to /privacy', async () => {
+  it('shows an error below the checkbox when Continue is clicked unchecked, without turning the checkbox itself invalid', async () => {
     const user = userEvent.setup()
     renderTermsOfUsePage()
+    const checkbox = screen.getByRole('checkbox')
+    expect(checkbox).not.toHaveAttribute('aria-invalid')
+    expect(
+      screen.queryByText('Please confirm you agree to the Terms of Use.'),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
+
+    expect(checkbox).not.toHaveAttribute('aria-invalid')
+    expect(checkbox).toHaveAttribute('aria-describedby', 'agree-checkbox-error')
+    expect(screen.getByText('Please confirm you agree to the Terms of Use.')).toBeInTheDocument()
+    expect(screen.queryByText('Privacy screen')).not.toBeInTheDocument()
+  })
+
+  it('checking the box clears the error, then Continue hands off to /privacy', async () => {
+    const user = userEvent.setup()
+    renderTermsOfUsePage()
+    await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
+    expect(screen.getByText('Please confirm you agree to the Terms of Use.')).toBeInTheDocument()
+
     await user.click(screen.getByRole('checkbox'))
-    expect(screen.getByRole('button', { name: 'Agree and continue' })).toBeEnabled()
+    expect(
+      screen.queryByText('Please confirm you agree to the Terms of Use.'),
+    ).not.toBeInTheDocument()
+
     await user.click(screen.getByRole('button', { name: 'Agree and continue' }))
     expect(screen.getByText('Privacy screen')).toBeInTheDocument()
   })

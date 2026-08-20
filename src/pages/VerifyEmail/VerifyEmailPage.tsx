@@ -1,61 +1,101 @@
-import { useEffect, useState } from 'react'
+import { useRef, useState, type ClipboardEvent, type KeyboardEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { Logo } from '@/components/atoms/Logo'
 import styles from './VerifyEmailPage.module.css'
 
-/** How long before the "Send new link" button appears — this repo is mock-data-only,
- * so there's no real email/link; this stands in for the real wait on an inbox. Clicking
- * the button once it appears mocks resending and immediately receiving/clicking that
- * link, handing off to /verify-account exactly like a real click would. */
-const RESEND_WAIT_SECONDS = 15
-
-/** Phosphor `envelope-simple` (regular weight), matching this system's other icons —
- * see docs/design.md's Icons section. */
-function EnvelopeIcon() {
-  return (
-    <svg className={styles.envelopeIcon} viewBox="0 0 256 256" aria-hidden="true">
-      <path
-        d="M32,56H224a0,0,0,0,1,0,0V192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V56A0,0,0,0,1,32,56Z"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="16"
-      />
-      <polyline
-        points="224 56 128 144 32 56"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="16"
-      />
-    </svg>
-  )
-}
+/** Number of digits in the mock one-time code. */
+const CODE_LENGTH = 4
 
 /**
- * Verify Email — second step of the magic-link mock flow, reached from
- * LoginPage's "Send magic link" form. Purely informational: confirms the
- * mock "send", explains the (mock) link's rules, and gives an escape hatch
- * back to Login if the address was wrong. There's no code to enter — a
- * resend hint sits next to where the "Send new link" button will appear;
- * the button itself only renders once the `RESEND_WAIT_SECONDS` countdown
- * reaches zero, and clicking it hands off to /verify-account. The hint text
- * stays on screen throughout, just changing wording once the button shows up.
+ * Verify Email — second step of the email sign-in mock flow, reached from
+ * LoginPage's "Log in to thrive" form. Confirms the mock "send" and offers
+ * a "Resend verification code" escape hatch below the code entry (clears
+ * the boxes and refocuses the first one — there's no real backend to
+ * re-issue a code from). The confirmation mechanism is a 4-digit one-time
+ * code: 4 separate boxes, auto-advancing focus as each digit is typed,
+ * backspace-to-previous when a box is empty.
+ * Since this repo is mock-data-only, **any** complete 4-digit code confirms
+ * — there's no real code issued anywhere for a real one to be checked
+ * against. Confirming hands off to /verify-account, which owns the actual
+ * `login()` call and its own mock-verification delay. "Confirm code" stays
+ * enabled even before all 4 digits are filled, on request — clicking it
+ * early is a no-op (guarded in `handleConfirm`) rather than truly disabled;
+ * only the cursor still shows `not-allowed` while incomplete, as a hint.
+ * Clicking with an incomplete code also reveals a validation error: all 4
+ * boxes turn border-danger (the same red used everywhere else in this
+ * system) and a content-danger message appears below, mirroring `Field`'s
+ * own error variant. There's no real "wrong code" case to detect — this
+ * repo is mock-data-only and any complete 4-digit code confirms — so the
+ * only condition this error can ever reflect is "incomplete", despite the
+ * message covering both by name. Its own row sits in a `min-height` slot
+ * (same technique as LoginPage's error slots) so `.formContent`'s vertical
+ * centering doesn't reflow-shift the rest of the page depending on whether
+ * that message is currently showing.
  */
 export function VerifyEmailPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const email = (location.state as { email?: string } | null)?.email
-  const [secondsLeft, setSecondsLeft] = useState(RESEND_WAIT_SECONDS)
+  const [digits, setDigits] = useState<string[]>(Array(CODE_LENGTH).fill(''))
+  const [showCodeValidation, setShowCodeValidation] = useState(false)
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
-  useEffect(() => {
-    if (secondsLeft <= 0) return
-    const timer = window.setTimeout(() => setSecondsLeft((s) => s - 1), 1000)
-    return () => window.clearTimeout(timer)
-  }, [secondsLeft])
+  const isComplete = digits.every((digit) => digit !== '')
+  const codeInvalid = showCodeValidation && !isComplete
+
+  function setDigitAt(index: number, value: string) {
+    setDigits((prev) => {
+      const next = [...prev]
+      next[index] = value
+      return next
+    })
+  }
+
+  function handleDigitChange(index: number, rawValue: string) {
+    const value = rawValue.replace(/\D/g, '').slice(-1)
+    setDigitAt(index, value)
+    if (value && index < CODE_LENGTH - 1) {
+      inputRefs.current[index + 1]?.focus()
+    }
+  }
+
+  function handleKeyDown(index: number, event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Backspace' && !digits[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus()
+    }
+  }
+
+  /** Lets a visitor paste the whole code at once instead of typing digit by digit. */
+  function handlePaste(event: ClipboardEvent<HTMLInputElement>) {
+    const pasted = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, CODE_LENGTH)
+    if (!pasted) return
+    event.preventDefault()
+    setDigits((prev) => {
+      const next = [...prev]
+      for (let i = 0; i < pasted.length; i += 1) {
+        next[i] = pasted.charAt(i)
+      }
+      return next
+    })
+    inputRefs.current[Math.min(pasted.length, CODE_LENGTH - 1)]?.focus()
+  }
+
+  function handleConfirm() {
+    if (!isComplete) {
+      setShowCodeValidation(true)
+      return
+    }
+    navigate('/verify-account')
+  }
+
+  /** Mock resend — this repo has no real backend to re-issue a code from, so this just
+   * clears the boxes and refocuses the first one, as if a fresh code were on its way. */
+  function handleResend() {
+    setDigits(Array(CODE_LENGTH).fill(''))
+    setShowCodeValidation(false)
+    inputRefs.current[0]?.focus()
+  }
 
   return (
     <main className={styles.page}>
@@ -63,48 +103,64 @@ export function VerifyEmailPage() {
         <div className={styles.panel}>
           <Logo className={styles.logo} />
           <div className={styles.formContent}>
-            <EnvelopeIcon />
             <h1 className={styles.title}>Check your email!</h1>
             <p className={styles.copy}>
-              A magic link has been sent to <strong>{email || 'your email address'}</strong>, check
-              your inbox.
-              <span className={styles.spinner} aria-hidden="true" />
-              <span className={styles.srOnly}>Waiting for confirmation</span>
+              We emailed you a four-digit code to <strong>{email || 'your email address'}</strong>.
+              Enter the code below to confirm your email address.
             </p>
-            <ul className={styles.rulesList}>
-              <li>It expires after 24 hours for your protection</li>
-              <li>If you do not see it, check your spam or junk folder</li>
-            </ul>
-            <div className={styles.linkRow}>
-              <button type="button" className={styles.textLink} onClick={() => navigate('/login')}>
-                Try a different email address
-              </button>
-              {/* Prototype-only shortcut — skips the mock wait entirely so a demo doesn't have
-                  to sit through the countdown; nothing like this exists in the real product. */}
-              <button
-                type="button"
-                className={styles.textLink}
-                onClick={() => navigate('/verify-account')}
-              >
-                Continue
-              </button>
-            </div>
-            <div className={styles.resendRow}>
-              <p className={styles.resendHint} role="status" aria-live="polite">
-                {secondsLeft > 0
-                  ? `You can request a new link in ${secondsLeft}s`
-                  : "Didn't get it?"}
+            <div className={styles.codeSection}>
+              <p id="verify-email-code-label" className={styles.codeLabel}>
+                Enter the 4-digit code
               </p>
-              {secondsLeft <= 0 && (
+              <div className={styles.codeRow}>
+                <div
+                  className={styles.codeBoxes}
+                  role="group"
+                  aria-labelledby="verify-email-code-label"
+                  aria-describedby={codeInvalid ? 'verify-email-code-error' : undefined}
+                  onPaste={handlePaste}
+                >
+                  {digits.map((digit, index) => (
+                    <input
+                      key={index}
+                      id={`verify-email-code-${index}`}
+                      ref={(el) => {
+                        inputRefs.current[index] = el
+                      }}
+                      className={[styles.codeBox, codeInvalid && styles.codeBoxError]
+                        .filter(Boolean)
+                        .join(' ')}
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      maxLength={1}
+                      value={digit}
+                      aria-label={`Digit ${index + 1} of ${CODE_LENGTH}`}
+                      aria-invalid={codeInvalid || undefined}
+                      onChange={(event) => handleDigitChange(index, event.target.value)}
+                      onKeyDown={(event) => handleKeyDown(index, event)}
+                    />
+                  ))}
+                </div>
                 <Button
                   type="button"
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => navigate('/verify-account')}
+                  size="lg"
+                  className={!isComplete ? styles.confirmCodeIncomplete : undefined}
+                  onClick={handleConfirm}
                 >
-                  Send new link
+                  Confirm code
                 </Button>
-              )}
+              </div>
+              <div className={styles.codeErrorSlot}>
+                {codeInvalid ? (
+                  <p id="verify-email-code-error" className={styles.codeError}>
+                    Please enter a valid four-digit code.
+                  </p>
+                ) : null}
+              </div>
+              <button type="button" className={styles.textLink} onClick={handleResend}>
+                Resend verification code
+              </button>
             </div>
           </div>
         </div>

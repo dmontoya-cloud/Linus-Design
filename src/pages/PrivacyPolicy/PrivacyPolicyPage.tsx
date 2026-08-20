@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/atoms/Checkbox'
 import { Button } from '@/components/atoms/Button'
 import { LegalLayout } from '../LegalLayout'
 import { SummaryCard } from '../SummaryCard'
-import { ScrollGatedLegalText } from '../ScrollGatedLegalText'
+import { LegalTextBox } from '../LegalTextBox'
 import { CheckboxCard } from '../CheckboxCard'
 import { cascadeDelay } from '../cascade'
 import styles from './PrivacyPolicyPage.module.css'
@@ -93,28 +93,41 @@ const FULL_TEXT = [
 /**
  * Privacy Policy — step 2 of the pre-registration legal flow (Terms of Use,
  * then Privacy Policy), reached from Terms of Use. The full legal text sits
- * inline in a scrollable box rather than behind a "Read full text" link or
- * Modal, and the Privacy Policy agreement checkbox stays disabled until the
- * visitor has actually scrolled to the end of it — agreeing to text you
- * never saw isn't real agreement. There is no separate Consent step: this
- * page's own assessment-results checkbox covers that, and both it and the
- * (scroll-gated) Privacy Policy agreement are required to continue. The
- * optional marketing checkbox does not gate Continue, and isn't gated by
- * the scroll read either. The age-18+ checkbox that used to live on
- * Consent now lives on Legal Intro, right after the greeting (see
- * LegalIntroPage). Each checkbox here sits in its own full-width white
- * card (the same CheckboxCard used there), so none of them read as
- * floating loose on the page background.
+ * inline as plain text (`LegalTextBox`) rather than behind a "Read full
+ * text" link or Modal, so it's visible without an extra click. The Privacy
+ * Policy agreement checkbox is enabled from the start — it used to stay
+ * disabled until scrolled to the end of the full text, but that scroll-gate
+ * was removed on request. There is no separate Consent step, and no
+ * separate assessment-results consent checkbox either (removed on request)
+ * — the Privacy Policy agreement itself is the only required checkbox here.
+ * The optional marketing checkbox does not gate Continue. The age-18+
+ * checkbox that used to live on Consent now lives on Login, right after the
+ * email field (see LoginPage). Each checkbox here sits in its own
+ * full-width white card (the same CheckboxCard used there), so none of them
+ * read as floating loose on the page background.
+ *
+ * "Agree and continue" stays enabled at all times, same as Terms of Use —
+ * clicking it with the agreement checkbox unchecked reveals a
+ * `content-danger` message below it (the checkbox itself never turns red)
+ * rather than the button silently refusing to respond. The checkbox card
+ * sits in its own `min-height` slot sized to fit the card with its error
+ * message showing, so that message never changes the card's height and
+ * pushes the rest of the page down.
  */
 export function PrivacyPolicyPage() {
   const navigate = useNavigate()
   const { giveConsent } = useAuth()
   const [agreed, setAgreed] = useState(false)
-  const [assessmentConsent, setAssessmentConsent] = useState(false)
   const [marketingOptIn, setMarketingOptIn] = useState(false)
-  const [hasReadFullText, setHasReadFullText] = useState(false)
+  const [showValidation, setShowValidation] = useState(false)
+
+  const agreedInvalid = showValidation && !agreed
 
   function handleAgreeAndContinue() {
+    if (!agreed) {
+      setShowValidation(true)
+      return
+    }
     giveConsent()
     navigate('/setting-up')
   }
@@ -128,71 +141,47 @@ export function PrivacyPolicyPage() {
       <SummaryCard sections={SECTIONS} />
 
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 1) }}>
-        <ScrollGatedLegalText
-          paragraphs={FULL_TEXT}
-          onScrolledToEnd={() => setHasReadFullText(true)}
-        />
+        <LegalTextBox paragraphs={FULL_TEXT} />
       </div>
 
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 2) }}>
         <CheckboxCard>
           <Checkbox
-            label={
-              <>
-                Send me free, actionable brain health tips by email.{' '}
-                <em>Optional, unsubscribe any time</em>
-              </>
-            }
+            label="I agree to receive marketing communications from Linus Health"
             checked={marketingOptIn}
             onChange={(event) => setMarketingOptIn(event.target.checked)}
           />
         </CheckboxCard>
       </div>
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 3) }}>
-        <CheckboxCard>
-          <Checkbox
-            label={
-              <>
-                I have read and agree to the Privacy Policy. <strong>Required.</strong>
-                {!hasReadFullText && (
-                  <span className={styles.scrollHint}> Scroll to the end above to enable.</span>
-                )}
-              </>
-            }
-            checked={agreed}
-            disabled={!hasReadFullText}
-            onChange={(event) => setAgreed(event.target.checked)}
-          />
-        </CheckboxCard>
+        <div className={styles.agreeCheckboxSlot}>
+          <CheckboxCard>
+            <Checkbox
+              label={
+                <>
+                  I have read and agree to the Privacy Policy. <strong>Required.</strong>
+                </>
+              }
+              checked={agreed}
+              aria-describedby={agreedInvalid ? 'agree-checkbox-error' : undefined}
+              onChange={(event) => setAgreed(event.target.checked)}
+            />
+            {agreedInvalid ? (
+              <p id="agree-checkbox-error" className={styles.checkboxError}>
+                Please confirm you agree to the Privacy Policy.
+              </p>
+            ) : null}
+          </CheckboxCard>
+        </div>
       </div>
-      <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 4) }}>
-        <CheckboxCard>
-          <Checkbox
-            label={
-              <>
-                I consent to Linus Health using my assessment results as described above.{' '}
-                <strong>Required.</strong>
-              </>
-            }
-            checked={assessmentConsent}
-            onChange={(event) => setAssessmentConsent(event.target.checked)}
-          />
-        </CheckboxCard>
-      </div>
-
       <div
         className={[styles.actions, styles.reveal].join(' ')}
-        style={{ animationDelay: cascadeDelay(SECTIONS.length + 5) }}
+        style={{ animationDelay: cascadeDelay(SECTIONS.length + 4) }}
       >
         <Button type="button" variant="outline" size="lg" onClick={() => navigate('/terms')}>
           Back
         </Button>
-        <Button
-          type="button"
-          size="lg"
-          disabled={!agreed || !assessmentConsent}
-          onClick={handleAgreeAndContinue}
-        >
+        <Button type="button" size="lg" onClick={handleAgreeAndContinue}>
           Agree and continue
         </Button>
       </div>

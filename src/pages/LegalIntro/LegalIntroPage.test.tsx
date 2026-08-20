@@ -27,26 +27,24 @@ function renderLegalIntroPage() {
 }
 
 describe('LegalIntroPage', () => {
-  it('greets generically and prompts for a name before any is entered', () => {
+  it('greets generically and prompts for a required name before any is entered', () => {
     renderLegalIntroPage()
     expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
     expect(
       screen.getByText(
-        "Before we go any further, let's confirm we can set you up in thrive. You must be over the age of eighteen.",
+        'Before we get you set up. We need you to agree to our Terms of Use and Privacy Policy.',
       ),
     ).toBeInTheDocument()
-    expect(
-      screen.getByText("Let's keep things casual. How would you like to be called?"),
-    ).toBeInTheDocument()
-    expect(screen.getByLabelText('Preferred name (optional)')).toBeInTheDocument()
-    expect(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" })).not.toBeChecked()
-    expect(screen.getByRole('button', { name: "Let's go" })).toBeDisabled()
+    expect(screen.getByText('How would you like to be called?')).toBeInTheDocument()
+    expect(screen.getByLabelText('Preferred name')).toBeInTheDocument()
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeDisabled()
   })
 
   it('swaps the greeting to the typed name live, and back when cleared', async () => {
     const user = userEvent.setup()
     renderLegalIntroPage()
-    const nameField = screen.getByLabelText('Preferred name (optional)')
+    const nameField = screen.getByLabelText('Preferred name')
 
     await user.type(nameField, 'Ada')
     expect(screen.getByRole('heading', { name: 'Hey, Ada' })).toBeInTheDocument()
@@ -55,15 +53,15 @@ describe('LegalIntroPage', () => {
     expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
   })
 
-  it("keeps Let's go disabled until the age checkbox is checked, then sends to /terms whether or not a name was entered", async () => {
+  it('keeps Continue disabled until a name is entered, then sends to /terms', async () => {
     const user = userEvent.setup()
     renderLegalIntroPage()
-    await user.click(screen.getByRole('button', { name: "Let's go" }))
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(screen.queryByText('Terms screen')).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('checkbox', { name: "I'm over the age of eighteen" }))
-    expect(screen.getByRole('button', { name: "Let's go" })).toBeEnabled()
-    await user.click(screen.getByRole('button', { name: "Let's go" }))
+    await user.type(screen.getByLabelText('Preferred name'), 'Ada')
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(screen.getByText('Terms screen')).toBeInTheDocument()
   })
 

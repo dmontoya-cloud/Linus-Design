@@ -53,15 +53,18 @@ describe('Button', () => {
     expect(results.violations).toEqual([])
   })
 
-  it('shows a spinner and hides the label when loading, and is disabled', () => {
+  it('shows a spinner over the label when loading, without disabling the button', () => {
     render(<Button loading>Continue</Button>)
     const button = screen.getByRole('button', { name: 'Loading' })
-    expect(button).toBeDisabled()
+    expect(button).toBeEnabled()
     expect(button).toHaveAttribute('aria-busy', 'true')
-    expect(screen.queryByText('Continue')).not.toBeInTheDocument()
+    // The label stays in the DOM (just visually hidden) so the button keeps its resting
+    // width instead of shrinking to fit only the spinner — it's still there, just excluded
+    // from the accessible name in favor of the "Loading" text.
+    expect(screen.getByText('Continue')).toBeInTheDocument()
   })
 
-  it('does not fire onClick while loading', async () => {
+  it('still fires onClick while loading, since loading alone does not disable the button', async () => {
     const onClick = vi.fn()
     const user = userEvent.setup()
     render(
@@ -70,6 +73,20 @@ describe('Button', () => {
       </Button>,
     )
     await user.click(screen.getByRole('button', { name: 'Loading' }))
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not fire onClick while loading if disabled is also passed', async () => {
+    const onClick = vi.fn()
+    const user = userEvent.setup()
+    render(
+      <Button loading disabled onClick={onClick}>
+        Continue
+      </Button>,
+    )
+    const button = screen.getByRole('button', { name: 'Loading' })
+    expect(button).toBeDisabled()
+    await user.click(button)
     expect(onClick).not.toHaveBeenCalled()
   })
 })

@@ -5,19 +5,25 @@ export type Gender = 'female' | 'male' | 'non-binary' | 'prefer-not-to-say'
 export type SexAssignedAtBirth = 'female' | 'male' | 'intersex'
 
 export type EducationLevel =
-  | 'less-than-high-school'
+  | 'none'
+  | 'elementary-school'
+  | 'middle-school'
   | 'high-school'
   | 'some-college'
-  | 'associate-degree'
   | 'bachelors-degree'
-  | 'graduate-degree'
+  | 'some-graduate-education'
+  | 'masters-degree'
+  | 'doctoral-degree'
 
 export interface Profile {
   firstName: string
   lastName: string
   /** ISO yyyy-mm-dd, built from the separate month/day/year fields on Registration. */
   dateOfBirth: string
-  gender: Gender
+  /** Optional — left `''` if the visitor didn't answer on Gender & Identity. Unlike sex
+   * assigned at birth, gender isn't used to place results in a comparison group, so there's
+   * nothing that requires an answer here. */
+  gender: Gender | ''
   sexAssignedAtBirth: SexAssignedAtBirth
   educationLevel: EducationLevel
 }

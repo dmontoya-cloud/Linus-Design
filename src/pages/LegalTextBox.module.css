@@ -1,8 +1,6 @@
 /* Same card look as SummaryCard (radius, shadow, padding) so it reads as the same kind of
-   box, just scrollable at a fixed height instead of growing to fit its content. */
+   box — grows to fit its content instead of scrolling at a fixed height. */
 .box {
-  height: 360px;
-  overflow-y: auto;
   background: var(--color-surface, #fff);
   border-radius: var(--radius-xl, 24px);
   box-shadow: var(

@@ -5,7 +5,12 @@ import styles from './Button.module.css'
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   size?: ButtonSize
-  /** Shows a spinner in place of the label and disables the button — for mocked async actions (magic-link send/confirm) that need a visible in-flight state. */
+  /** Shows a spinner over the label — for mocked async actions (email sign-in/confirm) that
+   * need a visible in-flight state. The label stays in the DOM (invisible, not removed) so the
+   * button keeps its exact resting width/height instead of shrinking to fit just the spinner.
+   * Deliberately does NOT imply `disabled` — a loading button still reads and looks enabled
+   * (same fill color, no `:disabled` styling), it just shows a spinner in place of the label;
+   * pass `disabled` explicitly if a loading action should also block re-clicks. */
   loading?: boolean
 }
 
@@ -30,18 +35,17 @@ export function Button({
     <button
       type="button"
       className={classes}
-      disabled={disabled || loading}
+      disabled={disabled}
       aria-busy={loading || undefined}
       {...props}
     >
+      <span className={loading ? styles.labelHidden : undefined}>{children as ReactNode}</span>
       {loading ? (
-        <>
+        <span className={styles.spinnerOverlay}>
           <span className={styles.spinner} aria-hidden="true" />
           <span className={styles.srOnly}>Loading</span>
-        </>
-      ) : (
-        (children as ReactNode)
-      )}
+        </span>
+      ) : null}
     </button>
   )
 }

@@ -26,10 +26,10 @@ import './App.css'
  * (registration) → Gender & Identity → Dashboard are real screens, gated by
  * AuthContext's mock auth. Legal Intro is a brief, conversational heads-up
  * ("you'll need to agree to some things") before the two-step Terms/Privacy
- * flow, not a step of its own. There is no separate Consent step: Privacy
- * Policy's own "I consent to Linus Health using my assessment results"
- * checkbox covers that (see PrivacyPolicyPage), and the age-18+ checkbox
- * now lives on Registration, next to date of birth. Setting Up and Thanks
+ * flow, not a step of its own. There is no separate Consent step — Terms of
+ * Use and Privacy Policy's own agreement checkboxes cover that (see
+ * TermsOfUsePage / PrivacyPolicyPage), and the age-18+ checkbox now lives
+ * on Registration, next to date of birth. Setting Up and Thanks
  * are both brief non-interactive beats between agreeing to Privacy Policy
  * and landing on the registration form — Setting Up marks that consent was
  * recorded, Thanks greets the visitor by the preferred name they gave on
