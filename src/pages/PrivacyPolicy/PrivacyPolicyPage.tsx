@@ -45,9 +45,9 @@ const FULL_TEXT = [
   </>,
   <>
     <strong>3. How we use your information.</strong> Your information is used only to generate your
-    report and to operate the Thrive service itself — for example, to remember your check-in history
-    so your report can show change over time. We do not use your information to build an advertising
-    profile, and we do not use it for any purpose you have not agreed to here.
+    report and to operate the Linus Health service itself — for example, to remember your check-in
+    history so your report can show change over time. We do not use your information to build an
+    advertising profile, and we do not use it for any purpose you have not agreed to here.
   </>,
   <>
     <strong>4. We never sell your information.</strong> We do not sell your information to
@@ -57,7 +57,7 @@ const FULL_TEXT = [
   </>,
   <>
     <strong>5. Who sees it.</strong> Access to your information is limited to our team members who
-    need it to operate Thrive, and to trusted service providers bound by contract to the same
+    need it to operate Linus Health, and to trusted service providers bound by contract to the same
     protections described in this policy. We disclose your information to anyone else — including a
     doctor or family member — only at your explicit request.
   </>,
@@ -71,12 +71,12 @@ const FULL_TEXT = [
     <strong>7. Your rights and choices.</strong> You can review, correct, or request deletion of
     your information at any time by contacting us. If you opted in to marketing emails, you can
     unsubscribe at any time using the link in any email we send, with no effect on your ability to
-    use Thrive.
+    use Linus Health.
   </>,
   <>
-    <strong>8. Children&apos;s privacy.</strong> Thrive is intended for adults aged 18 and over and
-    is not directed at children. We do not knowingly collect information from anyone under 18; if we
-    learn that we have, we will delete it promptly.
+    <strong>8. Children&apos;s privacy.</strong> Linus Health is intended for adults aged 18 and
+    over and is not directed at children. We do not knowingly collect information from anyone under
+    18; if we learn that we have, we will delete it promptly.
   </>,
   <>
     <strong>9. Changes to this policy.</strong> If we make a material change to how we collect or
@@ -86,7 +86,7 @@ const FULL_TEXT = [
   <>
     <strong>10. Contact us.</strong> If you have questions about this policy or want to exercise any
     of the rights described in Section 7, you can reach us through the contact details provided in
-    the Thrive app or on the Linus Health website.
+    the app or on the Linus Health website.
   </>,
 ]
 
@@ -147,7 +147,12 @@ export function PrivacyPolicyPage() {
       <div className={styles.reveal} style={{ animationDelay: cascadeDelay(SECTIONS.length + 2) }}>
         <CheckboxCard>
           <Checkbox
-            label="I agree to receive marketing communications from Linus Health"
+            label={
+              <>
+                I agree to receive marketing communications from Linus Health.{' '}
+                <strong>Optional.</strong>
+              </>
+            }
             checked={marketingOptIn}
             onChange={(event) => setMarketingOptIn(event.target.checked)}
           />

@@ -227,7 +227,7 @@ export function OnboardingPage() {
           <div className={styles.dobErrorSlot}>
             {underageInvalid ? (
               <p id="dob-error" className={styles.dobError}>
-                You must be over eighteen years old to use Thrive.
+                You must be over eighteen years old to use Linus Health.
               </p>
             ) : null}
           </div>

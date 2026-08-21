@@ -2,7 +2,7 @@
   display: inline-block;
   height: 36px;
   width: auto;
-  aspect-ratio: 87 / 36;
+  aspect-ratio: 347 / 129;
   /* Guards against stretching when a parent flex container leaves
      align-items at its default (stretch) — a logo should never distort. */
   align-self: flex-start;

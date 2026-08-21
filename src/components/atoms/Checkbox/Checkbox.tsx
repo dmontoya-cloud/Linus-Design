@@ -6,7 +6,8 @@ export interface CheckboxProps extends Omit<
   'type' | 'size'
 > {
   /** A plain string covers most cases; ReactNode is there for labels that need inline
-   * emphasis (e.g. a bold "Required." or italic "Optional." clause). */
+   * emphasis — a bold "Required." or "Optional." clause, both styled the same way so
+   * neither reads as more or less important than the other. */
   label: ReactNode
   error?: boolean
 }

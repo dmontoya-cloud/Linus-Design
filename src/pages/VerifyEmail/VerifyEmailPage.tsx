@@ -9,7 +9,7 @@ const CODE_LENGTH = 4
 
 /**
  * Verify Email — second step of the email sign-in mock flow, reached from
- * LoginPage's "Log in to thrive" form. Confirms the mock "send" and offers
+ * LoginPage's "Log in to Linus Health" form. Confirms the mock "send" and offers
  * a "Resend verification code" escape hatch below the code entry (clears
  * the boxes and refocuses the first one — there's no real backend to
  * re-issue a code from). The confirmation mechanism is a 4-digit one-time
