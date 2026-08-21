@@ -201,12 +201,12 @@ describe('OnboardingPage', () => {
     await user.type(screen.getByLabelText('Year'), underageYear)
 
     expect(
-      screen.queryByText('You must be over eighteen years old to use Thrive.'),
+      screen.queryByText('You must be over eighteen years old to use Linus Health.'),
     ).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(
-      screen.getByText('You must be over eighteen years old to use Thrive.'),
+      screen.getByText('You must be over eighteen years old to use Linus Health.'),
     ).toBeInTheDocument()
     expect(screen.getByLabelText('First name')).toBeInTheDocument()
   })
@@ -222,13 +222,13 @@ describe('OnboardingPage', () => {
     await user.type(yearField, String(new Date().getFullYear() - 10))
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
-      screen.getByText('You must be over eighteen years old to use Thrive.'),
+      screen.getByText('You must be over eighteen years old to use Linus Health.'),
     ).toBeInTheDocument()
 
     await user.clear(yearField)
     await user.type(yearField, '1988')
     expect(
-      screen.queryByText('You must be over eighteen years old to use Thrive.'),
+      screen.queryByText('You must be over eighteen years old to use Linus Health.'),
     ).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Continue' }))

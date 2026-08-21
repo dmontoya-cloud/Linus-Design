@@ -32,7 +32,7 @@ describe('TermsOfUsePage', () => {
   it('renders the summary sections, the full text as plain content, and an always-enabled Continue button', () => {
     renderTermsOfUsePage()
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
-    expect(screen.getByText('What Thrive does')).toBeInTheDocument()
+    expect(screen.getByText('What Linus Health does')).toBeInTheDocument()
     expect(screen.getByText(/1\. Acceptance of these Terms\./)).toBeInTheDocument()
     const checkbox = screen.getByRole('checkbox')
     expect(checkbox).not.toBeChecked()

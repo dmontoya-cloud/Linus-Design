@@ -48,7 +48,7 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings')
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
     expect(screen.getByText('AL')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Welcome back, Ada' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Welcome, Ada' })).toBeInTheDocument()
   })
 
   it('selects Assessment as the current page by default', () => {
@@ -60,21 +60,42 @@ describe('DashboardPage', () => {
 
   it('shows three pending activity cards, each with a Start link to /assessment', () => {
     renderDashboard()
-    expect(screen.getByText('You have 3 activities pending.')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Memory Recall' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Speech Pattern Analysis' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Visual Attention Test' })).toBeInTheDocument()
-    expect(screen.getByText('Speak clearly into your microphone.')).toBeInTheDocument()
-    expect(screen.getByText('Use headphones for the audio cues.')).toBeInTheDocument()
+    expect(screen.getByText('Or just pick one')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Each check-in works on its own. Take them in any order. Your report updates each time.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Memory & Thinking' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Lifestyle' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Priorities' })).toBeInTheDocument()
+    expect(screen.getAllByText('Not started')).toHaveLength(3)
+    expect(screen.getByText('About 15 minutes')).toBeInTheDocument()
+    expect(screen.getAllByText('About 5–10 minutes')).toHaveLength(2)
+    expect(screen.getByText('Needs quiet room')).toBeInTheDocument()
     const startLinks = screen.getAllByRole('link', { name: 'Start' })
     expect(startLinks).toHaveLength(3)
     startLinks.forEach((link) => expect(link).toHaveAttribute('href', '/assessment'))
   })
 
+  it('shows the resources card with a real external link to the Linus Health website', () => {
+    renderDashboard()
+    expect(screen.getByRole('heading', { name: 'Brain health resources' })).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'Exercises, articles and programmes from our clinical team. Free to browse, nothing to complete first.',
+      ),
+    ).toBeInTheDocument()
+    const link = screen.getByRole('link', { name: /Open resources on linushealth.com/ })
+    expect(link).toHaveAttribute('href', 'https://www.linushealth.com')
+    expect(link).toHaveAttribute('target', '_blank')
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  })
+
   it('falls back to a generic label when no profile is present', () => {
     renderDashboard({ withProfile: false })
     expect(screen.getByText('Account')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Welcome back, there' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Welcome, there' })).toBeInTheDocument()
   })
 
   it('has no automatically detectable accessibility violations (axe)', async () => {

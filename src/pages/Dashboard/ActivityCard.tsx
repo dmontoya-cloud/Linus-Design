@@ -1,27 +1,53 @@
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
+import { ClockIcon } from '@/components/atoms/Icon'
 import styles from './ActivityCard.module.css'
+
+/** Only status this mock-data prototype ever has — there's no real assessment flow yet to
+ * actually progress or complete one. Named (rather than a bare boolean) so a real "in
+ * progress"/"completed" status has somewhere to go once that flow exists. */
+export type ActivityStatus = 'not-started'
+
+const STATUS_LABELS: Record<ActivityStatus, string> = {
+  'not-started': 'Not started',
+}
 
 export interface Activity {
   id: string
   title: string
-  estimatedMinutes: number
+  status: ActivityStatus
+  /** e.g. "About 15 minutes" — a rough estimate, not a real measured duration. */
+  duration: string
+  /** Optional environment note shown beside the duration, e.g. "Needs quiet room" —
+   * only activities with a real setup requirement (like the listening/speaking tasks) carry one. */
+  requirement?: string
   description: string
-  indication: string
 }
 
-/** One pending assessment activity — title, time estimate, description, a
- * setup indication (e.g. "use headphones"), and a Start CTA that hands off
- * to the /assessment stub, same as every other not-yet-built PoD-4 screen. */
-export function ActivityCard({ activity }: { activity: Activity }) {
+/** One pending assessment activity — a status badge on its own line above the title (never
+ * pinned to a corner or inline beside it, so a long title never truncates or has to reserve
+ * space for it), title, a clock-icon-led duration estimate (with an optional requirement
+ * badge beside it, e.g. "Needs quiet room", on activities where that matters), description,
+ * and a Start CTA that hands off to the /assessment stub, same as every other not-yet-built
+ * PoD-4 screen. Cascades in on mount (fade-rise) same as every other card on Dashboard —
+ * `style` carries the per-card `animationDelay` DashboardPage staggers by, since a `<li>`
+ * can't be wrapped in an extra element without breaking the `<ul>`'s content model. */
+export function ActivityCard({ activity, style }: { activity: Activity; style?: CSSProperties }) {
   return (
-    <li className={styles.card}>
-      <div className={styles.header}>
-        <h3 className={styles.title}>{activity.title}</h3>
-        <span className={styles.time}>{activity.estimatedMinutes} min</span>
+    <li className={[styles.card, styles.reveal].join(' ')} style={style}>
+      <span className={styles.status}>{STATUS_LABELS[activity.status]}</span>
+      <h3 className={styles.title}>{activity.title}</h3>
+      <div className={styles.durationRow}>
+        <p className={styles.duration}>
+          <ClockIcon className={styles.durationIcon} />
+          {activity.duration}
+        </p>
+        {activity.requirement ? (
+          <span className={styles.requirement}>{activity.requirement}</span>
+        ) : null}
       </div>
       <p className={styles.description}>{activity.description}</p>
-      <p className={styles.indication}>{activity.indication}</p>
       <hr className={styles.divider} />
       <Link
         to="/assessment"

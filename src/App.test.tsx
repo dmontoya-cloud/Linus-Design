@@ -61,7 +61,7 @@ describe('App', () => {
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
     expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Log in to thrive' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Log in to Linus Health' })).toBeInTheDocument()
   })
 
   it('redirects /onboarding to /login when not authenticated', () => {
@@ -76,7 +76,7 @@ describe('App', () => {
     await user.click(screen.getByRole('link', { name: 'Login' }))
     await user.type(screen.getByLabelText('Email address*'), 'ada@example.com')
     await user.click(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ }))
-    await user.click(screen.getByRole('button', { name: 'Log in to thrive' }))
+    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
 
     await waitFor(
       () => expect(screen.getByRole('heading', { name: 'Check your email!' })).toBeInTheDocument(),
@@ -100,7 +100,7 @@ describe('App', () => {
         ).toBeInTheDocument(),
       { timeout: 4500 },
     )
-    await user.type(screen.getByLabelText('Preferred name'), 'Ada')
+    await user.type(screen.getByLabelText(/Preferred name/), 'Ada')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
@@ -150,7 +150,7 @@ describe('App', () => {
     })
 
     await waitFor(
-      () => expect(screen.getByRole('heading', { name: 'Welcome back, Ada' })).toBeInTheDocument(),
+      () => expect(screen.getByRole('heading', { name: 'Welcome, Ada' })).toBeInTheDocument(),
       { timeout: 3000 },
     )
     expect(screen.getByRole('link', { name: 'Assessment' })).toBeInTheDocument()

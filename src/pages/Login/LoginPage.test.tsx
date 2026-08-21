@@ -26,11 +26,11 @@ function renderLoginPage() {
 }
 
 describe('LoginPage', () => {
-  it('renders the Thrive logo, the email sign-in form, and an always-enabled Log in button', () => {
+  it('renders the Linus Health logo, the email sign-in form, and an always-enabled Log in button', () => {
     renderLoginPage()
-    expect(screen.getByRole('img', { name: 'Thrive' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Linus Health' })).toBeInTheDocument()
     expect(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ })).not.toBeChecked()
-    expect(screen.getByRole('button', { name: 'Log in to thrive' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Log in to Linus Health' })).toBeEnabled()
   })
 
   it('shows an error state on the email field and the age checkbox card when clicked with the form empty', async () => {
@@ -47,7 +47,7 @@ describe('LoginPage', () => {
       screen.queryByText('Please confirm you are over the age of eighteen.'),
     ).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Log in to thrive' }))
+    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
 
     expect(emailField).toHaveAttribute('aria-invalid', 'true')
     expect(ageCheckbox).not.toHaveAttribute('aria-invalid')
@@ -59,7 +59,7 @@ describe('LoginPage', () => {
   it('clears the email error once a valid value is typed, independently of the still-unchecked age checkbox', async () => {
     const user = userEvent.setup()
     renderLoginPage()
-    await user.click(screen.getByRole('button', { name: 'Log in to thrive' }))
+    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
     const emailField = screen.getByLabelText('Email address*')
     expect(emailField).toHaveAttribute('aria-invalid', 'true')
 
@@ -74,7 +74,7 @@ describe('LoginPage', () => {
     const emailField = screen.getByLabelText('Email address*')
 
     await user.type(emailField, 'not-an-email')
-    await user.click(screen.getByRole('button', { name: 'Log in to thrive' }))
+    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
 
     expect(emailField).toHaveAttribute('aria-invalid', 'true')
     expect(screen.getByText('Please enter a valid email address.')).toBeInTheDocument()
@@ -87,9 +87,16 @@ describe('LoginPage', () => {
     await user.type(screen.getByLabelText('Email address*'), 'david@pi.tech')
     await user.click(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ }))
 
-    await user.click(screen.getByRole('button', { name: 'Log in to thrive' }))
+    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
     // Loading alone doesn't disable the button — it stays enabled-looking with a spinner.
     expect(screen.getByRole('button', { name: 'Loading' })).toBeEnabled()
+    // Nor the email field or the age checkbox — the visual "disabled" cue during the mock
+    // request is a page-level dimmed wrapper (opacity), not the field-error/gray-text
+    // disabled prop on either atom, so both stay enabled and keep their normal colors.
+    const ageCheckbox = screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ })
+    expect(screen.getByLabelText('Email address*')).toBeEnabled()
+    expect(ageCheckbox).toBeEnabled()
+    expect(ageCheckbox).toBeChecked()
     await waitFor(
       () => expect(screen.getByText('Verify email for: david@pi.tech')).toBeInTheDocument(),
       { timeout: 2000 },

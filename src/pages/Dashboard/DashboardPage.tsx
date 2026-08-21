@@ -3,6 +3,8 @@ import { useAuth } from '@/auth'
 import { Logo } from '@/components/atoms/Logo'
 import { ActivityCard, type Activity } from './ActivityCard'
 import { FullCheckInCard } from './FullCheckInCard'
+import { ResourcesCard } from './ResourcesCard'
+import { cascadeDelay } from '../cascade'
 import styles from './DashboardPage.module.css'
 
 const NAV_LINKS = [
@@ -11,29 +13,33 @@ const NAV_LINKS = [
   { to: '/settings', label: 'Settings' },
 ]
 
-/** Mock pending activities — this repo has no real backend, so this list is
- * a fixed placeholder, not fetched or personalized. */
+/** Mock pending activities — this repo has no real backend, so this list is a fixed
+ * placeholder, not fetched or personalized. Every activity here is `'not-started'` since
+ * there's no real assessment flow yet to actually progress or complete one. */
 const PENDING_ACTIVITIES: Activity[] = [
   {
     id: 'memory-recall',
-    title: 'Memory Recall',
-    estimatedMinutes: 5,
-    description: 'A short exercise to assess your short-term memory.',
-    indication: 'Find a quiet space with no distractions.',
+    title: 'Memory & Thinking',
+    status: 'not-started',
+    duration: 'About 15 minutes',
+    requirement: 'Needs quiet room',
+    description:
+      'Listening, speaking and recall tasks. They measure memory, attention, language and thinking.',
   },
   {
     id: 'speech-pattern',
-    title: 'Speech Pattern Analysis',
-    estimatedMinutes: 3,
-    description: 'Speak a few prompted phrases to assess your speech fluency.',
-    indication: 'Speak clearly into your microphone.',
+    title: 'Lifestyle',
+    status: 'not-started',
+    duration: 'About 5–10 minutes',
+    description: 'Fifteen short questions about sleep, movement, food, health and mood.',
   },
   {
     id: 'visual-attention',
-    title: 'Visual Attention Test',
-    estimatedMinutes: 7,
-    description: 'Track and respond to visual and audio cues to measure attention span.',
-    indication: 'Use headphones for the audio cues.',
+    title: 'Priorities',
+    status: 'not-started',
+    duration: 'About 5–10 minutes',
+    description:
+      'Tell us in your own words what matters most to you. Your goals are then built around those things.',
   },
 ]
 
@@ -44,9 +50,16 @@ function initialsFor(firstName: string, lastName: string) {
 /**
  * Dashboard — the post-onboarding home screen, reached once Login →
  * Onboarding → Gender & Identity all complete. Deliberately minimal: a quiet nav bar
- * (logo, centered primary links, user info) over a short welcome message.
- * Assessment/History/Settings are still PoD-4+ stubs, same as the other
- * placeholders reachable from the prototype index.
+ * (logo, centered primary links, user info) over a short welcome message. Below the
+ * gradient full-check-in card and the three pending-activity cards sits `ResourcesCard`,
+ * a fourth, plainer card pointing to the real Linus Health website for browsable content —
+ * the one genuine external link in this prototype. Everything below the nav bar cascades in
+ * on mount — the welcome title, the full-check-in card, the "Or just pick one" heading and
+ * its subtext, each of the three activity cards in turn, then the resources card — the same
+ * fade-rise-staggered-by-`cascadeDelay` rhythm the Terms of Use/Privacy Policy/Registration
+ * flow already uses, so the whole app shares one entrance style rather than this page
+ * appearing all at once while everything before it cascades. Assessment/History/Settings are
+ * still PoD-4+ stubs, same as the other placeholders reachable from the prototype index.
  */
 export function DashboardPage() {
   const { profile } = useAuth()
@@ -87,14 +100,42 @@ export function DashboardPage() {
       </header>
 
       <main className={styles.content}>
-        <h1 className={styles.welcome}>Welcome back, {profile?.firstName ?? 'there'}</h1>
-        <FullCheckInCard />
-        <h2 className={styles.copy}>You have {PENDING_ACTIVITIES.length} activities pending.</h2>
+        <h1
+          className={[styles.welcome, styles.reveal].join(' ')}
+          style={{ animationDelay: cascadeDelay(0) }}
+        >
+          Welcome, {profile?.firstName ?? 'there'}
+        </h1>
+        <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
+          <FullCheckInCard />
+        </div>
+        <h2
+          className={[styles.copy, styles.reveal].join(' ')}
+          style={{ animationDelay: cascadeDelay(2) }}
+        >
+          Or just pick one
+        </h2>
+        <p
+          className={[styles.copySubtext, styles.reveal].join(' ')}
+          style={{ animationDelay: cascadeDelay(3) }}
+        >
+          Each check-in works on its own. Take them in any order. Your report updates each time.
+        </p>
         <ul className={styles.activityGrid}>
-          {PENDING_ACTIVITIES.map((activity) => (
-            <ActivityCard key={activity.id} activity={activity} />
+          {PENDING_ACTIVITIES.map((activity, index) => (
+            <ActivityCard
+              key={activity.id}
+              activity={activity}
+              style={{ animationDelay: cascadeDelay(4 + index) }}
+            />
           ))}
         </ul>
+        <div
+          className={styles.reveal}
+          style={{ animationDelay: cascadeDelay(4 + PENDING_ACTIVITIES.length) }}
+        >
+          <ResourcesCard />
+        </div>
       </main>
     </div>
   )
