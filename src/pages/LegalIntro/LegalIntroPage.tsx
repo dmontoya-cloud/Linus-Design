@@ -22,12 +22,12 @@ const DEFAULT_GREETING = "we're glad to have you"
  * assessment-results consent, and the age-18+ attestation now lives on
  * Login instead (the very first gate in the funnel, not something to
  * re-confirm here). A second, smaller title — "How would you like to be
- * called?" — introduces the name field below it, which is required (its
- * required-asterisk hidden, same as Registration's all-required fields —
- * with nothing optional to contrast against, it wouldn't tell the visitor
- * anything) and gates "Continue". Its own text fades/rises in on a
- * stagger, the same subtle entrance Verify Account uses for its
- * logo/spinner/message.
+ * called?" — introduces the name field below it, which is optional (its
+ * own label says so — "Preferred name - Optional") and never gates
+ * "Continue"; leaving it blank just keeps the generic greeting and leaves
+ * Registration's first name field to fill in on its own. Its own text
+ * fades/rises in on a stagger, the same subtle entrance Verify Account uses
+ * for its logo/spinner/message.
  */
 export function LegalIntroPage() {
   const navigate = useNavigate()
@@ -47,9 +47,7 @@ export function LegalIntroPage() {
       </p>
       <div className={styles.fadeField}>
         <Field
-          label="Preferred name"
-          required
-          hideRequiredMark
+          label="Preferred name - Optional"
           value={name}
           onChange={(event) => setPreferredName(event.target.value)}
         />
@@ -58,7 +56,6 @@ export function LegalIntroPage() {
         type="button"
         size="lg"
         className={styles.fadeButton}
-        disabled={!name.trim()}
         onClick={() => navigate('/terms')}
       >
         Continue

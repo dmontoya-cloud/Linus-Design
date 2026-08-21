@@ -9,6 +9,7 @@ export type EducationLevel =
   | 'elementary-school'
   | 'middle-school'
   | 'high-school'
+  | 'high-school-graduate'
   | 'some-college'
   | 'bachelors-degree'
   | 'some-graduate-education'
