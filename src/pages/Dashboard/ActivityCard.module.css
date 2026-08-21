@@ -13,11 +13,22 @@
   text-align: left;
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-xs, 4px);
+/* Cascades in on mount, staggered by DashboardPage via the `style` prop — same fade-rise
+   rhythm as Terms of Use / Privacy Policy / Registration — see src/pages/cascade.ts. */
+.reveal {
+  opacity: 0;
+  animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .title {
@@ -28,47 +39,88 @@
   margin: 0;
 }
 
-.time {
+/* Its own line above the title (not pinned to a corner, not inline beside it) so a long
+   title never has to reserve space for it or risk truncating — on request. Right-aligned on
+   that line, on request. Neutral gray, on request, rather than the primary-blue tint every
+   other badge in this system uses — a "not started" status isn't an accent-worthy highlight
+   the way a time estimate might be. */
+.status {
+  align-self: flex-end;
   flex-shrink: 0;
   font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-label-m-semibold-size, 0.6875rem);
   font-weight: var(--font-label-m-semibold-weight, 600);
   letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
-  color: var(--color-primary, #087dae);
-  background: var(--color-primary-soft, #e6f2f7);
+  color: var(--color-text-secondary, #5b6b79);
+  background: var(--color-border-subtle, #eff0f2);
+  border-radius: var(--radius-pill, 999px);
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+}
+
+/* Wraps the duration paragraph and, on activities that need one, the requirement badge
+   beside it — the extra 16px below (on top of .card's own 8px flex `gap`) belongs on the
+   row as a whole now, since .duration and .requirement are two independent children of it. */
+.durationRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  margin: 0 0 var(--space-md, 16px);
+}
+
+/* Clock icon + a rough duration estimate, on request — this mock-data prototype has no real
+   per-activity timing, so it's just an editorial guess per card, not measured. */
+.duration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs, 4px);
+  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-semibold-size, 0.6875rem);
+  font-weight: var(--font-label-m-semibold-weight, 600);
+  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0;
+}
+
+.durationIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Only on activities that actually need one (the listening/speaking tasks), on request —
+   same subtle pill treatment as .status, since both are secondary, non-accent-worthy notes. */
+.requirement {
+  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-semibold-size, 0.6875rem);
+  font-weight: var(--font-label-m-semibold-weight, 600);
+  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
+  color: var(--color-text-secondary, #5b6b79);
+  background: var(--color-border-subtle, #eff0f2);
   border-radius: var(--radius-pill, 999px);
   padding: var(--space-xs, 4px) var(--space-sm, 8px);
 }
 
 /* flex: 1 so this box absorbs whatever height the card's siblings in the same
-   grid row don't need — the indication/divider/Start button that follow it
-   always sit flush with the card's bottom edge, so every card's button lines
-   up regardless of how long its description text is. */
+   grid row don't need — the divider/Start button that follow it always sit
+   flush with the card's bottom edge, so every card's button lines up
+   regardless of how long its description text is. */
 .description {
   flex: 1;
   font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-paragraph-2-regular-size, 1rem);
   color: var(--color-text-secondary, #5b6b79);
   line-height: 1.5;
-  margin: 0;
-}
-
-.indication {
-  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-label-m-semibold-size, 0.6875rem);
-  font-weight: var(--font-label-m-semibold-weight, 600);
-  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
-  color: var(--color-text-secondary, #5b6b79);
-  text-align: left;
-  border-radius: var(--radius-md, 12px);
-  padding: var(--space-sm, 8px) var(--space-md, 16px);
-  margin: 0;
+  /* .card's own flex `gap` already adds 8px below every child — this adds 16px more here
+     specifically, on request, without changing the spacing anywhere else in the card. */
+  margin: 0 0 var(--space-md, 16px);
 }
 
 .divider {
   width: 100%;
   height: 0;
-  margin: 0;
+  /* .card's own flex `gap` already adds 8px below every child — this adds 8px more here
+     specifically, on request, without changing the spacing anywhere else in the card. */
+  margin: 0 0 var(--space-sm, 8px);
   border: none;
   border-top: 1px solid var(--color-border-subtle, #eff0f2);
 }

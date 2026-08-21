@@ -8377,10 +8377,12 @@
             inherits whatever <code>color</code> its container already sets &mdash; the same
             recoloring this system's <code>iconColor</code> tokens already rely on elsewhere
             (Search's icon, Tag's remove &times;, Modal's close button).
-            <strong>Deliberately a starter set, not the full ~1,500-icon library</strong>: these 8
+            <strong>Deliberately a starter set, not the full ~1,500-icon library</strong>: these 9
             were added on request; more only as a real component actually needs one. No new size or
             color tokens &mdash; recolor via the existing text/content tokens on a wrapping element,
-            size via plain CSS on the <code>&lt;svg&gt;</code>.
+            size via plain CSS on the <code>&lt;svg&gt;</code>. <code>clock</code> is also the first
+            of these with a real React implementation (<code>Icon/ClockIcon</code>) rather than
+            existing only in this reference page.
           </p>
 
           <div class="icon-grid">
@@ -8577,6 +8579,19 @@
                 />
               </svg>
               <span class="icon-name">envelope-simple</span>
+            </div>
+            <div class="icon-card">
+              <svg
+                class="icon-glyph"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+              >
+                <path
+                  d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"
+                />
+              </svg>
+              <span class="icon-name">clock</span>
             </div>
           </div>
         </section>
