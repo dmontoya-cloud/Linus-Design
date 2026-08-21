@@ -83,6 +83,15 @@
   align-self: flex-end;
 }
 
+/* Visual "disabled" cue for the email field and age checkbox while the mock sign-in request
+   is in flight — a flat 60% opacity plus pointer-events: none, on request, instead of
+   Field/Checkbox's own disabled prop (which recolors the border/text to a muted gray on top
+   of whatever else changes). */
+.loadingDim {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 /* Reserves enough height for the checkbox card plus its error message, so the rest of the
    vertically-centered form content never reflow-shifts depending on whether that message is
    currently showing (25px bare vs. 43.5px with the message, measured empirically). */

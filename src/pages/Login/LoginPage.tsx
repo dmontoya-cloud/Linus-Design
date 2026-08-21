@@ -27,9 +27,9 @@ function isValidEmail(value: string): boolean {
  * finishes. Login is a gate before the onboarding process, not a step
  * within it, so it doesn't carry the shared OnboardingLayout/progress bar
  * the later screens do. The age-18+ attestation lives here too, right after
- * the email field — required before "Log in to thrive" will proceed, since
+ * the email field — required before "Log in to Linus Health" will proceed, since
  * this is the very first gate in the funnel rather than something to
- * re-confirm later on Legal Intro. "Log in to thrive" stays enabled at all
+ * re-confirm later on Legal Intro. "Log in to Linus Health" stays enabled at all
  * times rather than being disabled while the form is incomplete — clicking
  * it with something missing reveals which field via its own error state
  * instead of the button just silently refusing to respond. The email field
@@ -39,7 +39,14 @@ function isValidEmail(value: string): boolean {
  * email address. The age checkbox uses a different, quieter treatment, on
  * request — its border and card stay neutral (never `border-danger` or a
  * danger-soft background); the only error cue is a `content-danger` message
- * below the checkbox. Both the email field and the checkbox card sit in
+ * below the checkbox. Both the email field and the checkbox card sit inside
+ * a `.loadingDim` wrapper while the mock sign-in request is in flight — a
+ * flat 60% opacity plus `pointer-events: none`, on request, rather than
+ * `Field`/`Checkbox`'s own built-in `disabled` prop (which recolors the
+ * border/text to a muted gray on top of whatever else changes); this way
+ * the checkbox's checked fill stays its normal primary color, just dimmed,
+ * instead of graying out, and the email field's typed value stays full
+ * contrast. Both the email field and the checkbox card also sit in
  * their own `min-height` slots, each sized to fit its content with its
  * error message showing — without that, the extra height either message
  * adds would grow `.formContent`'s total height and, since it's vertically
@@ -93,19 +100,26 @@ export function LoginPage() {
                 Enter your email address below so we can match you to our records.
               </p>
               <form className={styles.magicLinkForm} onSubmit={handleMagicLink} noValidate>
-                <div className={styles.emailFieldSlot}>
+                <div
+                  className={[styles.emailFieldSlot, magicLinkLoading ? styles.loadingDim : '']
+                    .filter(Boolean)
+                    .join(' ')}
+                >
                   <Field
                     label="Email address"
                     type="email"
                     required
                     error={emailInvalid}
                     helperText={emailHelperText}
-                    disabled={magicLinkLoading}
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </div>
-                <div className={styles.ageCheckboxSlot}>
+                <div
+                  className={[styles.ageCheckboxSlot, magicLinkLoading ? styles.loadingDim : '']
+                    .filter(Boolean)
+                    .join(' ')}
+                >
                   <CheckboxCard className={styles.ageCheckboxCard}>
                     <Checkbox
                       label={
@@ -114,7 +128,6 @@ export function LoginPage() {
                         </>
                       }
                       checked={overEighteen}
-                      disabled={magicLinkLoading}
                       aria-describedby={ageInvalid ? 'age-checkbox-error' : undefined}
                       onChange={(event) => setOverEighteen(event.target.checked)}
                     />
@@ -131,7 +144,7 @@ export function LoginPage() {
                   className={styles.magicLinkSubmit}
                   loading={magicLinkLoading}
                 >
-                  Log in to thrive
+                  Log in to Linus Health
                 </Button>
               </form>
             </div>
