@@ -70,6 +70,13 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
   })
 
+  it('jumps straight to Dashboard from the prototype index, without the login flow', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('link', { name: 'Dashboard' }))
+    expect(screen.getByRole('heading', { name: 'Welcome, there' })).toBeInTheDocument()
+  })
+
   it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Setting Up → Thanks → Onboarding → Gender & Identity → Education → Loading → Dashboard happy path', async () => {
     const user = userEvent.setup()
     render(<App />)

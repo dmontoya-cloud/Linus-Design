@@ -29,6 +29,8 @@ function renderDashboard({ withProfile = true } = {}) {
       <Routes>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/assessment" element={<p>Assessment stub</p>} />
+        <Route path="/assessment/lifestyle" element={<p>Lifestyle stub</p>} />
+        <Route path="/assessment/priorities" element={<p>Priorities stub</p>} />
         <Route path="/history" element={<p>History stub</p>} />
         <Route path="/settings" element={<p>Settings stub</p>} />
       </Routes>
@@ -58,7 +60,7 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('link', { name: 'Settings' })).not.toHaveAttribute('aria-current')
   })
 
-  it('shows three pending activity cards, each with a Start link to /assessment', () => {
+  it('shows three pending activity cards, each Start link routed to its own destination', () => {
     renderDashboard()
     expect(screen.getByText('Or just pick one')).toBeInTheDocument()
     expect(
@@ -73,9 +75,13 @@ describe('DashboardPage', () => {
     expect(screen.getByText('About 15 minutes')).toBeInTheDocument()
     expect(screen.getAllByText('About 5–10 minutes')).toHaveLength(2)
     expect(screen.getByText('Needs quiet room')).toBeInTheDocument()
+    // Only Memory & Thinking's Start reaches the real Assessment Intro screen (with its
+    // instructions voice-over) — Lifestyle/Priorities route to their own not-yet-built stubs.
     const startLinks = screen.getAllByRole('link', { name: 'Start' })
     expect(startLinks).toHaveLength(3)
-    startLinks.forEach((link) => expect(link).toHaveAttribute('href', '/assessment'))
+    expect(startLinks[0]).toHaveAttribute('href', '/assessment')
+    expect(startLinks[1]).toHaveAttribute('href', '/assessment/lifestyle')
+    expect(startLinks[2]).toHaveAttribute('href', '/assessment/priorities')
   })
 
   it('shows the resources card with a real external link to the Linus Health website', () => {

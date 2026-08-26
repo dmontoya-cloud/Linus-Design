@@ -1,17 +1,10 @@
-import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/auth'
-import { Logo } from '@/components/atoms/Logo'
+import { DashboardNavBar } from '../DashboardNavBar'
 import { ActivityCard, type Activity } from './ActivityCard'
 import { FullCheckInCard } from './FullCheckInCard'
 import { ResourcesCard } from './ResourcesCard'
 import { cascadeDelay } from '../cascade'
 import styles from './DashboardPage.module.css'
-
-const NAV_LINKS = [
-  { to: '/assessment', label: 'Assessment' },
-  { to: '/history', label: 'History' },
-  { to: '/settings', label: 'Settings' },
-]
 
 /** Mock pending activities — this repo has no real backend, so this list is a fixed
  * placeholder, not fetched or personalized. Every activity here is `'not-started'` since
@@ -25,6 +18,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     requirement: 'Needs quiet room',
     description:
       'Listening, speaking and recall tasks. They measure memory, attention, language and thinking.',
+    startPath: '/assessment',
   },
   {
     id: 'speech-pattern',
@@ -32,6 +26,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     status: 'not-started',
     duration: 'About 5–10 minutes',
     description: 'Fifteen short questions about sleep, movement, food, health and mood.',
+    startPath: '/assessment/lifestyle',
   },
   {
     id: 'visual-attention',
@@ -40,64 +35,33 @@ const PENDING_ACTIVITIES: Activity[] = [
     duration: 'About 5–10 minutes',
     description:
       'Tell us in your own words what matters most to you. Your goals are then built around those things.',
+    startPath: '/assessment/priorities',
   },
 ]
 
-function initialsFor(firstName: string, lastName: string) {
-  return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
-}
-
 /**
  * Dashboard — the post-onboarding home screen, reached once Login →
- * Onboarding → Gender & Identity all complete. Deliberately minimal: a quiet nav bar
- * (logo, centered primary links, user info) over a short welcome message. Below the
- * gradient full-check-in card and the three pending-activity cards sits `ResourcesCard`,
- * a fourth, plainer card pointing to the real Linus Health website for browsable content —
- * the one genuine external link in this prototype. Everything below the nav bar cascades in
- * on mount — the welcome title, the full-check-in card, the "Or just pick one" heading and
- * its subtext, each of the three activity cards in turn, then the resources card — the same
+ * Onboarding → Gender & Identity all complete. Deliberately minimal: `DashboardNavBar`'s quiet
+ * nav bar (logo, centered primary links, user info) — shared with Assessment Intro and every
+ * other screen reached from here — over a short welcome message. Below the gradient
+ * full-check-in card and the three pending-activity cards sits `ResourcesCard`, a fourth,
+ * plainer card pointing to the real Linus Health website for browsable content — the one
+ * genuine external link in this prototype. Everything below the nav bar cascades in on mount —
+ * the welcome title, the full-check-in card, the "Or just pick one" heading and its subtext,
+ * each of the three activity cards in turn, then the resources card — the same
  * fade-rise-staggered-by-`cascadeDelay` rhythm the Terms of Use/Privacy Policy/Registration
  * flow already uses, so the whole app shares one entrance style rather than this page
- * appearing all at once while everything before it cascades. Assessment/History/Settings are
- * still PoD-4+ stubs, same as the other placeholders reachable from the prototype index.
+ * appearing all at once while everything before it cascades. The full check-in button and
+ * Memory & Thinking's Start both hand off to the real Assessment Intro screen (`/assessment`);
+ * Lifestyle/Priorities' Start buttons and History/Settings are still PoD-4+ stubs, same as the
+ * other placeholders reachable from the prototype index.
  */
 export function DashboardPage() {
   const { profile } = useAuth()
-  const location = useLocation()
-  const fullName = profile ? `${profile.firstName} ${profile.lastName}` : 'Account'
 
   return (
     <div className={styles.page}>
-      <header className={styles.navBar}>
-        <Link to="/" className={styles.logoLink} aria-label="Back to start">
-          <Logo />
-        </Link>
-        <nav className={styles.nav} aria-label="Primary">
-          {NAV_LINKS.map((link) => {
-            // Dashboard itself has no nav item of its own — landing here selects
-            // Assessment by default, since that's the primary thing to do here.
-            const isActive =
-              location.pathname === link.to ||
-              (link.to === '/assessment' && location.pathname === '/dashboard')
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
-                aria-current={isActive ? 'page' : undefined}
-                className={isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink}
-              >
-                {link.label}
-              </Link>
-            )
-          })}
-        </nav>
-        <div className={styles.userInfo}>
-          <span className={styles.avatar} aria-hidden="true">
-            {profile ? initialsFor(profile.firstName, profile.lastName) : '?'}
-          </span>
-          <span className={styles.userName}>{fullName}</span>
-        </div>
-      </header>
+      <DashboardNavBar />
 
       <main className={styles.content}>
         <h1
