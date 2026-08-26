@@ -1,0 +1,117 @@
+.page {
+  min-height: 100svh;
+  background: var(--color-background, #faf9f7);
+}
+
+.content {
+  min-height: calc(100svh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+}
+
+.card {
+  max-width: 640px;
+  width: 100%;
+  padding: var(--space-xxl, 48px) var(--space-xl, 32px);
+  text-align: center;
+  /* Same shifted-up positioning as Assessment Intro, for visual continuity between the two
+     screens in this flow. */
+  margin-top: -200px;
+  --section-gap: calc(var(--space-lg, 24px) + var(--space-md, 16px));
+}
+
+/* Same ~200px sizing as Assessment Intro's ReadingCompanion. */
+.companion {
+  display: block;
+  width: 200px;
+  height: 160px;
+  margin: 0 auto var(--space-md, 16px);
+}
+
+.title {
+  font-family: var(--font-headline-4-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-4-semibold-size, 1.75rem);
+  font-weight: var(--font-headline-4-semibold-weight, 600);
+  line-height: var(--font-headline-4-semibold-line-height, 1.25);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0 0 var(--section-gap, 40px);
+}
+
+.instructions {
+  /* Same large body-copy size as Assessment Intro's paragraph, on request. */
+  font-family: var(--font-paragraph-4-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-4-regular-size, 1.4375rem);
+  font-weight: var(--font-paragraph-4-regular-weight, 400);
+  /* The starting/unread color, matching Assessment Intro's same voice-over highlight — words
+     switch to --color-text-primary (see .wordRead) as the voice-over reads past them. */
+  color: var(--color-text-tertiary, #94a3ad);
+  line-height: 1.6;
+  margin: 0 0 var(--section-gap, 40px);
+}
+
+.word {
+  transition: color 0.15s ease;
+}
+
+/* Every word up to and including the one currently being spoken — a progressive "read so far"
+   reveal, same as Assessment Intro's paragraph. */
+.wordRead {
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.micBarsWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 var(--section-gap, 40px);
+}
+
+.testSoundWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 var(--section-gap, 40px);
+}
+
+/* Animates its own height from 0 to the buttons' natural height via the grid-rows trick
+   (0fr → 1fr, both transitionable) — since .content vertically centers .card, growing this
+   smoothly rather than inserting the buttons all at once is what turns the text's upward
+   shift into a graceful glide instead of an abrupt jump. Same mechanism as Assessment Intro. */
+.actionsWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.actionsWrapperExpanded {
+  grid-template-rows: 1fr;
+}
+
+.actionsInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Stacked, matching Assessment Intro's button layout. */
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md, 16px);
+}
+
+.reveal {
+  opacity: 0;
+  animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

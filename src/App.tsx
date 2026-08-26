@@ -18,6 +18,8 @@ import { SettingUpPage } from '@/pages/SettingUp/SettingUpPage'
 import { ThanksPage } from '@/pages/Thanks/ThanksPage'
 import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
+import { AssessmentIntroPage } from '@/pages/Assessment/AssessmentIntroPage'
+import { DeviceSetupPage } from '@/pages/DeviceSetup/DeviceSetupPage'
 import './App.css'
 
 /**
@@ -38,9 +40,12 @@ import './App.css'
  * Identity collects gender/sex assigned at birth, both passing their answers
  * forward in router state; Education collects education level and saves the
  * whole thing at once, then hands off to Loading — a last spinner beat
- * before Dashboard appears. Paywall/Assessment/Report are still PoD-4
- * stubs, as are History/Settings (reachable only from Dashboard's own nav,
- * not listed in this funnel).
+ * before Dashboard appears. Assessment Intro (reached from any Dashboard
+ * activity card's Start link) is real too — it reads its instructions aloud
+ * via the browser's own speech synthesis — but the actual assessment task
+ * flow it would hand off to doesn't exist yet. Paywall/Report are still
+ * PoD-4 stubs, as are History/Settings (reachable only from Dashboard's own
+ * nav, not listed in this funnel).
  */
 const FUNNEL_STEPS = [
   { path: '/login', label: 'Login' },
@@ -73,9 +78,18 @@ const REAL_STEP_PATHS = [
   '/education',
   '/loading',
   '/dashboard',
+  '/assessment',
 ]
 
 const STUB_STEPS = FUNNEL_STEPS.filter((step) => !REAL_STEP_PATHS.includes(step.path))
+
+/** Every real step except Login/Verify Email themselves — those two are the pre-auth part of
+ * the funnel and should still show as-is from the index. Everything else is gated by
+ * `RequireAuth`, so jumping to it directly from the prototype index needs a mock sign-in first
+ * (see `Home`) or it would just bounce back to /login. */
+const REQUIRE_AUTH_STEP_PATHS = REAL_STEP_PATHS.filter(
+  (path) => path !== '/login' && path !== '/verify-email',
+)
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -100,7 +114,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 /** Routes whose own header already provides a way back to the start (e.g. a logo Link to "/"),
  * so the global corner link would only sit on top of their content. */
-const ROUTES_WITH_OWN_NAV = ['/dashboard']
+const ROUTES_WITH_OWN_NAV = ['/dashboard', '/assessment', '/assessment/memory-and-thinking']
 
 /** Hidden on routes in ROUTES_WITH_OWN_NAV — otherwise it overlaps that page's own header content,
  * since both are pinned to the same top-right corner. */
@@ -136,7 +150,14 @@ function LoginRoute() {
   return <LoginPage />
 }
 
+/**
+ * Jumping straight to a step past Login from this index would otherwise just bounce back to
+ * /login via `RequireAuth` — clicking here is a preview shortcut, not the real flow, so it
+ * mock-signs-in first (same as actually completing Login) for any step that needs it.
+ */
 function Home() {
+  const { login } = useAuth()
+
   return (
     <main className="screen-placeholder">
       <h1>Linus Patient Engagement — Prototype</h1>
@@ -148,7 +169,11 @@ function Home() {
         <ul>
           {FUNNEL_STEPS.map((step) => (
             <li key={step.path}>
-              <Link to={step.path} className={buttonClassName('primary')}>
+              <Link
+                to={step.path}
+                className={buttonClassName('primary')}
+                onClick={REQUIRE_AUTH_STEP_PATHS.includes(step.path) ? login : undefined}
+              >
                 {step.label}
               </Link>
             </li>
@@ -261,6 +286,52 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <DashboardPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment"
+                element={
+                  <RequireAuth>
+                    <AssessmentIntroPage />
+                  </RequireAuth>
+                }
+              />
+              {/* Lifestyle/Priorities aren't built yet — only Memory & Thinking's Start (and
+                  the full check-in button) reach the real Assessment Intro screen above. */}
+              <Route
+                path="/assessment/lifestyle"
+                element={
+                  <RequireAuth>
+                    <Placeholder title="Lifestyle" />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment/priorities"
+                element={
+                  <RequireAuth>
+                    <Placeholder title="Priorities" />
+                  </RequireAuth>
+                }
+              />
+              {/* Where Assessment Intro's "I'm Ready to Begin" hands off to — a device check
+                  (hearing, then a real live microphone level check, swapped in place on this
+                  one page) before the actual Memory & Thinking task flow, which isn't built yet
+                  ("Continue", after the microphone check, leads to its own placeholder below). */}
+              <Route
+                path="/assessment/memory-and-thinking"
+                element={
+                  <RequireAuth>
+                    <DeviceSetupPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment/memory-and-thinking/microphone-check"
+                element={
+                  <RequireAuth>
+                    <Placeholder title="Microphone Check Complete" />
                   </RequireAuth>
                 }
               />

@@ -23,16 +23,21 @@ export interface Activity {
    * only activities with a real setup requirement (like the listening/speaking tasks) carry one. */
   requirement?: string
   description: string
+  /** Where this card's Start button hands off to. Only Memory & Thinking has a real
+   * intro screen (`/assessment`, with its instructions voice-over) — the other activities
+   * route to their own not-yet-built placeholder rather than sharing that one. */
+  startPath: string
 }
 
 /** One pending assessment activity — a status badge on its own line above the title (never
  * pinned to a corner or inline beside it, so a long title never truncates or has to reserve
  * space for it), title, a clock-icon-led duration estimate (with an optional requirement
  * badge beside it, e.g. "Needs quiet room", on activities where that matters), description,
- * and a Start CTA that hands off to the /assessment stub, same as every other not-yet-built
- * PoD-4 screen. Cascades in on mount (fade-rise) same as every other card on Dashboard —
- * `style` carries the per-card `animationDelay` DashboardPage staggers by, since a `<li>`
- * can't be wrapped in an extra element without breaking the `<ul>`'s content model. */
+ * and a Start CTA that hands off to `activity.startPath` — only Memory & Thinking's points at
+ * the real Assessment Intro screen; the other two still point at not-yet-built placeholders.
+ * Cascades in on mount (fade-rise) same as every other card on Dashboard — `style` carries
+ * the per-card `animationDelay` DashboardPage staggers by, since a `<li>` can't be wrapped
+ * in an extra element without breaking the `<ul>`'s content model. */
 export function ActivityCard({ activity, style }: { activity: Activity; style?: CSSProperties }) {
   return (
     <li className={[styles.card, styles.reveal].join(' ')} style={style}>
@@ -50,7 +55,7 @@ export function ActivityCard({ activity, style }: { activity: Activity; style?: 
       <p className={styles.description}>{activity.description}</p>
       <hr className={styles.divider} />
       <Link
-        to="/assessment"
+        to={activity.startPath}
         className={`${buttonClassName('secondary', 'sm')} ${styles.startButton}`}
       >
         Start

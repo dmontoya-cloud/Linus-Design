@@ -1,0 +1,127 @@
+.page {
+  min-height: 100svh;
+  background: var(--color-background, #faf9f7);
+}
+
+.content {
+  min-height: calc(100svh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+}
+
+.card {
+  max-width: 640px;
+  width: 100%;
+  padding: var(--space-xxl, 48px) var(--space-xl, 32px);
+  text-align: center;
+  /* Shifts everything up from the vertically centered position .content's flex centering
+     would otherwise put it at, on request — there was too much empty space above it. Because
+     .content is vertically centered, the whole card (and everything above the buttons) re-
+     centers upward as the buttons' row grows in below — see .actionsWrapper for why that
+     motion is smoothed instead of an instant jump. */
+  margin-top: -200px;
+  /* Shared spacing between title/paragraph and paragraph/buttons, on request — --space-lg's
+     usual 24px, plus 16px more. */
+  --section-gap: calc(var(--space-lg, 24px) + var(--space-md, 16px));
+}
+
+/* ~200px wide, on request — height follows the same 200:160 (5:4) ratio as the SVG's own
+   viewBox so the illustration doesn't stretch. */
+.companion {
+  display: block;
+  width: 200px;
+  height: 160px;
+  margin: 0 auto var(--space-md, 16px);
+}
+
+.title {
+  font-family: var(--font-headline-4-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-4-semibold-size, 1.75rem);
+  font-weight: var(--font-headline-4-semibold-weight, 600);
+  line-height: var(--font-headline-4-semibold-line-height, 1.25);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0 0 var(--section-gap, 40px);
+}
+
+.instructions {
+  /* Largest paragraph size in the design system, on request — the voice-over text is the
+     one thing on this screen, so it reads at the biggest body-copy scale available. */
+  font-family: var(--font-paragraph-4-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-4-regular-size, 1.4375rem);
+  font-weight: var(--font-paragraph-4-regular-weight, 400);
+  /* The starting/unread color, on request — words switch to --color-text-primary (see
+     .wordRead) as the voice-over reads past them, rather than a background highlight. */
+  color: var(--color-text-tertiary, #94a3ad);
+  line-height: 1.6;
+  /* Same spacing as between the title and this paragraph, on request. */
+  margin: 0 0 var(--section-gap, 40px);
+}
+
+.word {
+  transition: color 0.15s ease;
+}
+
+/* Every word up to and including the one currently being spoken, on request — a progressive
+   "read so far" reveal rather than a single moving highlight. --color-text-primary is the
+   design system's darkest text token (near-black), for strong contrast against the light
+   gray starting color above. */
+.wordRead {
+  color: var(--color-text-primary, #1f2a37);
+}
+
+/* Animates its own height from 0 to the buttons' natural height via the grid-rows trick
+   (0fr → 1fr, both transitionable) — since .content vertically centers .card, growing this
+   smoothly rather than inserting the buttons all at once is what turns the text's upward
+   shift into a graceful glide instead of an abrupt jump. */
+.actionsWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.actionsWrapperExpanded {
+  grid-template-rows: 1fr;
+}
+
+.actionsInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Stacked, on request — "I'm Ready to Begin" above "Replay instructions". */
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md, 16px);
+}
+
+.beginButton {
+  gap: var(--space-sm, 8px);
+}
+
+.beginIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Cascades the two buttons in, staggered by cascadeDelay, once the reading finishes — same
+   fade-rise rhythm as Dashboard's cards — see src/pages/cascade.ts. */
+.reveal {
+  opacity: 0;
+  animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
