@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState, type CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
-import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
+import { Spinner } from '@/components/atoms/Spinner'
 import { DashboardNavBar } from '../DashboardNavBar'
 import { cascadeDelay } from '../cascade'
 import { MicrophoneLevelBars } from './MicrophoneLevelBars'
@@ -170,17 +170,26 @@ function MicrophoneCompanion({ className, style }: { className?: string; style?:
   )
 }
 
+/** "I can hear the sound" reveals once the reading is about halfway through, on request — see
+ * `HALFWAY_INDEX` on `AssessmentIntroPage`, the same idea applied here. Rounds down, so
+ * "halfway" never waits for one word more than it has to. */
+const HEARING_HALFWAY_INDEX = Math.floor((HEARING_WORDS.length - 1) / 2)
+
 /** First step: confirms the visitor can hear audio from their device. Its own instructions
  * cascade in, read aloud (see `./deviceSetupVoiceOver`) with the progressive "read so far"
  * highlight, same as every other screen in this flow. A `TestSoundPlayer` sits right after the
  * paragraph — its own synthesized bird-chirp sound, so a visitor can actually confirm they can
  * hear, not just take the page's word for it — shown as soon as the paragraph mounts rather than
  * gated behind the reading finishing, since it's a self-contained check independent of whether
- * the voice-over has finished. `onConfirmed` swaps this step out for `MicrophoneCheckStep` in
- * place, on the same page — not a route change — since the two are one continuous device check. */
+ * the voice-over has finished. "I can hear the sound" reveals once the reading is about halfway
+ * through (`HEARING_HALFWAY_INDEX`), on request, rather than waiting for the whole paragraph —
+ * clicking it before the voice-over finishes still cancels the reading in progress, the same way
+ * unmounting always does (see the cleanup below). `onConfirmed` swaps this step out for
+ * `MicrophoneCheckStep` in place, on the same page — not a route change — since the two are one
+ * continuous device check. */
 function HearingCheckStep({ onConfirmed }: { onConfirmed: () => void }) {
   const [readUpToIndex, setReadUpToIndex] = useState<number | null>(null)
-  const hasFinishedReading = readUpToIndex === HEARING_WORDS.length - 1
+  const hasReachedHalfway = readUpToIndex !== null && readUpToIndex >= HEARING_HALFWAY_INDEX
 
   useEffect(() => {
     const timer = window.setTimeout(() => speakHearing(setReadUpToIndex), AUTOPLAY_DELAY_MS)
@@ -225,39 +234,54 @@ function HearingCheckStep({ onConfirmed }: { onConfirmed: () => void }) {
         <TestSoundPlayer />
       </div>
       <div
-        className={[
-          styles.actionsWrapper,
-          hasFinishedReading ? styles.actionsWrapperExpanded : '',
-        ].join(' ')}
+        className={[styles.actions, hasReachedHalfway ? styles.actionsRevealed : ''].join(' ')}
+        style={{ animationDelay: cascadeDelay(0) }}
+        aria-hidden={!hasReachedHalfway}
       >
-        <div className={styles.actionsInner}>
-          {hasFinishedReading ? (
-            <div className={styles.actions}>
-              <Button
-                variant="primary"
-                size="lg"
-                className={styles.reveal}
-                style={{ animationDelay: cascadeDelay(0) }}
-                onClick={onConfirmed}
-              >
-                I confirm, I can hear
-              </Button>
-            </div>
-          ) : null}
-        </div>
+        <Button variant="primary" size="lg" disabled={!hasReachedHalfway} onClick={onConfirmed}>
+          I can hear the sound
+        </Button>
       </div>
     </>
   )
 }
 
+/** Once the mic is confirmed, how long to hold on `MicrophoneLevelBars`' own "Microphone is
+ * working" checkmark before swapping to the spinner — long enough to actually register as a
+ * confirmation, not just flash past. */
+const CONFIRMED_HOLD_MS = 1200
+/** How long the spinner shows before navigating on to `DeviceReadyPage` — this is a fixed hold,
+ * not tied to any real loading work (there's nothing left to check by this point), purely so the
+ * transition doesn't feel instant/jarring. */
+const SPINNER_HOLD_MS = 900
+
+type MicrophoneHandoffPhase = 'checking' | 'confirmed' | 'navigating'
+
 /** Second step: a real microphone check, not a canned animation — `MicrophoneLevelBars` asks
  * for actual mic access and visualizes live input level, since a fake bar animation couldn't
- * verify anything. Same voice-over/highlight/reveal treatment as the first step, with its own
- * separate script (see `./microphoneCheckVoiceOver`) and its own independent reading progress —
- * switching steps doesn't carry state between them. */
+ * verify anything. It also decides for itself whether the mic is working: as soon as it detects
+ * roughly 3-4 words' worth of continuous speech (matched by level and timing only — no words
+ * transcribed, no audio leaves the device), it swaps the bars for a checkmark right away, rather
+ * than waiting for several separate pause-and-repeat bursts. That detection is only armed once
+ * `hasFinishedReading` is true (`detectionEnabled`) — while this step's own instructions are
+ * still being read aloud, the mic could pick up that voice-over audio right back out of the
+ * device's speakers and mistake it for the visitor speaking. Same voice-over/highlight/reveal
+ * treatment as the first step, with its own separate script (see `./microphoneCheckVoiceOver`)
+ * and its own independent reading progress — switching steps doesn't carry state between them.
+ *
+ * There's no manual "Continue" here — on request, the hand-off is automatic:
+ * `MicrophoneLevelBars`' own `onConfirmed` callback moves `handoffPhase` from `'checking'` to
+ * `'confirmed'` (its checkmark is already showing at this point, unchanged); after
+ * `CONFIRMED_HOLD_MS`, `handoffPhase` moves to `'navigating'`, which swaps that same spot to a
+ * `Spinner`; after `SPINNER_HOLD_MS` more, it navigates to `DeviceReadyPage`. Three separate
+ * timers rather than one combined one, each keyed off the phase that started it, so the
+ * component doesn't need to reason about one single elapsed duration covering two different
+ * visual states. */
 function MicrophoneCheckStep() {
   const [readUpToIndex, setReadUpToIndex] = useState<number | null>(null)
   const hasFinishedReading = readUpToIndex === MIC_WORDS.length - 1
+  const [handoffPhase, setHandoffPhase] = useState<MicrophoneHandoffPhase>('checking')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const timer = window.setTimeout(() => speakMic(setReadUpToIndex), AUTOPLAY_DELAY_MS)
@@ -266,6 +290,20 @@ function MicrophoneCheckStep() {
       cancelMic()
     }
   }, [])
+
+  useEffect(() => {
+    if (handoffPhase !== 'confirmed') return
+    const timer = window.setTimeout(() => setHandoffPhase('navigating'), CONFIRMED_HOLD_MS)
+    return () => window.clearTimeout(timer)
+  }, [handoffPhase])
+
+  useEffect(() => {
+    if (handoffPhase !== 'navigating') return
+    const timer = window.setTimeout(() => {
+      navigate('/assessment/memory-and-thinking/microphone-check', { replace: true })
+    }, SPINNER_HOLD_MS)
+    return () => window.clearTimeout(timer)
+  }, [handoffPhase, navigate])
 
   return (
     <>
@@ -295,55 +333,55 @@ function MicrophoneCheckStep() {
           </Fragment>
         ))}
       </p>
-      <div
-        className={[styles.micBarsWrapper, styles.reveal].join(' ')}
-        style={{ animationDelay: cascadeDelay(3) }}
-      >
-        <MicrophoneLevelBars />
-      </div>
-      <div
-        className={[
-          styles.actionsWrapper,
-          hasFinishedReading ? styles.actionsWrapperExpanded : '',
-        ].join(' ')}
-      >
-        <div className={styles.actionsInner}>
-          {hasFinishedReading ? (
-            <div className={styles.actions}>
-              <Link
-                to="/assessment/memory-and-thinking/microphone-check"
-                className={`${buttonClassName('primary', 'lg')} ${styles.reveal}`}
-                style={{ animationDelay: cascadeDelay(0) }}
-              >
-                Continue
-              </Link>
-            </div>
-          ) : null}
+      {handoffPhase === 'navigating' ? (
+        <div
+          className={[styles.spinnerWrapper, styles.reveal].join(' ')}
+          style={{ animationDelay: cascadeDelay(3) }}
+        >
+          <Spinner />
+          <p className={styles.spinnerMessage} role="status" aria-live="polite">
+            Getting things ready
+          </p>
         </div>
-      </div>
+      ) : (
+        <div
+          className={[styles.micBarsWrapper, styles.reveal].join(' ')}
+          style={{ animationDelay: cascadeDelay(3) }}
+        >
+          <MicrophoneLevelBars
+            detectionEnabled={hasFinishedReading}
+            onConfirmed={() => setHandoffPhase('confirmed')}
+          />
+        </div>
+      )}
     </>
   )
 }
 
 /**
- * Device Setup — the screen "I'm Ready to Begin" hands off to from Assessment Intro, before
- * the actual Memory & Thinking tasks (still a PoD-4 stub past this point — "Continue" leads to
- * a not-yet-built placeholder). Two steps, swapped in place on this one page rather than
- * separate routes, since they're one continuous device check: `HearingCheckStep` confirms the
- * visitor can hear audio — via its own `SpeakerCompanion` illustration and a `TestSoundPlayer`
- * they can actually press — then `MicrophoneCheckStep` replaces it with `MicrophoneCompanion`
- * and a real, live microphone level check. Both mirror Assessment Intro's full voice-over
- * interaction — cascading in on mount, reading their own instructions aloud with the same
- * progressive "read so far" highlight, and keeping their buttons hidden (via the same
- * `.actionsWrapper` grid-rows grow-in, so the upward shift is a graceful glide, not a jump) until
- * that reveal reaches the last word.
+ * Device Setup — the screen "I'm Ready to Begin" hands off to from Assessment Intro. Two steps,
+ * swapped in place on this one page rather than separate routes, since they're one continuous
+ * device check: `HearingCheckStep` confirms the visitor can hear audio — via its own
+ * `SpeakerCompanion` illustration and a `TestSoundPlayer` they can actually press — then
+ * `MicrophoneCheckStep` replaces it with `MicrophoneCompanion` and a real, live microphone level
+ * check. Both mirror Assessment Intro's full voice-over interaction — cascading in on mount,
+ * reading their own instructions aloud with the same progressive "read so far" highlight.
+ * `HearingCheckStep`'s button row (`.actions`) is reserved but `visibility: hidden` from the
+ * start, so revealing it partway through the reading is a clean fade+rise in place rather than a
+ * clipped/masked reveal or a jump elsewhere on the page — but `MicrophoneCheckStep` has no button
+ * at all: once the mic is confirmed working, it hands off automatically (checkmark, then a
+ * spinner, then `DeviceReadyPage`), since by that point there's nothing left to click "Continue"
+ * for the visitor to decide about. Its `DashboardNavBar` uses `exitVariant="outline"` — a
+ * bordered pill with a `SignOutIcon` — the same Exit style `DeviceReadyPage` and
+ * `ShoppingListIntroPage` use, on request, so the whole device-setup-through-assessment-task
+ * flow looks consistent.
  */
 export function DeviceSetupPage() {
   const [step, setStep] = useState<'hearing' | 'microphone'>('hearing')
 
   return (
     <div className={styles.page}>
-      <DashboardNavBar title={ACTIVITY_NAME} exitTo="/dashboard" />
+      <DashboardNavBar title={ACTIVITY_NAME} exitTo="/dashboard" exitVariant="outline" />
       <main className={styles.content}>
         <div className={styles.card}>
           {step === 'hearing' ? (

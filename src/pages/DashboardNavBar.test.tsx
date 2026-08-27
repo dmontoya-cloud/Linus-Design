@@ -79,8 +79,18 @@ describe('DashboardNavBar', () => {
 
   it('replaces the signed-in user info with a tertiary Exit link when exitTo is given', () => {
     renderNavBar({ exitTo: '/dashboard' })
-    expect(screen.getByRole('link', { name: 'Exit' })).toHaveAttribute('href', '/dashboard')
+    const exitLink = screen.getByRole('link', { name: 'Exit' })
+    expect(exitLink).toHaveAttribute('href', '/dashboard')
     expect(screen.queryByText('Ada Lovelace')).not.toBeInTheDocument()
+    // The default (tertiary) Exit link is plain text — no SignOutIcon alongside it.
+    expect(exitLink.querySelector('svg')).not.toBeInTheDocument()
+  })
+
+  it('shows an outline Exit link with a SignOutIcon when exitVariant is "outline"', () => {
+    renderNavBar({ exitTo: '/dashboard', exitVariant: 'outline' })
+    const exitLink = screen.getByRole('link', { name: 'Exit' })
+    expect(exitLink).toHaveAttribute('href', '/dashboard')
+    expect(exitLink.querySelector('svg')).toBeInTheDocument()
   })
 
   it('has no automatically detectable accessibility violations (axe)', async () => {
@@ -91,6 +101,16 @@ describe('DashboardNavBar', () => {
 
   it('has no automatically detectable accessibility violations with title/exitTo set', async () => {
     const { container } = renderNavBar({ title: 'Memory & Thinking', exitTo: '/dashboard' })
+    const results = await axe(container)
+    expect(results.violations).toEqual([])
+  })
+
+  it('has no automatically detectable accessibility violations with an outline Exit link', async () => {
+    const { container } = renderNavBar({
+      title: 'Memory & Thinking',
+      exitTo: '/dashboard',
+      exitVariant: 'outline',
+    })
     const results = await axe(container)
     expect(results.violations).toEqual([])
   })

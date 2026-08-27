@@ -18,9 +18,9 @@
   text-align: center;
   /* Shifts everything up from the vertically centered position .content's flex centering
      would otherwise put it at, on request — there was too much empty space above it. Because
-     .content is vertically centered, the whole card (and everything above the buttons) re-
-     centers upward as the buttons' row grows in below — see .actionsWrapper for why that
-     motion is smoothed instead of an instant jump. */
+     .content is vertically centered, the card's own height matters for where it lands — see
+     .actions for why the button row's space is reserved from the start rather than growing in
+     (so nothing above it ever has to re-center). */
   margin-top: -200px;
   /* Shared spacing between title/paragraph and paragraph/buttons, on request — --space-lg's
      usual 24px, plus 16px more. */
@@ -71,31 +71,25 @@
   color: var(--color-text-primary, #1f2a37);
 }
 
-/* Animates its own height from 0 to the buttons' natural height via the grid-rows trick
-   (0fr → 1fr, both transitionable) — since .content vertically centers .card, growing this
-   smoothly rather than inserting the buttons all at once is what turns the text's upward
-   shift into a graceful glide instead of an abrupt jump. */
-.actionsWrapper {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.actionsWrapperExpanded {
-  grid-template-rows: 1fr;
-}
-
-.actionsInner {
-  overflow: hidden;
-  min-height: 0;
-}
-
-/* Stacked, on request — "I'm Ready to Begin" above "Replay instructions". */
+/* This row's space is reserved from the very first render (via `visibility`, not by being
+   removed from the DOM or animated in via height) — since .content vertically centers .card,
+   growing this row in after the fact would shift everything above it every time; reserving it
+   up front means revealing the button is a pure fade+rise in place, with nothing around it
+   ever moving. `visibility: hidden` (rather than only `opacity: 0`) also keeps it out of the
+   tab order and the accessibility tree until it's actually revealed — see .actionsRevealed. */
 .actions {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md, 16px);
+  visibility: hidden;
+}
+
+/* Applied once the reading finishes — the same fade-rise rhythm Dashboard's cards use (see
+   src/pages/cascade.ts), not a clipped/masked reveal. */
+.actionsRevealed {
+  visibility: visible;
+  animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .beginButton {

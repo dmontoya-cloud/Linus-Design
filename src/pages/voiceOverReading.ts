@@ -76,8 +76,14 @@ export interface VoiceOverReader {
    * supports them, and by an estimated timed guess (recalibrated against real timing once a
    * read-through actually finishes) otherwise — and either way, `onend` snaps the reveal to the
    * very last word the instant speech actually finishes, so the two stay in sync at the end even
-   * if the estimate drifted somewhere in the middle. */
-  speak: (onWordIndex: (index: number | null) => void) => void
+   * if the estimate drifted somewhere in the middle. The optional second `onFinished` callback is
+   * a *separate*, more trustworthy "done" signal than watching for `onWordIndex` to reach the
+   * final index: that estimated fallback can race ahead of the real audio (a guess, not a
+   * measurement) and report the last word "read" well before the voice has actually said it — fine
+   * for a highlight a few hundred ms off, but wrong for anything that reacts to completion by
+   * unmounting/navigating, since that then cancels the still-playing utterance early. `onFinished`
+   * only ever fires from the utterance's real `onend`, once speech has genuinely finished. */
+  speak: (onWordIndex: (index: number | null) => void, onFinished?: () => void) => void
   /** Chrome has a well-documented bug where calling `speechSynthesis.cancel()` while nothing is
    * actually speaking or queued can leave the engine unable to produce the *next* `speak()` call
    * — silently, with no error. Only canceling when there's really something to cancel avoids
@@ -154,7 +160,7 @@ export function createVoiceOverReader(text: string): VoiceOverReader {
     window.setTimeout(step, 80)
   }
 
-  function speak(onWordIndex: (index: number | null) => void) {
+  function speak(onWordIndex: (index: number | null) => void, onFinished?: () => void) {
     if (typeof window === 'undefined' || !window.speechSynthesis) {
       return
     }
@@ -198,6 +204,7 @@ export function createVoiceOverReader(text: string): VoiceOverReader {
       if (generation === currentGeneration) {
         onWordIndex(words.length - 1)
         currentGeneration += 1
+        onFinished?.()
       }
     }
     utterance.onerror = () => {

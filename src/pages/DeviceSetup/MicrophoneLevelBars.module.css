@@ -1,13 +1,50 @@
+/* Wraps the live-bars state's box + its "Troubleshooting" link so the component still returns a
+   single root node — its own parent page (`DeviceSetupPage`) lays that root out in a flex ROW,
+   so without this, the box and the link end up side by side instead of stacked. `width: 100%`
+   here (not just on .box) is what makes .box's own `width: 100%` resolve against this
+   component's real available width rather than shrinking to its content. */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  width: 100%;
+}
+
+/* Same "pill box on a white card" treatment as the hearing-check step's TestSoundPlayer — shared
+   across all three states below (bars/confirmed/denied) so the box itself doesn't pop in or out
+   as this component swaps between them. Padding adds around each state's own natural height
+   (no box-sizing override), the same way TestSoundPlayer's box sizes around its play button. */
+.box {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: var(--space-md, 16px) var(--space-lg, 24px);
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-pill, 999px);
+  box-shadow: var(
+    --shadow-card,
+    0 2px 8px rgba(32, 37, 42, 0.06),
+    0 1px 2px rgba(32, 37, 42, 0.04)
+  );
+}
+
+/* `justify-content: space-between` (rather than stretching each track) spreads BAR_COUNT
+   narrow, fixed-width bars — see .barTrack — across the box's full width, whatever that width
+   actually is at the current viewport: the first bar sits flush against the left edge, the last
+   against the right, and the gaps between them absorb any remaining space. `gap` sets a floor
+   on that spacing so bars never crowd closer than this even if the box gets narrower. */
 .bars {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
-  gap: var(--space-sm, 8px);
+  justify-content: space-between;
+  gap: var(--space-xs, 4px);
   height: 64px;
+  width: 100%;
 }
 
 .barTrack {
-  width: 10px;
+  width: 6px;
   height: 100%;
   display: flex;
   align-items: flex-end;
@@ -24,6 +61,47 @@
   background: var(--color-primary, #087dae);
   border-radius: var(--radius-pill, 999px);
   transition: height 0.05s linear;
+}
+
+/* Row layout (icon beside the label, not stacked above it) with the same fixed height as .bars
+   — so the box never changes size when this component swaps between showing live bars and
+   showing this confirmation. */
+.confirmed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm, 8px);
+  height: 64px;
+  animation: fade-rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.confirmedIcon {
+  display: block;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--color-secondary, #86c65a);
+}
+
+.confirmedText {
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .denied {

@@ -1,0 +1,33 @@
+.pulse {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinner-breathe 2.4s ease-in-out infinite;
+}
+
+.ring {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border, #ced3d7);
+  border-top-color: var(--color-primary, #087dae);
+  animation: spinner-spin 0.9s linear infinite;
+}
+
+@keyframes spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
