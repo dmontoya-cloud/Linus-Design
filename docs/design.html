@@ -8377,13 +8377,15 @@
             inherits whatever <code>color</code> its container already sets &mdash; the same
             recoloring this system's <code>iconColor</code> tokens already rely on elsewhere
             (Search's icon, Tag's remove &times;, Modal's close button).
-            <strong>Deliberately a starter set, not the full ~1,500-icon library</strong>: these 10
+            <strong>Deliberately a starter set, not the full ~1,500-icon library</strong>: these 12
             were added on request; more only as a real component actually needs one. No new size or
             color tokens &mdash; recolor via the existing text/content tokens on a wrapping element,
             size via plain CSS on the <code>&lt;svg&gt;</code>. <code>clock</code>,
-            <code>arrow-right</code>, and <code>play</code> also have real React implementations
-            (<code>Icon/ClockIcon</code>, <code>Icon/ArrowRightIcon</code>,
-            <code>Icon/PlayIcon</code>) rather than existing only in this reference page.
+            <code>arrow-right</code>, <code>play</code>, <code>check-circle</code>, and
+            <code>sign-out</code> also have real React implementations (<code>Icon/ClockIcon</code>,
+            <code>Icon/ArrowRightIcon</code>, <code>Icon/PlayIcon</code>,
+            <code>Icon/CheckCircleIcon</code>, <code>Icon/SignOutIcon</code>) rather than existing
+            only in this reference page.
           </p>
 
           <div class="icon-grid">
@@ -8594,6 +8596,32 @@
                 />
               </svg>
               <span class="icon-name">play</span>
+            </div>
+            <div class="icon-card">
+              <svg
+                class="icon-glyph"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+              >
+                <path
+                  d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"
+                />
+              </svg>
+              <span class="icon-name">check-circle</span>
+            </div>
+            <div class="icon-card">
+              <svg
+                class="icon-glyph"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+              >
+                <path
+                  d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"
+                />
+              </svg>
+              <span class="icon-name">sign-out</span>
             </div>
           </div>
         </section>

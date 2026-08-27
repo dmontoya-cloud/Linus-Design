@@ -95,9 +95,13 @@ function ReadingCompanion({ className, style }: { className?: string; style?: CS
  * requested for this spot turned out to carry a stock-site watermark and wasn't actually
  * licensed for use. Keeps `DashboardNavBar`'s
  * chrome (logo, nav bar) but swaps its centered Assessment/History/Settings links for the same
- * activity name shown as the page's own title, and its signed-in user info for a tertiary
- * "Exit" link back to Dashboard — this screen is about one activity,
- * not general navigation or whose account it is. Reads its instructions aloud on mount (see
+ * activity name shown as the page's own title, and its signed-in user info for an "Exit" link
+ * back to Dashboard — this screen is about one activity, not general navigation or whose account
+ * it is. Uses `exitVariant="outline"` (a bordered pill with a `SignOutIcon`) — the same Exit
+ * style every other screen in the device-setup-through-assessment-task flow uses (`DeviceSetupPage`,
+ * `DeviceReadyPage`, `ShoppingListIntroPage`), on request, so leaving looks the same at every step
+ * from here through the end of the flow, not just from Device Setup onward. Reads its instructions
+ * aloud on mount (see
  * `speak`, in `./assessmentVoiceOver`) — autoplaying this way relies on the visitor having just
  * tapped Start, a real user gesture, which is enough for most browsers to allow audio without
  * requiring an extra click first; the mount-time call is delayed slightly (`AUTOPLAY_DELAY_MS`)
@@ -106,17 +110,27 @@ function ReadingCompanion({ className, style }: { className?: string; style?: CS
  * deaf/hard of hearing or simply have their sound off. The paragraph starts in its light gray
  * color and progressively darkens word by word as the voice-over reads — a "read so far"
  * reveal, not a single moving highlight. "I'm Ready to Begin" stays hidden until that reveal
- * reaches the last word, then cascades in (the same fade-rise-staggered-by-`cascadeDelay`
- * rhythm Dashboard's cards use) — reading the instructions is the one thing to do here before
- * moving on, so "begin" isn't offered until there's actually something to begin from.
- * `.actionsWrapper` grows the button's row height in smoothly (a CSS grid-rows trick) rather
- * than inserting it all at once — since `.content` vertically centers `.card`, that growth also
- * re-centers everything above the button upward; animating it turns that shift into a graceful
- * glide instead of the abrupt jump an instant insert would cause.
+ * reaches roughly the halfway point (`HALFWAY_INDEX`), then fades and rises in (the same rhythm
+ * Dashboard's cards use) — on request, so a visitor who already knows what's coming doesn't have
+ * to sit through the entire paragraph before they can move on. Clicking it before the voice-over
+ * finishes navigates away immediately, which cancels the reading in progress (see the cleanup
+ * below) — moving on doesn't wait for the last word either. Its row (`.actions`) is always in the
+ * layout, reserved via `visibility: hidden` rather than being mounted late or grown in via a
+ * clipped/masked height animation — since `.content` vertically centers `.card`, reserving the
+ * space up front means revealing the button is a clean fade+rise in place, with nothing above
+ * it ever having to shift. `visibility: hidden` (plus `aria-hidden`/`tabIndex={-1}` on the link
+ * itself) also keeps it out of the tab order and the accessibility tree until it's genuinely
+ * available.
  */
+/** "I'm Ready to Begin" reveals once the reading is about halfway through, on request — a
+ * visitor who already knows the drill shouldn't have to sit through the whole paragraph before
+ * they can move on. Rounds down (a 41-word paragraph reveals at word 21 of 41, 0-indexed 20) so
+ * "halfway" never waits for one word more than it has to. */
+const HALFWAY_INDEX = Math.floor((WORDS.length - 1) / 2)
+
 export function AssessmentIntroPage() {
   const [readUpToIndex, setReadUpToIndex] = useState<number | null>(null)
-  const hasFinishedReading = readUpToIndex === WORDS.length - 1
+  const hasReachedHalfway = readUpToIndex !== null && readUpToIndex >= HALFWAY_INDEX
 
   useEffect(() => {
     const timer = window.setTimeout(() => speak(setReadUpToIndex), AUTOPLAY_DELAY_MS)
@@ -128,7 +142,7 @@ export function AssessmentIntroPage() {
 
   return (
     <div className={styles.page}>
-      <DashboardNavBar title={ACTIVITY_NAME} exitTo="/dashboard" />
+      <DashboardNavBar title={ACTIVITY_NAME} exitTo="/dashboard" exitVariant="outline" />
       <main className={styles.content}>
         <div className={styles.card}>
           <ReadingCompanion className={styles.reveal} style={{ animationDelay: cascadeDelay(0) }} />
@@ -158,25 +172,18 @@ export function AssessmentIntroPage() {
             ))}
           </p>
           <div
-            className={[
-              styles.actionsWrapper,
-              hasFinishedReading ? styles.actionsWrapperExpanded : '',
-            ].join(' ')}
+            className={[styles.actions, hasReachedHalfway ? styles.actionsRevealed : ''].join(' ')}
+            style={{ animationDelay: cascadeDelay(0) }}
+            aria-hidden={!hasReachedHalfway}
           >
-            <div className={styles.actionsInner}>
-              {hasFinishedReading ? (
-                <div className={styles.actions}>
-                  <Link
-                    to="/assessment/memory-and-thinking"
-                    className={`${buttonClassName('primary', 'lg')} ${styles.beginButton} ${styles.reveal}`}
-                    style={{ animationDelay: cascadeDelay(0) }}
-                  >
-                    I&apos;m Ready to Begin
-                    <ArrowRightIcon className={styles.beginIcon} />
-                  </Link>
-                </div>
-              ) : null}
-            </div>
+            <Link
+              to="/assessment/memory-and-thinking"
+              className={`${buttonClassName('primary', 'lg')} ${styles.beginButton}`}
+              tabIndex={hasReachedHalfway ? undefined : -1}
+            >
+              I&apos;m Ready to Begin
+              <ArrowRightIcon className={styles.beginIcon} />
+            </Link>
           </div>
         </div>
       </main>

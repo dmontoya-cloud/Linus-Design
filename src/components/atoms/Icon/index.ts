@@ -1,3 +1,5 @@
 export * from './ClockIcon'
 export * from './ArrowRightIcon'
 export * from './PlayIcon'
+export * from './CheckCircleIcon'
+export * from './SignOutIcon'

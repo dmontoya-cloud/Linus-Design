@@ -17,6 +17,41 @@ const MIC_TEXT =
   "Now let's test your microphone. Say something out loud, and you'll see the bars move " +
   'when we can hear you.'
 
+/** A fake `AnalyserNode` whose reported level can be driven from the test, standing in for
+ * actual sound reaching the microphone (real speech, or the device's own voice-over leaking
+ * back in through its speakers). */
+function makeControllableAnalyser() {
+  let level = 0
+  const analyser = {
+    fftSize: 64,
+    smoothingTimeConstant: 0.6,
+    get frequencyBinCount() {
+      return this.fftSize / 2
+    },
+    getByteFrequencyData(array: Uint8Array) {
+      array.fill(level)
+    },
+  }
+  return {
+    analyser: analyser as unknown as AnalyserNode,
+    setLevel: (byteValue: number) => {
+      level = byteValue
+    },
+  }
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/** Holds the level loud enough, long enough to confirm on its own — the default
+ * `createSpeechBurstDetector` needs one continuous ~700ms burst, not several pause-separated
+ * ones (a visitor saying a few words out loud, not "testing, testing"). */
+async function speakOneConfirmingBurst(setLevel: (byteValue: number) => void) {
+  setLevel(120)
+  await sleep(780)
+}
+
 function renderPage() {
   return render(
     <AuthProvider>
@@ -41,7 +76,7 @@ async function advanceToMicrophoneStep(user: ReturnType<typeof userEvent.setup>)
   await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1))
   const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[0]?.[0]
   utterance?.onend?.({} as SpeechSynthesisEvent)
-  const confirmButton = await screen.findByRole('button', { name: 'I confirm, I can hear' })
+  const confirmButton = await screen.findByRole('button', { name: 'I can hear the sound' })
   await user.click(confirmButton)
 }
 
@@ -73,6 +108,12 @@ describe('DeviceSetupPage', () => {
     expect(screen.getByRole('link', { name: 'Back to start' })).toHaveAttribute('href', '/')
     expect(screen.getAllByText('Memory & Thinking')).toHaveLength(1)
     expect(screen.getByRole('link', { name: 'Exit' })).toHaveAttribute('href', '/dashboard')
+  })
+
+  it('shows the Exit link as an outline button with a sign-out icon, not the usual plain text link', () => {
+    renderPage()
+    const exitLink = screen.getByRole('link', { name: 'Exit' })
+    expect(exitLink.querySelector('svg')).toBeInTheDocument()
   })
 
   describe('hearing check (step 1)', () => {
@@ -111,22 +152,45 @@ describe('DeviceSetupPage', () => {
       expect(utterance?.text).toBe(HEARING_TEXT)
     })
 
-    it('hides "I confirm, I can hear" until the reading is finished', () => {
+    it('hides "I can hear the sound" until the reading is finished', () => {
       renderPage()
-      expect(
-        screen.queryByRole('button', { name: 'I confirm, I can hear' }),
-      ).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'I can hear the sound' })).not.toBeInTheDocument()
     })
 
-    it('shows "I confirm, I can hear" once the reading finishes', async () => {
+    it('shows "I can hear the sound" once the reading finishes', async () => {
       renderPage()
       await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1))
       const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[0]?.[0]
       utterance?.onend?.({} as SpeechSynthesisEvent)
 
       expect(
-        await screen.findByRole('button', { name: 'I confirm, I can hear' }),
+        await screen.findByRole('button', { name: 'I can hear the sound' }),
       ).toBeInTheDocument()
+    })
+
+    it('still hides "I can hear the sound" partway through the reading, before the halfway point', async () => {
+      renderPage()
+      await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1))
+      const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[0]?.[0]
+
+      // charIndex 31 is where "and" (the 6th of 26 words) starts — well before halfway.
+      utterance?.onboundary?.({ name: 'word', charIndex: 31 } as SpeechSynthesisEvent)
+      await waitFor(() => expect(screen.getByText('and').className).toContain(styles.wordRead))
+      expect(screen.queryByRole('button', { name: 'I can hear the sound' })).not.toBeInTheDocument()
+    })
+
+    it('reveals "I can hear the sound" once the reading reaches roughly the halfway point, before it finishes', async () => {
+      renderPage()
+      await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1))
+      const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[0]?.[0]
+
+      // charIndex 76 is where "Make" (the 13th of 26 words, just past halfway) starts — later
+      // words are still unread, proving this fires mid-reading rather than only on completion.
+      utterance?.onboundary?.({ name: 'word', charIndex: 76 } as SpeechSynthesisEvent)
+
+      const button = await screen.findByRole('button', { name: 'I can hear the sound' })
+      expect(button).not.toBeDisabled()
+      expect(screen.getByText('below.').className).not.toContain(styles.wordRead)
     })
 
     it('shows a test sound player after the paragraph, independent of whether reading has finished', () => {
@@ -169,6 +233,34 @@ describe('DeviceSetupPage', () => {
       expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
     })
 
+    it('does not let its own voice-over trip the mic confirmation before it finishes reading', async () => {
+      const { analyser, setLevel } = makeControllableAnalyser()
+      vi.spyOn(window.AudioContext.prototype, 'createAnalyser').mockReturnValue(analyser)
+      vi.spyOn(navigator.mediaDevices, 'getUserMedia').mockResolvedValue({
+        getTracks: () => [{ stop: () => {} }],
+      } as unknown as MediaStream)
+
+      const user = userEvent.setup()
+      renderPage()
+      await advanceToMicrophoneStep(user)
+      await screen.findByRole('img', { name: 'Live microphone input level' })
+
+      // Stands in for this step's own instructions leaking back into the mic through the
+      // device's speakers while they're still being read aloud — must not count.
+      await speakOneConfirmingBurst(setLevel)
+      setLevel(0)
+      expect(screen.queryByRole('img', { name: 'Microphone is working' })).not.toBeInTheDocument()
+
+      // The reading actually finishes — detection arms, and the same burst (standing in for the
+      // visitor actually speaking) now confirms it.
+      await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(2))
+      const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[1]?.[0]
+      utterance?.onend?.({} as SpeechSynthesisEvent)
+
+      await speakOneConfirmingBurst(setLevel)
+      expect(await screen.findByRole('img', { name: 'Microphone is working' })).toBeInTheDocument()
+    }, 20000)
+
     it('reads its own instructions aloud, separately from the hearing step', async () => {
       const user = userEvent.setup()
       renderPage()
@@ -179,25 +271,49 @@ describe('DeviceSetupPage', () => {
       expect(utterance?.text).toBe(MIC_TEXT)
     })
 
-    it('hides "Continue" until its own reading is finished, then moves on to the microphone-check placeholder', async () => {
+    it('has no manual "Continue" button — even once its own reading finishes', async () => {
       const user = userEvent.setup()
       renderPage()
       await advanceToMicrophoneStep(user)
 
       expect(screen.queryByRole('link', { name: 'Continue' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Continue' })).not.toBeInTheDocument()
 
       await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(2))
       const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[1]?.[0]
       utterance?.onend?.({} as SpeechSynthesisEvent)
 
-      const continueLink = await screen.findByRole('link', { name: 'Continue' })
-      expect(continueLink).toHaveAttribute(
-        'href',
-        '/assessment/memory-and-thinking/microphone-check',
-      )
-      await user.click(continueLink)
-      expect(screen.getByText('Microphone check stub')).toBeInTheDocument()
+      expect(screen.queryByRole('link', { name: 'Continue' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Continue' })).not.toBeInTheDocument()
     })
+
+    it('hands off automatically once the mic is confirmed working: checkmark, then a spinner, then the next page — no click required', async () => {
+      vi.spyOn(navigator.mediaDevices, 'getUserMedia').mockResolvedValue({
+        getTracks: () => [{ stop: () => {} }],
+      } as unknown as MediaStream)
+      const { analyser, setLevel } = makeControllableAnalyser()
+      vi.spyOn(window.AudioContext.prototype, 'createAnalyser').mockReturnValue(analyser)
+
+      const user = userEvent.setup()
+      renderPage()
+      await advanceToMicrophoneStep(user)
+
+      await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(2))
+      const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[1]?.[0]
+      utterance?.onend?.({} as SpeechSynthesisEvent)
+
+      await speakOneConfirmingBurst(setLevel)
+      await screen.findByRole('img', { name: 'Microphone is working' })
+
+      // Holds on the checkmark for a moment, then swaps to a spinner on its own...
+      await screen.findByText('Getting things ready', {}, { timeout: 3000 })
+      expect(screen.queryByRole('img', { name: 'Microphone is working' })).not.toBeInTheDocument()
+
+      // ...then navigates on to the next page on its own, no click involved.
+      expect(
+        await screen.findByText('Microphone check stub', {}, { timeout: 3000 }),
+      ).toBeInTheDocument()
+    }, 20000)
   })
 
   it('has no automatically detectable accessibility violations (axe)', async () => {

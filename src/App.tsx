@@ -20,6 +20,8 @@ import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
 import { AssessmentIntroPage } from '@/pages/Assessment/AssessmentIntroPage'
 import { DeviceSetupPage } from '@/pages/DeviceSetup/DeviceSetupPage'
+import { DeviceReadyPage } from '@/pages/DeviceSetup/DeviceReadyPage'
+import { ShoppingListIntroPage } from '@/pages/Assessment/MemoryThinkingTask/ShoppingListIntroPage'
 import './App.css'
 
 /**
@@ -42,8 +44,9 @@ import './App.css'
  * whole thing at once, then hands off to Loading — a last spinner beat
  * before Dashboard appears. Assessment Intro (reached from any Dashboard
  * activity card's Start link) is real too — it reads its instructions aloud
- * via the browser's own speech synthesis — but the actual assessment task
- * flow it would hand off to doesn't exist yet. Paywall/Report are still
+ * via the browser's own speech synthesis, same as the device check and the
+ * one real assessment item (of 20) that follows it — but items 2-20 and the
+ * actual shopping-list task itself don't exist yet. Paywall/Report are still
  * PoD-4 stubs, as are History/Settings (reachable only from Dashboard's own
  * nav, not listed in this funnel).
  */
@@ -114,7 +117,13 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
 /** Routes whose own header already provides a way back to the start (e.g. a logo Link to "/"),
  * so the global corner link would only sit on top of their content. */
-const ROUTES_WITH_OWN_NAV = ['/dashboard', '/assessment', '/assessment/memory-and-thinking']
+const ROUTES_WITH_OWN_NAV = [
+  '/dashboard',
+  '/assessment',
+  '/assessment/memory-and-thinking',
+  '/assessment/memory-and-thinking/microphone-check',
+  '/assessment/memory-and-thinking/task',
+]
 
 /** Hidden on routes in ROUTES_WITH_OWN_NAV — otherwise it overlaps that page's own header content,
  * since both are pinned to the same top-right corner. */
@@ -317,8 +326,15 @@ export default function App() {
               />
               {/* Where Assessment Intro's "I'm Ready to Begin" hands off to — a device check
                   (hearing, then a real live microphone level check, swapped in place on this
-                  one page) before the actual Memory & Thinking task flow, which isn't built yet
-                  ("Continue", after the microphone check, leads to its own placeholder below). */}
+                  one page) before the actual Memory & Thinking task flow. The microphone check
+                  hands off automatically once it's confirmed working (no button — see
+                  DeviceSetupPage's MicrophoneCheckStep) to DeviceReadyPage below, whose own
+                  "Continue to test" leads to ShoppingListIntroPage — item 1 of the assessment's
+                  20 items. That page has three of its own in-place steps (same pattern as
+                  DeviceSetupPage): instructions, then "Start" swaps to reading the list to
+                  remember aloud, then a fixed 30-second "repeat it back" window with live mic
+                  bars, which hands off automatically (no button) to the placeholder below —
+                  items 2-20 and any real scoring of what the visitor said aren't built yet. */}
               <Route
                 path="/assessment/memory-and-thinking"
                 element={
@@ -331,7 +347,23 @@ export default function App() {
                 path="/assessment/memory-and-thinking/microphone-check"
                 element={
                   <RequireAuth>
-                    <Placeholder title="Microphone Check Complete" />
+                    <DeviceReadyPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment/memory-and-thinking/task"
+                element={
+                  <RequireAuth>
+                    <ShoppingListIntroPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment/memory-and-thinking/task/next"
+                element={
+                  <RequireAuth>
+                    <Placeholder title="Next Assessment Item" />
                   </RequireAuth>
                 }
               />

@@ -1,0 +1,25 @@
+.steps {
+  margin: 0 0 var(--space-lg, 24px);
+  padding-left: var(--space-lg, 24px);
+}
+
+.steps li {
+  margin: 0 0 var(--space-sm, 8px);
+}
+
+.steps li:last-child {
+  margin-bottom: 0;
+}
+
+.exampleLabel {
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.mockup {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+}

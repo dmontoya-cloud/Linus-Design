@@ -61,9 +61,15 @@ describe('AssessmentIntroPage', () => {
     expect(screen.getByRole('heading', { name: 'Memory & Thinking' })).toBeInTheDocument()
   })
 
-  it('shows a tertiary Exit link back to Dashboard in place of the signed-in user info', () => {
+  it('shows an Exit link back to Dashboard in place of the signed-in user info', () => {
     renderPage()
     expect(screen.getByRole('link', { name: 'Exit' })).toHaveAttribute('href', '/dashboard')
+  })
+
+  it('shows the Exit link as an outline button with a sign-out icon, not the usual plain text link', () => {
+    renderPage()
+    const exitLink = screen.getByRole('link', { name: 'Exit' })
+    expect(exitLink.querySelector('svg')).toBeInTheDocument()
   })
 
   it('shows the instructions text on screen, not only as audio', () => {
@@ -134,6 +140,31 @@ describe('AssessmentIntroPage', () => {
 
     const beginLink = await screen.findByRole('link', { name: /Ready to Begin/ })
     expect(beginLink).toHaveAttribute('href', '/assessment/memory-and-thinking')
+  })
+
+  it('still hides "I\'m Ready to Begin" partway through the reading, before the halfway point', async () => {
+    renderPage()
+    await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1))
+    const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[0]?.[0]
+
+    // charIndex 65 is where "let's" (the 11th of 38 words) starts — well before halfway.
+    utterance?.onboundary?.({ name: 'word', charIndex: 65 } as SpeechSynthesisEvent)
+    await waitFor(() => expect(screen.getByText("let's").className).toContain(styles.wordRead))
+    expect(screen.queryByRole('link', { name: /Ready to Begin/ })).not.toBeInTheDocument()
+  })
+
+  it('reveals "I\'m Ready to Begin" once the reading reaches roughly the halfway point, before it finishes', async () => {
+    renderPage()
+    await waitFor(() => expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1))
+    const utterance = vi.mocked(window.speechSynthesis.speak).mock.calls[0]?.[0]
+
+    // charIndex 103 is where "a" (the 19th of 38 words, just past halfway) starts — later words
+    // are still unread, proving this fires mid-reading rather than only on completion.
+    utterance?.onboundary?.({ name: 'word', charIndex: 103 } as SpeechSynthesisEvent)
+
+    const beginLink = await screen.findByRole('link', { name: /Ready to Begin/ })
+    expect(beginLink).not.toHaveAttribute('tabindex', '-1')
+    expect(screen.getByText('them.').className).not.toContain(styles.wordRead)
   })
 
   it('moves on to the Memory & Thinking task placeholder from "I\'m Ready to Begin"', async () => {
