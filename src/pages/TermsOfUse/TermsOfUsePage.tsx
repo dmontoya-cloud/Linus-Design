@@ -6,6 +6,7 @@ import { LegalLayout } from '../LegalLayout'
 import { SummaryCard } from '../SummaryCard'
 import { LegalTextBox } from '../LegalTextBox'
 import { CheckboxCard } from '../CheckboxCard'
+import { ScrollDownHint } from '../ScrollDownHint'
 import { cascadeDelay } from '../cascade'
 import styles from './TermsOfUsePage.module.css'
 
@@ -183,6 +184,7 @@ export function TermsOfUsePage() {
           Agree and continue
         </Button>
       </div>
+      <ScrollDownHint />
     </LegalLayout>
   )
 }

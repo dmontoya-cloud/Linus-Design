@@ -1,7 +1,10 @@
+/* 19px is an exact pixel match to Figma's own itemSpacing — not one of the 4/8/16/24/32/48
+   scale tokens, but consistent across all six gaps in this card (status→title→duration→
+   description→requirement→divider→buttons), so it's a real deliberate value, not noise. */
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm, 8px);
+  gap: 19px;
   background: var(--color-surface, #fff);
   border-radius: var(--radius-xl, 24px);
   box-shadow: var(
@@ -9,7 +12,7 @@
     0 2px 8px rgba(32, 37, 42, 0.06),
     0 1px 2px rgba(32, 37, 42, 0.04)
   );
-  padding: var(--space-xl, 32px);
+  padding: var(--space-lg, 24px);
   text-align: left;
 }
 
@@ -32,9 +35,9 @@
 }
 
 .title {
-  font-family: var(--font-paragraph-4-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-paragraph-4-semibold-size, 1.4375rem);
-  font-weight: var(--font-paragraph-4-semibold-weight, 600);
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
   margin: 0;
 }
@@ -57,14 +60,11 @@
   padding: var(--space-xs, 4px) var(--space-sm, 8px);
 }
 
-/* Wraps the duration paragraph and, on activities that need one, the requirement badge
-   beside it — the extra 16px below (on top of .card's own 8px flex `gap`) belongs on the
-   row as a whole now, since .duration and .requirement are two independent children of it. */
-.durationRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm, 8px);
-  margin: 0 0 var(--space-md, 16px);
+/* docs/design.md's documented `badge-success` recipe (success-soft background, success text) —
+   an existing token pair, not a one-off green invented for this badge. */
+.statusCompleted {
+  color: var(--color-success, #15803d);
+  background: var(--color-success-soft, #e8f2ec);
 }
 
 /* Clock icon + a rough duration estimate, on request — this mock-data prototype has no real
@@ -88,8 +88,10 @@
 }
 
 /* Only on activities that actually need one (the listening/speaking tasks), on request —
-   same subtle pill treatment as .status, since both are secondary, non-accent-worthy notes. */
+   same subtle pill treatment as .status, since both are secondary, non-accent-worthy notes.
+   Moved onto its own line below the description (was inline beside .duration), on request. */
 .requirement {
+  align-self: flex-start;
   font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-label-m-semibold-size, 0.6875rem);
   font-weight: var(--font-label-m-semibold-weight, 600);
@@ -98,6 +100,7 @@
   background: var(--color-border-subtle, #eff0f2);
   border-radius: var(--radius-pill, 999px);
   padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  margin: 0;
 }
 
 /* flex: 1 so this box absorbs whatever height the card's siblings in the same
@@ -108,23 +111,21 @@
   flex: 1;
   font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-primary, #1f2a37);
   line-height: 1.5;
-  /* .card's own flex `gap` already adds 8px below every child — this adds 16px more here
-     specifically, on request, without changing the spacing anywhere else in the card. */
-  margin: 0 0 var(--space-md, 16px);
+  margin: 0;
 }
 
 .divider {
   width: 100%;
   height: 0;
-  /* .card's own flex `gap` already adds 8px below every child — this adds 8px more here
-     specifically, on request, without changing the spacing anywhere else in the card. */
-  margin: 0 0 var(--space-sm, 8px);
+  margin: 0;
   border: none;
   border-top: 1px solid var(--color-border-subtle, #eff0f2);
 }
 
-.startButton {
-  align-self: flex-end;
+.buttonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

@@ -1,0 +1,75 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+/* Reset to a plain icon button — no visible chrome beyond the icon itself until focus,
+   same restraint search-clear/modal-close already apply to their own icon-only triggers. */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: var(--color-text-tertiary, #94a3ad);
+  border-radius: var(--radius-pill, 999px);
+}
+
+.trigger:hover {
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+/* Same corrected two-layer ring recipe as every other icon-only trigger in this system
+   (search-clear, modal-close) — a `surface` gap, then a solid contrast-passing ring. */
+.trigger:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-surface, #fff),
+    0 0 0 4px var(--color-primary, #087dae);
+}
+
+/* Always mounted, animated via opacity/transform rather than conditionally rendered — see
+   Tooltip.tsx's own note. 1500 matches docs/design.md's z-index.tooltip token exactly; no
+   CSS variable exists for it yet (the whole z-index scale is documented but not wired into
+   theme.ts), so it's a literal here rather than an invented one. */
+.bubble {
+  position: absolute;
+  bottom: calc(100% + var(--space-xs, 4px));
+  left: 50%;
+  z-index: 1500;
+  width: max-content;
+  max-width: 220px;
+  background: var(--color-text-primary, #1f2a37);
+  color: var(--color-text-on-primary, #fff);
+  font-family: var(--font-label-l-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-regular-size, 0.8125rem);
+  /* Explicit, not inherited — without this it silently picks up whatever weight its
+     trigger's surrounding text happens to be (e.g. a 600-weight title), reading heavier
+     than intended for a caption. */
+  font-weight: var(--font-label-l-regular-weight, 400);
+  line-height: 1.4;
+  text-align: left;
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: var(
+    --shadow-card,
+    0 2px 8px rgba(32, 37, 42, 0.06),
+    0 1px 2px rgba(32, 37, 42, 0.04)
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity var(--motion-duration-fast, 120ms) var(--motion-easing-standard, ease),
+    transform var(--motion-duration-fast, 120ms) var(--motion-easing-standard, ease);
+}
+
+.bubbleVisible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

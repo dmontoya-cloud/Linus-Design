@@ -4,11 +4,13 @@ import { ActivityCard, type Activity } from './ActivityCard'
 import { FullCheckInCard } from './FullCheckInCard'
 import { ResourcesCard } from './ResourcesCard'
 import { cascadeDelay } from '../cascade'
+import { MemoryThinkingDetailsContent } from '../Assessment/MemoryThinkingDetailsContent'
 import styles from './DashboardPage.module.css'
 
 /** Mock pending activities — this repo has no real backend, so this list is a fixed
- * placeholder, not fetched or personalized. Every activity here is `'not-started'` since
- * there's no real assessment flow yet to actually progress or complete one. */
+ * placeholder, not fetched or personalized. `status` here is just each activity's default —
+ * DashboardPage overrides it per-render from `useAuth().completedActivityIds`, the one piece of
+ * real (if entirely client-side) completion state this prototype has. */
 const PENDING_ACTIVITIES: Activity[] = [
   {
     id: 'memory-recall',
@@ -17,16 +19,18 @@ const PENDING_ACTIVITIES: Activity[] = [
     duration: 'About 15 minutes',
     requirement: 'Needs quiet room',
     description:
-      'Listening, speaking and recall tasks. They measure memory, attention, language and thinking.',
-    startPath: '/assessment',
+      'Complete tasks that look at your brain abilities: memory, attention, language and thinking.',
+    startPath: '/assessment/start',
+    detailsContent: <MemoryThinkingDetailsContent />,
   },
   {
     id: 'speech-pattern',
     title: 'Lifestyle',
     status: 'not-started',
     duration: 'About 5–10 minutes',
-    description: 'Fifteen short questions about sleep, movement, food, health and mood.',
+    description: 'Fifteen questions about your health and lifestyle.',
     startPath: '/assessment/lifestyle',
+    detailsPath: '/assessment/lifestyle/details',
   },
   {
     id: 'visual-attention',
@@ -34,21 +38,24 @@ const PENDING_ACTIVITIES: Activity[] = [
     status: 'not-started',
     duration: 'About 5–10 minutes',
     description:
-      'Tell us in your own words what matters most to you. Your goals are then built around those things.',
+      'Tell us what you want to keep doing in daily life and what matters most for your brain health.',
     startPath: '/assessment/priorities',
+    detailsPath: '/assessment/priorities/details',
   },
 ]
 
 /**
  * Dashboard — the post-onboarding home screen, reached once Login →
  * Onboarding → Gender & Identity all complete. Deliberately minimal: `DashboardNavBar`'s quiet
- * nav bar (logo, centered primary links, user info) — shared with Assessment Intro and every
- * other screen reached from here — over a short welcome message. Below the gradient
- * full-check-in card and the three pending-activity cards sits `ResourcesCard`, a fourth,
+ * nav bar (logo, user info, empty center — the Assessment/History/Settings links that used to
+ * sit there were removed on request) — shared with Assessment Intro and every other screen
+ * reached from here — over a short welcome message (name plus a friendly subline, on request).
+ * Below the gradient full-check-in card and the three pending-activity
+ * cards sits its own "Brain health resources" heading, then `ResourcesCard`, a fourth,
  * plainer card pointing to the real Linus Health website for browsable content — the one
  * genuine external link in this prototype. Everything below the nav bar cascades in on mount —
- * the welcome title, the full-check-in card, the "Or just pick one" heading and its subtext,
- * each of the three activity cards in turn, then the resources card — the same
+ * the welcome title, the full-check-in card, the "Explore one area" heading and its subtext,
+ * each of the three activity cards in turn, then the resources heading and card — the same
  * fade-rise-staggered-by-`cascadeDelay` rhythm the Terms of Use/Privacy Policy/Registration
  * flow already uses, so the whole app shares one entrance style rather than this page
  * appearing all at once while everything before it cascades. The full check-in button and
@@ -57,7 +64,7 @@ const PENDING_ACTIVITIES: Activity[] = [
  * other placeholders reachable from the prototype index.
  */
 export function DashboardPage() {
-  const { profile } = useAuth()
+  const { profile, completedActivityIds } = useAuth()
 
   return (
     <div className={styles.page}>
@@ -68,7 +75,8 @@ export function DashboardPage() {
           className={[styles.welcome, styles.reveal].join(' ')}
           style={{ animationDelay: cascadeDelay(0) }}
         >
-          Welcome, {profile?.firstName ?? 'there'}
+          Welcome, {profile?.firstName ?? 'there'}!{' '}
+          <span className={styles.welcomeSubtext}>We&rsquo;re so glad you&rsquo;re here.</span>
         </h1>
         <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
           <FullCheckInCard />
@@ -77,26 +85,36 @@ export function DashboardPage() {
           className={[styles.copy, styles.reveal].join(' ')}
           style={{ animationDelay: cascadeDelay(2) }}
         >
-          Or just pick one
+          Explore one area
         </h2>
         <p
           className={[styles.copySubtext, styles.reveal].join(' ')}
           style={{ animationDelay: cascadeDelay(3) }}
         >
-          Each check-in works on its own. Take them in any order. Your report updates each time.
+          You can also complete each activity individually. Each activity looks at a different area
+          of brain health, and adding more activities over time will create a new report.
         </p>
         <ul className={styles.activityGrid}>
           {PENDING_ACTIVITIES.map((activity, index) => (
             <ActivityCard
               key={activity.id}
-              activity={activity}
+              activity={{
+                ...activity,
+                status: completedActivityIds.includes(activity.id) ? 'completed' : 'not-started',
+              }}
               style={{ animationDelay: cascadeDelay(4 + index) }}
             />
           ))}
         </ul>
+        <h2
+          className={[styles.copy, styles.copyNoSubtext, styles.reveal].join(' ')}
+          style={{ animationDelay: cascadeDelay(4 + PENDING_ACTIVITIES.length) }}
+        >
+          Brain health resources
+        </h2>
         <div
           className={styles.reveal}
-          style={{ animationDelay: cascadeDelay(4 + PENDING_ACTIVITIES.length) }}
+          style={{ animationDelay: cascadeDelay(5 + PENDING_ACTIVITIES.length) }}
         >
           <ResourcesCard />
         </div>

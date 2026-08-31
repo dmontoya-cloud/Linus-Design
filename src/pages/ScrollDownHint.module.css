@@ -1,0 +1,61 @@
+/* Fixed to the viewport, not the page — first real consumer of the `sticky` z-index token
+   (see docs/design.md's Layering section, reserved since that section was first written).
+   `pointer-events: none` on the wrapper keeps it purely visual; it never intercepts scrolling
+   or taps meant for whatever sits underneath it. */
+.wrapper {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-xl, 32px);
+  z-index: 1100;
+  transform: translate(-50%, 24px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--motion-duration-slow, 250ms) var(--motion-easing-standard, ease),
+    transform var(--motion-duration-slow, 250ms) var(--motion-easing-standard, ease);
+}
+
+.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* The bounce lives on this inner element, separate from .wrapper's own slide/fade transform,
+   so the two don't fight over the same CSS property. Three short hops (`iteration-count: 3`),
+   on request, each rising 10px before settling back to rest — not an infinite idle animation,
+   just enough motion to catch the eye once the pill has flown into place. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  padding: var(--space-sm, 8px) var(--space-lg, 24px);
+  border-radius: var(--radius-pill, 999px);
+  background: var(--color-primary, #087dae);
+  color: var(--color-text-on-primary, #fff);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  font-weight: var(--font-paragraph-2-regular-weight, 400);
+  white-space: nowrap;
+  box-shadow: var(
+    --shadow-card,
+    0 2px 8px rgba(32, 37, 42, 0.06),
+    0 1px 2px rgba(32, 37, 42, 0.04)
+  );
+  animation: scrollHintBounce 0.5s ease-in-out 0.4s 3;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+@keyframes scrollHintBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
