@@ -1,6 +1,10 @@
+/* Same radial wash as Dashboard's .page — secondary-subtle to light blue at 10% opacity, on
+   request, so the pages between Dashboard and the actual task share one background. */
 .page {
   min-height: 100svh;
-  background: var(--color-background, #faf9f7);
+  background:
+    radial-gradient(ellipse at 48% 49%, rgba(188, 224, 164, 0.1), rgba(145, 213, 233, 0.1)),
+    var(--color-background, #faf9f7);
 }
 
 .content {

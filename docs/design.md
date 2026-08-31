@@ -187,7 +187,7 @@ colors:
   content-warning: '#BC4126'
 
 typography:
-  # IBM Plex Sans (Plus Jakarta Sans for headline-1/2/3 only), 1.200 (minor third)
+  # IBM Plex Sans (Plus Jakarta Sans for every Headline style), 1.200 (minor third)
   # modular scale, base = Paragraph 2 = 16px.
   # 11 sizes x 2 weights = 22 content styles, plus a dedicated `button` style
   # unrelated to the content scale. Headline, Paragraph, and Label all use
@@ -239,12 +239,12 @@ typography:
     fontWeight: 600
     lineHeight: 1.2
   headline-4-regular:
-    fontFamily: "'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
     fontSize: 1.75rem
     fontWeight: 400
     lineHeight: 1.25
   headline-4-semibold:
-    fontFamily: "'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
     fontSize: 1.75rem
     fontWeight: 600
     lineHeight: 1.25
@@ -255,12 +255,12 @@ typography:
   # visibly smaller size than paragraph-4 while staying bold enough to read as a title
   # rather than body text — the smallest tier in the headline family.
   headline-5-regular:
-    fontFamily: "'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
     fontSize: 1.125rem
     fontWeight: 400
     lineHeight: 1.3
   headline-5-semibold:
-    fontFamily: "'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
     fontSize: 1.125rem
     fontWeight: 600
     lineHeight: 1.3
@@ -420,9 +420,11 @@ z-index:
   # behind an open modal, and a tooltip — transient, contextual, can be
   # triggered from inside anything else — always wins. Values are spaced by
   # 100 to leave room to insert something later without renumbering.
-  # dropdown/sticky/tooltip have no real consumer yet (this system has no
-  # dropdown menu or tooltip component); overlay-backdrop/modal back Modal
-  # below.
+  # dropdown/toast have no real consumer yet; overlay-backdrop/modal back
+  # Modal below, tooltip backs Tooltip (see components below), and sticky
+  # backs ScrollDownHint (also below) — fixed to the viewport above
+  # everything on the page except a modal or toast, since neither should
+  # ever be able to end up hidden behind it.
   dropdown: 1000
   sticky: 1100
   overlay-backdrop: 1200
@@ -431,25 +433,32 @@ z-index:
   tooltip: 1500
 
 components:
-  # Button — 3 variants (primary/secondary/tertiary) x 3 sizes (lg/md/sm) x
-  # 5 states (enabled/hover/pressed/disabled/focus). Size controls only
-  # height/padding/typography (below); color/shape are per-variant here and
-  # apply at every size. Every fill/text/ring color is a semantic token —
-  # see the `primary-strong`/`secondary-subtle` note above for the two new
-  # ones this introduced.
+  # Button — 5 variants (primary/secondary/tertiary/danger/outline) x 3 sizes
+  # (lg/md/sm) x 5 states (enabled/hover/pressed/disabled/focus). Size
+  # controls only height/padding/typography (below); color/shape are
+  # per-variant here and apply at every size. Every fill/text/ring color is a
+  # semantic token — see the `primary-strong`/`secondary-subtle` note above
+  # for the two new ones this introduced. danger and outline were both
+  # documented well after the original 3-variant version shipped — see their
+  # own notes below.
+  # backgroundColor changed on request from primary-strong (blue-900, #032C3D — reads
+  # almost black) to primary-hover (blue-700, #065E83) — a shade that still reads clearly
+  # as blue. Hover/pressed step one further down the same ramp to primary-pressed
+  # (blue-800, #044560) rather than reusing primary-strong-hover, which would jump past
+  # primary-strong itself and read as a bigger color change than a hover state should be.
   button-primary:
-    backgroundColor: '{colors.primary-strong}'
+    backgroundColor: '{colors.primary-hover}'
     textColor: '{colors.on-primary}'
     rounded: '{rounded.pill}'
   button-primary-hover:
-    backgroundColor: '{colors.primary-strong-hover}'
+    backgroundColor: '{colors.primary-pressed}'
     textColor: '{colors.on-primary}'
     rounded: '{rounded.pill}'
   button-primary-pressed:
-    backgroundColor: '{colors.primary-strong-hover}'
+    backgroundColor: '{colors.primary-pressed}'
     textColor: '{colors.on-primary}'
     rounded: '{rounded.pill}'
-    note: "same fill as hover (blue-950 is the ramp's last step); pressed is differentiated by a subtle inset shadow, not a further color change"
+    note: 'same fill as hover; pressed is differentiated by a subtle inset shadow, not a further color change'
   button-primary-disabled:
     backgroundColor: '{colors.border}'
     textColor: '{colors.text-tertiary}'
@@ -457,24 +466,29 @@ components:
   button-primary-focus-ring:
     ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
     note: 'corrected — the original single-layer {colors.primary-soft} ring measured ~1.1:1 against a white/near-white surface, far under the 3:1 non-text contrast a focus indicator needs to be perceptible (WCAG 1.4.11/2.4.11). No light tint on any ramp clears 3:1 against white, so the fix is structural, not a lighter color: a {colors.surface} gap separates the ring from the element, then a solid {colors.primary} ring (4.61:1 against surface, 4.38:1 against background) carries the actual contrast. Applies to every focus-ring token below.'
+  # Secondary — changed on request from a solid secondary-subtle/green fill to a blue
+  # outline pill: surface fill, border and text always matching, stepping through the
+  # same primary/primary-hover/primary-pressed ramp button-primary's own hover/pressed
+  # already use. This makes it visually close to button-outline (same surface-fill,
+  # bordered shape) — the two are now distinguished by color only: outline stays neutral
+  # (border/text-primary), secondary is the blue variant. No new tokens either way.
   button-secondary:
-    backgroundColor: '{colors.secondary-subtle}'
-    textColor: '{colors.on-secondary}'
+    backgroundColor: '{colors.surface}'
+    borderColor: '{colors.primary}'
+    textColor: '{colors.primary}'
     rounded: '{rounded.pill}'
   button-secondary-hover:
-    backgroundColor: '{colors.secondary}'
-    textColor: '{colors.on-secondary}'
-    rounded: '{rounded.pill}'
+    borderColor: '{colors.primary-hover}'
+    textColor: '{colors.primary-hover}'
   button-secondary-pressed:
-    backgroundColor: '{colors.secondary-hover}'
-    textColor: '{colors.on-secondary}'
-    rounded: '{rounded.pill}'
+    borderColor: '{colors.primary-pressed}'
+    textColor: '{colors.primary-pressed}'
+    note: 'differentiated from hover by a subtle inset shadow, same recipe as button-primary-pressed'
   button-secondary-disabled:
-    backgroundColor: '{colors.border}'
+    borderColor: '{colors.border-disabled}'
     textColor: '{colors.text-tertiary}'
-    rounded: '{rounded.pill}'
   button-secondary-focus-ring:
-    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.secondary-hover}'
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
     note: 'secondary-hover (green-700), not secondary itself (green-500, which is only 2.05:1 against white and fails 3:1) — the same fix as button-primary-focus-ring, applied with the one ramp step on green that actually clears 3:1 (3.36:1 against background, 3.54:1 against surface).'
   button-tertiary:
     backgroundColor: transparent
@@ -527,6 +541,30 @@ components:
   button-danger-focus-ring:
     ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.danger}'
     note: 'danger (4.83:1 against surface) clears 3:1 directly at its 500 step, unlike secondary — no darker substitute needed'
+  # Outline — a 5th variant, real and shipped since before this doc's
+  # 3-variant rewrite (predates button-secondary/button-tertiary as those
+  # names exist today). Never fully migrated off, and never formally
+  # specified here until now: real screens (Onboarding/Dashboard "Back",
+  # Device Setup "Exit", "I can hear the sound") still use it, so rather than
+  # force a visual change onto shipped UI to make it disappear, it's
+  # documented as what it actually is — a bordered, low-emphasis variant
+  # distinct from tertiary's fill-less text-only treatment. All existing
+  # tokens; nothing new.
+  button-outline:
+    backgroundColor: '{colors.surface}'
+    borderColor: '{colors.border}'
+    textColor: '{colors.text-primary}'
+    rounded: '{rounded.pill}'
+  button-outline-hover:
+    borderColor: '{colors.text-secondary}'
+  button-outline-pressed:
+    borderColor: '{colors.text-secondary}'
+    note: 'differentiated from hover by a subtle inset shadow, same recipe as button-primary-pressed'
+  button-outline-disabled:
+    borderColor: '{colors.border-disabled}'
+    textColor: '{colors.text-tertiary}'
+  button-outline-focus-ring:
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 5px {colors.primary}'
   button-size-lg:
     typography: '{typography.button}'
     padding: '{spacing.md} {spacing.xl}'
@@ -834,6 +872,49 @@ components:
   # real destructive flow either — see the session report's open items).
   modal-confirm-danger-button:
     ref: '{components.button-danger}'
+  # Tooltip — new here, the first real consumer of the `tooltip` z-index token (see
+  # Layering above, reserved but unused until now). A dark, `text-primary`-filled bubble
+  # rather than a light surface — the inverse of every other surface in this system — so it
+  # reads as a transient overlay floating above the page, not another card. The trigger is a
+  # real `<button>` (an info icon, `Icon/Info`), shown/hidden on both hover and focus so
+  # keyboard users get the same access as a mouse — never hover-only. First real usage:
+  # Memory & Thinking's details screen, where two of its four instruction captions moved
+  # from always-visible body text into a tooltip, on request, to keep the row to title-only
+  # text. Every value already existed; nothing new was added to build it.
+  tooltip:
+    backgroundColor: '{colors.text-primary}'
+    textColor: '{colors.text-on-primary}'
+    typography: '{typography.label-l-regular}'
+    rounded: '{rounded.sm}'
+    padding: '{spacing.xs} {spacing.sm}'
+    elevation: '{elevation.shadow-card}'
+    maxWidth: 220px
+  tooltip-trigger:
+    iconColor: '{colors.text-tertiary}'
+  tooltip-trigger-hover:
+    iconColor: '{colors.text-secondary}'
+  tooltip-trigger-focus-ring:
+    ring: '0 0 0 2px {colors.surface}, 0 0 0 4px {colors.primary}'
+  # ScrollDownHint — new here, the first real consumer of the `sticky` z-index token (see
+  # Layering above). Fixed to the viewport bottom-center on Terms of Use / Privacy Policy,
+  # nudging the reader to keep scrolling through the long legal text — a softer replacement
+  # for the scroll-gated checkbox both pages used to have (see each page's own docstring for
+  # why that gate was removed). Inverted like Tooltip, but the other direction: `primary`
+  # fill with `text-on-primary` text, since this is an active prompt rather than a passive
+  # caption. Flies up from off-screen on mount, bounces a few times (three 10px hops) to
+  # catch the eye, then holds position; flies back down out of the way once the page is
+  # ~92% scrolled, since the checkbox/buttons are already in view by then and the nudge has
+  # nothing left to say. `pointer-events: none` throughout — purely a visual affordance, it
+  # never intercepts a scroll or a tap meant for the page underneath. Every value already
+  # existed; nothing new was added to build it.
+  scroll-down-hint:
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.text-on-primary}'
+    typography: '{typography.paragraph-2-regular}'
+    rounded: '{rounded.pill}'
+    padding: '{spacing.sm} {spacing.lg}'
+    elevation: '{elevation.shadow-card}'
+    zIndex: '{z-index.sticky}'
 ---
 
 # Engagement app Design System
@@ -883,7 +964,7 @@ The functional content trio — `content-danger`, `content-success`, `content-wa
 
 ## Typography
 
-Typography runs on two families: **IBM Plex Sans** for everything, and **Plus Jakarta Sans** for the three largest Headline styles (`headline-1`, `headline-2`, `headline-3`) only — a deliberate accent for the biggest, most prominent titles, not a wholesale typeface swap. (This accent face was IBM Plex Serif originally; replaced with Plus Jakarta Sans, pulled from Google Fonts same as the base family.) `headline-4`, `headline-5`, and every Paragraph/Label/button style stay on IBM Plex Sans. Both families share the same fallback chain in case the webfont fails to load: `-apple-system, 'Segoe UI', Roboto, system-ui, sans-serif`.
+Typography runs on two families: **IBM Plex Sans** for body/label/button text, and **Plus Jakarta Sans** as the accent face for every Headline style (`headline-1` through `headline-5`) — a deliberate accent for titles, not a wholesale typeface swap. (This accent face was IBM Plex Serif originally; replaced with Plus Jakarta Sans, pulled from Google Fonts same as the base family. Headline's accent treatment was initially scoped to just `headline-1`–`headline-3`, the three largest sizes, before being extended to all five Headline steps for a consistent title voice throughout.) Every Paragraph/Label/button style stays on IBM Plex Sans. Both families share the same fallback chain in case the webfont fails to load: `-apple-system, 'Segoe UI', Roboto, system-ui, sans-serif`.
 
 The scale is a **1.200 (minor third) modular scale**, anchored on `paragraph-2` = 16px = the scale's base (exponent 0); every other step is 16px × 1.2ⁿ, rounded to a clean pixel value — with one deliberate exception, `headline-5` (see below). Twelve sizes across three categories, each with two weights (24 tokens total). There is no Display category and no Bold (700) weight anywhere in the scale — both were removed at the founder's request after the scale was first built; `headline-1` (48px, Regular/Semi Bold) is now the largest and most prominent style available:
 
@@ -919,9 +1000,9 @@ Radius is generous and consistent: 8px on inputs and small chips, 12px on button
 
 ## Components
 
-**Icons**, new here, is this system's first documented icon set — until now every icon (`search`'s leading icon, `tag`'s remove `×`, `modal`'s close button) was either a one-off inline SVG or plain text, with no shared library behind it. Sourced from [Phosphor Icons](https://phosphoricons.com) (MIT-licensed, open source — real SVG markup pulled directly from `phosphor-icons/core`, not redrawn or approximated), **regular** weight specifically (24×24 grid, `viewBox="0 0 256 256"`, 16px stroke, `stroke="currentColor"`) — the stroke-based weight was chosen over `fill`/`bold`/`duotone` because `currentColor` lets every icon inherit whatever `color` its container already sets, the same recompositing this system already relies on for `iconColor` tokens (`search`'s `text-tertiary`→`primary` on focus, `tag-removable-icon`'s `text-tertiary`→`text-secondary` on hover) — no separate icon-color system needed. **Deliberately a starter set, not the full ~1,500-icon library**: 12 icons — `arrow-up`, `arrow-down`, `arrow-left`, `arrow-right`, `plus`, `minus`, `magnifying-glass`, `envelope-simple`, `clock`, `play`, `check-circle`, `sign-out` — added on request, more to be added only as a real component actually needs one (the same "don't build ahead of a real consumer" discipline already applied to Deferred proposals below). `clock` was this set's first icon with a real React implementation (`Icon/ClockIcon`, `src/components/atoms/Icon`) rather than existing only in this doc and `docs/design.html` — Dashboard's `ActivityCard` uses it to lead its "About 5–10 minutes" duration estimate. `arrow-right` (`Icon/ArrowRightIcon`), `play` (`Icon/PlayIcon`), `check-circle` (`Icon/CheckCircleIcon`), and `sign-out` (`Icon/SignOutIcon`) followed the same way — `arrow-right` used by Assessment Intro's "I'm Ready to Begin" button, `play` by Device Setup's test-sound player, `check-circle` by Device Setup's microphone check once it's confirmed working, `sign-out` by `DashboardNavBar`'s Exit link when `exitVariant="outline"` (the actual assessment task chrome uses this; every other screen keeps the plain tertiary text link). No new size or color tokens were introduced for icons themselves — recolor via the existing text/content color tokens on a wrapping element (`content-secondary`, `text-tertiary`, etc.), size via a plain `width`/`height` on the `<svg>`, exactly like every `iconColor` reference elsewhere in this doc already assumes.
+**Icons**, new here, is this system's first documented icon set — until now every icon (`search`'s leading icon, `tag`'s remove `×`, `modal`'s close button) was either a one-off inline SVG or plain text, with no shared library behind it. Sourced from [Phosphor Icons](https://phosphoricons.com) (MIT-licensed, open source — real SVG markup pulled directly from `phosphor-icons/core`, not redrawn or approximated), **regular** weight specifically (24×24 grid, `viewBox="0 0 256 256"`, 16px stroke, `stroke="currentColor"`) — the stroke-based weight was chosen over `fill`/`bold`/`duotone` because `currentColor` lets every icon inherit whatever `color` its container already sets, the same recompositing this system already relies on for `iconColor` tokens (`search`'s `text-tertiary`→`primary` on focus, `tag-removable-icon`'s `text-tertiary`→`text-secondary` on hover) — no separate icon-color system needed. **Deliberately a starter set, not the full ~1,500-icon library**: 20 icons — `arrow-up`, `arrow-down`, `arrow-left`, `arrow-right`, `plus`, `minus`, `magnifying-glass`, `envelope-simple`, `clock`, `play`, `check-circle`, `sign-out`, `brain`, `barbell`, `list-numbers`, `speaker-high`, `pencil-slash`, `calendar`, `info`, `house` — added on request, more to be added only as a real component actually needs one (the same "don't build ahead of a real consumer" discipline already applied to Deferred proposals below). `brain`, `barbell`, and `list-numbers` were added together in a later pass — no real component consumes them yet, unlike `clock`/`arrow-right`/`play`/`check-circle`/`sign-out` below. `clock` was this set's first icon with a real React implementation (`Icon/ClockIcon`, `src/components/atoms/Icon`) rather than existing only in this doc and `docs/design.html` — Dashboard's `ActivityCard` uses it to lead its "About 5–10 minutes" duration estimate. `arrow-right` (`Icon/ArrowRightIcon`), `play` (`Icon/PlayIcon`), `check-circle` (`Icon/CheckCircleIcon`), and `sign-out` (`Icon/SignOutIcon`) followed the same way — `arrow-right` used by Assessment Intro's "I'm Ready to Begin" button, `play` by Device Setup's test-sound player, `check-circle` by Device Setup's microphone check once it's confirmed working, `sign-out` by `DashboardNavBar`'s Exit link when `exitVariant="outline"` (the actual assessment task chrome uses this; every other screen keeps the plain tertiary text link). `house`, `speaker-high`, `pencil-slash`, and `calendar` also have real React implementations (`Icon/HouseIcon`, `Icon/SpeakerHighIcon`, `Icon/PencilSlashIcon`, `Icon/CalendarIcon`) — the four instructions on Memory & Thinking's details screen ("Make sure you're in a quiet room.", "Turn up your volume...", "Please do not write anything down...", "Only take this once every three months"); `calendar` replaced an earlier one-off warning-triangle icon there, on request, since it reads more clearly as a scheduling/frequency cue than a generic caution symbol. `info` (`Icon/InfoIcon`) leads `Tooltip`'s icon-button trigger — see the Tooltip entry below. No new size or color tokens were introduced for icons themselves — recolor via the existing text/content color tokens on a wrapping element (`content-secondary`, `text-tertiary`, etc.), size via a plain `width`/`height` on the `<svg>`, exactly like every `iconColor` reference elsewhere in this doc already assumes.
 
-**Buttons** come in 3 variants, each at 3 sizes, each with 5 explicit states (never computed opacity tricks) — supersedes the earlier 2-variant (`button-primary`/`button-outline`) version. `button-primary` is a solid pill using `primary-strong` (not `primary` — see the Semantic Colors note above), white text; hover/pressed darken to `primary-strong-hover`, pressed adding a subtle inset shadow rather than a further color change since `blue-950` is the ramp's last step. `button-secondary` is a solid pill using the lighter `secondary-subtle`, dark `on-secondary` text; hover/pressed step through the existing `secondary`/`secondary-hover` values, reusing rather than adding new tokens. `button-tertiary` is text-only, no fill or border — `primary-strong` text, an underline on hover/pressed, sized to just its own padded hit-area (`rounded.sm`, for the focus ring only, since there's no visible container). A 4th variant, **`button-danger`**, is documented here for the first time: it shipped to `src/components/atoms/Button` in a later session for real destructive actions (delete, remove, revoke) but was never back-ported into this spec. It reuses `danger`/`danger-soft`/`on-danger` exactly as they already exist — no new color. Hover/pressed darken via a `brightness()` filter over the same `danger` fill rather than a color swap (matching the real implementation) — a filter is a rendering effect, not an invented color, so this still holds the governing color rule without adding a `danger-hover` alias the ramp doesn't otherwise need.
+**Buttons** come in 5 variants, each at 3 sizes, each with 5 explicit states (never computed opacity tricks). `button-primary` is a solid pill, white text; changed on request from `primary-strong` (blue-900, reads almost black) to `primary-hover` (blue-700 — a shade that still clearly reads as blue), with hover/pressed stepping one further down the same ramp to `primary-pressed` (blue-800), pressed adding a subtle inset shadow rather than a further color change. `button-secondary` was originally a solid pill using the lighter `secondary-subtle`, dark `on-secondary` text; changed on request to a blue outline pill instead — `surface` fill, border and text always matching, stepping through `primary`/`primary-hover`/`primary-pressed` on hover/pressed (the same ramp `button-primary`'s own hover/pressed already use). This makes it visually close to `button-outline` below — both are now bordered, surface-fill, text-only-looking pills — distinguished only by color: `button-outline` stays neutral (`border`/`text-primary`), `button-secondary` is the blue one. No new tokens either way. `button-tertiary` is text-only, no fill or border — `primary-strong` text, an underline on hover/pressed, sized to just its own padded hit-area (`rounded.sm`, for the focus ring only, since there's no visible container). A 4th variant, **`button-danger`**, was documented for the first time in an earlier pass: it shipped to `src/components/atoms/Button` in a later session for real destructive actions (delete, remove, revoke) but was never back-ported into this spec. It reuses `danger`/`danger-soft`/`on-danger` exactly as they already exist — no new color. Hover/pressed darken via a `brightness()` filter over the same `danger` fill rather than a color swap (matching the real implementation) — a filter is a rendering effect, not an invented color, so this still holds the governing color rule without adding a `danger-hover` alias the ramp doesn't otherwise need. A 5th variant, **`button-outline`**, is documented here for the first time: a bordered `surface`-fill, `text-primary`-text style predating the `button-primary`/`button-secondary` naming used today. It was never migrated to either of those and never formally specified — but it's still real, still in use on shipped screens (Onboarding's and Dashboard's "Back", Device Setup's "Exit" and "I can hear the sound"), so rather than force those screens to change to match a spec that never accounted for them, `button-outline` is captured here as what it actually is: a genuine 5th variant, not a deprecated one. Every value it uses — `surface`, `border`, `text-secondary`, `text-primary`, `text-tertiary`, `border-disabled` — already existed; nothing new was added to document it.
 
 Every variant gets a focus ring — **corrected here**: the original single-layer `0 0 0 3px` ring, in each variant's own `*-soft` tint, measured roughly 1.1:1 against a white or near-white surface, far under the 3:1 non-text contrast a focus indicator needs to be perceptible (WCAG 1.4.11/2.4.11) — no tint on any ramp clears 3:1 against white, so a lighter color was never going to fix it. The ring is now two layers: a `surface`-colored gap, then a solid ring in each variant's base contrast-passing color — `primary` for primary/tertiary/danger's own hue would clash so danger uses `danger` itself (4.83:1), and secondary uses `secondary-hover` rather than `secondary` (green-500 itself is only 2.05:1 against white and fails 3:1; `secondary-hover`/green-700 clears it at 3.36–3.54:1). This same corrected recipe applies to every focus ring in this system, not just buttons — see Radio/Checkbox/Toggle below. Size (`button-size-lg`/`-md`/`-sm`) controls only height/padding/typography and composes with any variant/state: `lg` (56px) and `md` (48px, the prior default) share the `button` typography token; `sm` (40px) drops to `label-l-semibold` (13px) rather than shrinking the same type style, reusing an existing token instead of inventing a smaller one. **Input, Select, and Date Picker** all sit on the same `field` container: an outlined box whose label is a separate element on its own line directly above it — not notched into the border, not resting inside the field like a placeholder, and never floating between the two. The label renders at `label-l-semibold` size in `colors.text-primary` (bold and legible, but sized as a caption rather than a headline — `headline-4-semibold` was tried first and read as oversized for a field label, corrected down to `label-l-semibold` while keeping the same semibold weight) and is always present, regardless of whether the field is empty, focused, filled, or in error; there is no two-state transition to speak of. A real `placeholder`, if given, is entirely optional and renders as an actual placeholder inside the field — it no longer stands in for the label, and no longer needs the empty-space `placeholder=" "`/`:not(:placeholder-shown)` CSS trick the old notched-label implementation depended on. Default border is `colors.border-strong` — the one gray tier that clears 3:1 non-text contrast, since a resting field's outline is its only boundary cue on a white `surface`. `field-hover` darkens the border to `colors.text-secondary` (a hint of interactivity, not yet full commitment); `field-focus` swaps the border to `colors.primary`, with a matching 1px inset `box-shadow` layered on top of the 1px border to read as a thicker ~2px ring without shifting any layout; `field-error` swaps the border to `colors.border-danger` and the label to `colors.content-danger`; `field-disabled` fades the border to `colors.border-disabled` and both the label and input text to `colors.text-tertiary`, using the real HTML `disabled` attribute, never a fake class-only look. `field-size-lg`/`-md`/`-sm` are **deliberately identical in height to `button-size-lg`/`-md`/`-sm`** (56/48/40px) — the whole reason this is a separate size scale rather than reusing spacing tokens directly is so a field and a button always line up when placed side by side. Select adds a chevron affordance and uses a real `<select>`; Date Picker uses a real `<input type="date">`, whose native calendar affordance is kept rather than reimplementing a custom calendar widget — both inherit `field`'s border/label/state treatment unchanged. **Textarea**, new here, is the multi-line member of this family — same container, same label-above-field treatment, same border colors, same hover/focus/error/disabled states — with one deliberate departure: its height isn't pinned to the button size scale, since multi-line content needs room to grow, unlike a single line that must align with a button. `resize: vertical` was reconsidered and turned off (`resize: none`) — the box stays a fixed size set by `rows`, no user-draggable handle; text also sits closer to the top edge now (`{spacing.sm}` top padding, matching Input's horizontal `{spacing.md}`, in place of the earlier `{spacing.lg}` top padding that read as too much empty space above the caret). `question-card` is the core surface of the product: one question, generously padded, elevated. `progress-stepper` / `progress-stepper-active` render as a pill-shaped track and fill, not numbered steps, to keep the "N of M" nature of an assessment from feeling like a countdown. `score-card` renders the result using `headline-1-semibold` — the largest style in the scale now that Display has been removed. `nav-bar` stays quiet (`text-secondary`, no shadow) with `nav-bar-item-active` marked only by a soft `primary-soft` tint, never a hard color block. `badge`, `badge-success`, and `badge-encouraging` are the only places pill-shaped color chips appear: `badge` is the neutral/default (blue), `badge-success` uses the legible `success` green for informational status, and `badge-encouraging` uses `accent` teal — reserve it for genuine positive moments (streaks, milestones), not routine UI.
 
@@ -930,5 +1011,7 @@ Every variant gets a focus ring — **corrected here**: the original single-laye
 **Tag / Chip**, new here, fills a real gap next to Badge: Badge communicates a fixed status the user doesn't control ("New", "Improving"); Tag is a user-manipulable unit — a selected filter, a removable value in a multi-select field — so it needs hover/selected/disabled/focus states Badge never needed, plus an optional remove (×) icon. Neutral (`border-subtle` fill, `text-primary` text) at rest, tinting to `primary`/`primary-soft` only once selected — the same color restraint the rest of this system applies elsewhere, not a new rule invented for Tag. Every value is an existing token; nothing new was added to build it, matching the standard the 5 Session-3 form controls set.
 
 **Modal / Dialog**, new here, was this system's highest-value gap: `alpha.scrim-48` (new — `gray-900` at 48% opacity, the sanctioned way to add a page-dimming scrim without inventing a standalone rgba) is the only genuinely new color value this whole audit introduced, and `elevation.shadow-modal` and `rounded.xl` were both already defined and named specifically for a modal — they simply had nothing to render. `modal-panel` is `surface` + `rounded.xl` + `shadow-modal`, entering and leaving with `motion.duration-slow` and `motion.easing-enter`/`-exit` — the first real consumer of both the Motion and Layering (z-index) additions above (`overlay-backdrop` behind the panel, `modal` for the panel itself). Built on the native `<dialog>` element rather than a div-plus-ARIA reconstruction, consistent with this system's standing preference for real native elements over custom-built equivalents (`<select>`, `<input type="date">`): focus trapping, Escape-to-close, and an inert background are the platform's job, not this doc's. The close (×) control reuses the same corrected focus-ring recipe as everything else above. A destructive-confirmation variant reuses `button-danger` for the confirming action and changes nothing else — the panel itself stays neutral `surface`; only the button communicates the stakes — which also makes this the first place in the entire system `button-danger` is shown in a real usage context, something even its `src/` implementation still lacks (see the prototype session report's open items). `Modal` (`src/components/atoms/Modal`) got its own first real `src/` usage in Device Setup's microphone check — a "Troubleshooting" link opens it to show a general permission/device checklist, alongside an originally-illustrated mockup of a browser's microphone-permission prompt (not a real screenshot, since the exact chrome differs by browser/OS/version).
+
+**Tooltip**, new here, is the first real consumer of the `tooltip` z-index token (see Layering above) — reserved since that section was first written, with nothing to render until now. Inverted from every other surface in this system on purpose: a dark `text-primary` fill with `text-on-primary` text, so it reads unmistakably as a transient overlay rather than another card. The trigger is a real `<button>` (an info icon, `Icon/Info`) — not a `<span>` with a faked `role="button"` — and shows the tooltip on both hover and focus, never hover alone, so keyboard users get the same access a mouse does; `aria-describedby` links the trigger to the tooltip's own `role="tooltip"` text for screen readers. First real usage: Memory & Thinking's details screen (`MemoryThinkingDetailsPage`), where two of its four instruction items had their supporting sentence moved out of always-visible body text and into a tooltip, on request, so each column reads as a single-line title with the detail available on demand rather than a title-plus-paragraph pair. Every token it uses — `text-primary`, `text-on-primary`, `label-l-regular`, `rounded.sm`, `shadow-card` — already existed; nothing new was added to build it.
 
 **Spinner**, new here, is a small standalone atom (`src/components/atoms/Spinner`) extracted from a pattern `VerifyAccountPage` had already been using inline (that page keeps its own copy, unmigrated — extracted for new usages, not to risk touching an already-working screen): a rotating ring inside a separately-animated "breathing" pulse-scale wrapper, since a continuous spin and a continuous scale both need their own `transform` — one element per animation, not two animations stacked on one. Its first consumer is Device Setup's microphone check, which shows it for a fixed hold once the mic is confirmed working, between that confirmation and automatically navigating on — a transition beat, not tied to any real loading work.

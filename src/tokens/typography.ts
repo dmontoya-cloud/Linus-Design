@@ -5,7 +5,8 @@
  * scale is tracked separately (WI-0002) and stays open.
  */
 const FONT_FAMILY = "'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
-/** headline-1/2/3 only — the largest titles get a distinct accent face; everything else stays on FONT_FAMILY. */
+/** Every Headline style — the accent face that sets titles apart from body/label text, which
+ * stays on FONT_FAMILY. */
 const FONT_FAMILY_SERIF =
   "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
 
@@ -105,13 +106,13 @@ export const defaultTypography: TypographyTokens = {
       lineHeight: 1.2,
     },
     'headline-4-regular': {
-      fontFamily: FONT_FAMILY,
+      fontFamily: FONT_FAMILY_SERIF,
       fontSize: '1.75rem',
       fontWeight: 400,
       lineHeight: 1.25,
     },
     'headline-4-semibold': {
-      fontFamily: FONT_FAMILY,
+      fontFamily: FONT_FAMILY_SERIF,
       fontSize: '1.75rem',
       fontWeight: 600,
       lineHeight: 1.25,
@@ -122,13 +123,13 @@ export const defaultTypography: TypographyTokens = {
        need (Registration's field-group subheadings — see OnboardingPage), a size visibly
        smaller than paragraph-4 while still bold enough to read as a title, not body text. */
     'headline-5-regular': {
-      fontFamily: FONT_FAMILY,
+      fontFamily: FONT_FAMILY_SERIF,
       fontSize: '1.125rem',
       fontWeight: 400,
       lineHeight: 1.3,
     },
     'headline-5-semibold': {
-      fontFamily: FONT_FAMILY,
+      fontFamily: FONT_FAMILY_SERIF,
       fontSize: '1.125rem',
       fontWeight: 600,
       lineHeight: 1.3,

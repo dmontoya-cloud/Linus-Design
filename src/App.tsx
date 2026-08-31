@@ -19,9 +19,11 @@ import { ThanksPage } from '@/pages/Thanks/ThanksPage'
 import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
 import { AssessmentIntroPage } from '@/pages/Assessment/AssessmentIntroPage'
+import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
 import { DeviceSetupPage } from '@/pages/DeviceSetup/DeviceSetupPage'
 import { DeviceReadyPage } from '@/pages/DeviceSetup/DeviceReadyPage'
 import { ShoppingListIntroPage } from '@/pages/Assessment/MemoryThinkingTask/ShoppingListIntroPage'
+import { BuildingReportPage } from '@/pages/BuildingReport/BuildingReportPage'
 import './App.css'
 
 /**
@@ -65,6 +67,7 @@ const FUNNEL_STEPS = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/paywall', label: 'Paywall / Subscription' },
   { path: '/assessment', label: 'Assessment Intro' },
+  { path: '/report/building', label: 'Building your report' },
   { path: '/report', label: 'In-App Report' },
 ] as const
 
@@ -82,6 +85,7 @@ const REAL_STEP_PATHS = [
   '/loading',
   '/dashboard',
   '/assessment',
+  '/report/building',
 ]
 
 const STUB_STEPS = FUNNEL_STEPS.filter((step) => !REAL_STEP_PATHS.includes(step.path))
@@ -115,22 +119,43 @@ function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-/** Routes whose own header already provides a way back to the start (e.g. a logo Link to "/"),
- * so the global corner link would only sit on top of their content. */
-const ROUTES_WITH_OWN_NAV = [
-  '/dashboard',
+/** Dashboard's own header already provides a way back to the start (a logo Link to "/", via
+ * `DashboardNavBar`) — the global corner link would be a pure duplicate here, so it's hidden
+ * rather than given a destination of its own (Dashboard *is* the menu; a "Back to menu" link
+ * pointing at itself would be pointless). */
+const ROUTES_WITH_OWN_NAV = ['/dashboard']
+
+/** Every screen in the device-setup/assessment flow reached from Dashboard — each already has
+ * its own header "Exit" button to /dashboard (via `DashboardNavBar`'s `exitTo`), plus the same
+ * logo Link to "/" every `DashboardNavBar` screen has. The corner link becomes a "Skip to
+ * report" shortcut on these instead, on request — a way to jump straight past the whole
+ * device-setup/assessment flow (none of which is the point of a walkthrough) to Building your
+ * report (`BuildingReportPage`), the screen that will sit right after the assessment finishes
+ * once that flow is actually built out. */
+const ROUTES_WITH_REPORT_SKIP = [
   '/assessment',
+  '/assessment/start',
   '/assessment/memory-and-thinking',
   '/assessment/memory-and-thinking/microphone-check',
   '/assessment/memory-and-thinking/task',
 ]
 
-/** Hidden on routes in ROUTES_WITH_OWN_NAV — otherwise it overlaps that page's own header content,
- * since both are pinned to the same top-right corner. */
+/** On most routes, a quick corner shortcut back to the very beginning of the funnel. Hidden on
+ * ROUTES_WITH_OWN_NAV (redundant with that page's own logo link); replaced with a "Skip to
+ * report" shortcut to /report/building on ROUTES_WITH_REPORT_SKIP. Same `.back-to-start`
+ * styling and bottom-right position in every case — only whether it renders, and its
+ * label/destination, change. */
 function BackToStart() {
   const location = useLocation()
   if (ROUTES_WITH_OWN_NAV.includes(location.pathname)) {
     return null
+  }
+  if (ROUTES_WITH_REPORT_SKIP.includes(location.pathname)) {
+    return (
+      <Link to="/report/building" className="back-to-start">
+        Skip to report
+      </Link>
+    )
   }
   return (
     <Link to="/" className="back-to-start">
@@ -298,6 +323,17 @@ export default function App() {
                   </RequireAuth>
                 }
               />
+              {/* Details screen shown before the voice-over intro below — on request, a new
+                  step between Dashboard's "Start Activity"/"Start" and AssessmentIntroPage,
+                  not a replacement for it. */}
+              <Route
+                path="/assessment/start"
+                element={
+                  <RequireAuth>
+                    <MemoryThinkingDetailsPage />
+                  </RequireAuth>
+                }
+              />
               <Route
                 path="/assessment"
                 element={
@@ -321,6 +357,26 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <Placeholder title="Priorities" />
+                  </RequireAuth>
+                }
+              />
+              {/* Dashboard's activity cards each added a Details button alongside Start — Memory
+                  & Thinking's now opens a Modal in place (see ActivityCard/DashboardPage)
+                  instead of routing anywhere; Lifestyle/Priorities have no real detail content
+                  yet, so those two still fall back to placeholders below. */}
+              <Route
+                path="/assessment/lifestyle/details"
+                element={
+                  <RequireAuth>
+                    <Placeholder title="Lifestyle Details" />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment/priorities/details"
+                element={
+                  <RequireAuth>
+                    <Placeholder title="Priorities Details" />
                   </RequireAuth>
                 }
               />
@@ -364,6 +420,20 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <Placeholder title="Next Assessment Item" />
+                  </RequireAuth>
+                }
+              />
+              {/* Where the real assessment flow will hand off once it's actually built —
+                  reachable today only via each device-setup/assessment screen's "Skip to
+                  report" corner link (see ROUTES_WITH_REPORT_SKIP above), since items 2-20
+                  and any real scoring don't exist yet. Hands off to /report (still a
+                  placeholder) after a brief non-interactive beat, same pattern as
+                  Loading/Setting Up/Thanks. */}
+              <Route
+                path="/report/building"
+                element={
+                  <RequireAuth>
+                    <BuildingReportPage />
                   </RequireAuth>
                 }
               />

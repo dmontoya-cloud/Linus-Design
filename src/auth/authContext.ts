@@ -41,11 +41,17 @@ export interface AuthState {
   preferredName: string | null
   profile: Profile | null
   consent: ConsentRecord | null
+  /** Activity ids (matching `ActivityCard`'s `Activity.id`/`FullCheckInCard`'s `CATEGORIES`)
+   * the visitor has finished — this mock-data prototype has no real assessment flow yet to
+   * actually complete one, so the only way in today is `BuildingReportPage`'s "Go to Dashboard"
+   * button standing in for "you just finished a real assessment." */
+  completedActivityIds: string[]
   login: () => void
   logout: () => void
   setPreferredName: (name: string) => void
   saveProfile: (profile: Profile) => void
   giveConsent: () => void
+  completeActivity: (id: string) => void
 }
 
 export const AuthContext = createContext<AuthState | undefined>(undefined)

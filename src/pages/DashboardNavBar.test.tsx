@@ -41,14 +41,16 @@ function renderNavBar({
 }
 
 describe('DashboardNavBar', () => {
-  it('renders the logo, primary nav links, and the signed-in user', () => {
+  it('renders the logo and the signed-in user, with no center nav links', () => {
     renderNavBar()
     expect(screen.getByRole('link', { name: 'Back to start' })).toHaveAttribute('href', '/')
-    expect(screen.getByRole('link', { name: 'Assessment' })).toHaveAttribute('href', '/assessment')
-    expect(screen.getByRole('link', { name: 'History' })).toHaveAttribute('href', '/history')
-    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings')
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
     expect(screen.getByText('AL')).toBeInTheDocument()
+    // Removed on request — Dashboard's header center used to show Assessment/History/Settings
+    // links, now it's empty.
+    expect(screen.queryByRole('link', { name: 'Assessment' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'History' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Settings' })).not.toBeInTheDocument()
   })
 
   it('falls back to a generic label when no profile is present', () => {
@@ -57,24 +59,9 @@ describe('DashboardNavBar', () => {
     expect(screen.getByText('?')).toBeInTheDocument()
   })
 
-  it('marks Assessment active on /dashboard, since Dashboard has no nav item of its own', () => {
-    renderNavBar({ path: '/dashboard' })
-    expect(screen.getByRole('link', { name: 'Assessment' })).toHaveAttribute('aria-current', 'page')
-    expect(screen.getByRole('link', { name: 'History' })).not.toHaveAttribute('aria-current')
-    expect(screen.getByRole('link', { name: 'Settings' })).not.toHaveAttribute('aria-current')
-  })
-
-  it('marks Assessment active on /assessment too', () => {
-    renderNavBar({ path: '/assessment' })
-    expect(screen.getByRole('link', { name: 'Assessment' })).toHaveAttribute('aria-current', 'page')
-  })
-
-  it('replaces the nav links with plain text when a title is given', () => {
+  it('shows a centered title in place of the (removed) nav links when one is given', () => {
     renderNavBar({ title: 'Memory & Thinking' })
     expect(screen.getByText('Memory & Thinking')).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: 'Assessment' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: 'History' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: 'Settings' })).not.toBeInTheDocument()
   })
 
   it('replaces the signed-in user info with a tertiary Exit link when exitTo is given', () => {

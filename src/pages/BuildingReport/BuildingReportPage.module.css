@@ -1,0 +1,231 @@
+/* Same radial wash as Dashboard/Memory & Thinking Details' .page — secondary-subtle to light
+   blue at 10% opacity, on request, replacing the earlier flat light-blue background so this
+   page matches the app's other pale-wash treatment. */
+.page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 48% 49%, rgba(188, 224, 164, 0.1), rgba(145, 213, 233, 0.1)),
+    var(--color-background, #faf9f7);
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 560px;
+  text-align: center;
+}
+
+.icon {
+  width: 112px;
+  height: 112px;
+  color: var(--color-primary, #087dae);
+  margin-bottom: var(--space-lg, 24px);
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+}
+
+.title {
+  font-family: var(--font-headline-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-2-regular-size, 2.5rem);
+  font-weight: var(--font-headline-2-regular-weight, 400);
+  line-height: var(--font-headline-2-regular-line-height, 1.2);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0 0 var(--space-md, 16px);
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+/* 24px gap to the buttons below, on request — wider than the 16px this title uses above the
+   subtitle in the "building" state, so it gets its own override here rather than changing the
+   shared `.title` margin. */
+.title.titleReady {
+  margin-bottom: var(--space-lg, 24px);
+}
+
+/* Building-to-ready transition, on request — rather than the headline/subtitle/spinner just
+   vanishing the instant the Download button is ready to appear, they briefly continue the same
+   upward drift their own entrance used (see `fade-rise`) and fade out, so leaving reads as a
+   continuation of the same motion rather than a cut. `EXIT_DURATION_MS` in the component gives
+   these just enough time to finish before the "ready" elements mount. Compound selectors (two
+   classes, not one) so this reliably overrides the element's own base `animation` regardless of
+   rule order in this file. */
+.title.titleExiting {
+  animation: fade-rise-out 0.35s ease both;
+}
+
+.subtitle.subtitleExiting {
+  animation: fade-rise-out 0.35s ease both;
+}
+
+.spinnerWrap.spinnerWrapExiting {
+  animation: fade-rise-out 0.35s ease both;
+}
+
+@keyframes fade-rise-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+
+.subtitle {
+  font-family: var(--font-paragraph-3-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-3-regular-size, 1.1875rem);
+  font-weight: var(--font-paragraph-3-regular-weight, 400);
+  line-height: 1.5;
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0 0 var(--space-xl, 32px);
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* The emphasized half of the subtitle sentence — darker and bolder than the surrounding
+   context text, on request, so "stay on this screen" reads as the one thing that matters. */
+.subtitle strong {
+  color: var(--color-text-primary, #1f2a37);
+  font-weight: 700;
+}
+
+/* Same breathing + spinning recipe as Loading/Setting Up/Thanks's own spinner (see
+   LoadingPage.module.css) — reused rather than reinvented, since this is the same "keep
+   waiting" signal those screens already establish. Three nested elements, not one, so the
+   entrance fade/rise, the continuous breathe, and the continuous spin each own their own
+   `transform` — stacking more than one of these on a single element would make the
+   later-listed animation clobber the others instead of composing with them. */
+.spinnerWrap {
+  margin-bottom: var(--space-xl, 32px);
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.spinnerPulse {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spinner-breathe 2.4s ease-in-out infinite;
+}
+
+.spinnerRing {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border, #ced3d7);
+  border-top-color: var(--color-primary, #087dae);
+  animation: spinner-spin 0.9s linear infinite;
+}
+
+@keyframes spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+/* Replaces the subtitle/spinner once the report is "ready" — the same fade-rise entrance those
+   two used, so swapping to this state doesn't just pop the buttons in. Download report
+   (primary) plus a secondary "Go to Dashboard", on request. */
+.readyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md, 16px);
+  margin-bottom: var(--space-xl, 32px);
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+}
+
+/* Centered, not left-aligned, on request — overflow hidden so the push-up-and-fade-in
+   transition below (see .tipContent) never briefly pokes a rising line of text out past the
+   card's own rounded corners. */
+.tipCard {
+  width: 100%;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-xl, 24px);
+  box-shadow: var(
+    --shadow-card,
+    0 2px 8px rgba(32, 37, 42, 0.06),
+    0 1px 2px rgba(32, 37, 42, 0.04)
+  );
+  padding: var(--space-xl, 32px);
+  text-align: center;
+  overflow: hidden;
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.tipEyebrow {
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  font-style: italic;
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0 0 var(--space-sm, 8px);
+}
+
+/* Remounted (via React `key`) every time the tip rotates — replays this push-up-and-fade-in on
+   the eyebrow/title/body together, on request, rather than the text just snapping to something
+   new every 15 seconds. A bigger rise (20px) and a touch slower than the page's own entrance
+   `fade-rise` (10px/0.7s) so the motion reads as a distinct "next fact" beat, not a repeat of
+   the initial page-load animation. Only the text transitions this way; the card itself
+   (`.tipCard`) doesn't re-animate its own entrance on every rotation. */
+.tipContent {
+  animation: fade-rise-tip 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-rise-tip {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tipTitle {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
+  line-height: 1.3;
+  margin: 0 0 var(--space-sm, 8px);
+}
+
+.tipBody {
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-secondary, #5b6b79);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

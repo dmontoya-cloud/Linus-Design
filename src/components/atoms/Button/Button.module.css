@@ -52,14 +52,14 @@
 }
 
 .primary {
-  background: var(--color-primary-strong, #032c3d);
+  background: var(--color-primary-hover, #065e83);
   color: var(--color-on-primary, #fff);
 }
 .primary:hover {
-  background: var(--color-primary-strong-hover, #021923);
+  background: var(--color-primary-pressed, #044560);
 }
 .primary:active {
-  background: var(--color-primary-strong-hover, #021923);
+  background: var(--color-primary-pressed, #044560);
   box-shadow: inset 0 2px 4px var(--alpha-shadow-ink-14, rgba(32, 37, 42, 0.14));
 }
 .primary:disabled {
@@ -71,25 +71,31 @@
   box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
 }
 
-/* Secondary */
+/* Secondary — a blue outline pill, on request (previously a solid secondary-subtle/green
+   fill). Border and text always match, stepping through the same primary/primary-hover/
+   primary-pressed ramp button-primary's own hover/pressed already use. */
 .secondary {
-  background: var(--color-secondary-subtle, #bce0a4);
-  color: var(--color-on-secondary, #1f2a37);
+  background: var(--color-surface, #fff);
+  color: var(--color-primary, #087dae);
+  border: 1px solid var(--color-primary, #087dae);
 }
 .secondary:hover {
-  background: var(--color-secondary, #86c65a);
+  border-color: var(--color-primary-hover, #065e83);
+  color: var(--color-primary-hover, #065e83);
 }
 .secondary:active {
-  background: var(--color-secondary-hover, #659544);
+  border-color: var(--color-primary-pressed, #044560);
+  color: var(--color-primary-pressed, #044560);
   box-shadow: inset 0 2px 4px var(--alpha-shadow-ink-14, rgba(32, 37, 42, 0.14));
 }
 .secondary:disabled {
-  background: var(--color-border, #ced3d7);
+  background: var(--color-surface, #fff);
+  border-color: var(--color-border-disabled, #eff0f2);
   color: var(--color-text-tertiary, #94a3ad);
 }
 .secondary:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px var(--color-secondary-soft, #f3f9ef);
+  box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
 }
 
 /* Tertiary — text-only, no fill or border */

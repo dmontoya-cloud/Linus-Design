@@ -1,24 +1,18 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { Logo } from '@/components/atoms/Logo'
 import { buttonClassName, type ButtonVariant } from '@/components/atoms/Button/buttonClassName'
 import { SignOutIcon } from '@/components/atoms/Icon'
 import styles from './DashboardNavBar.module.css'
 
-const NAV_LINKS = [
-  { to: '/assessment', label: 'Assessment' },
-  { to: '/history', label: 'History' },
-  { to: '/settings', label: 'Settings' },
-]
-
 function initialsFor(firstName: string, lastName: string) {
   return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
 }
 
 export interface DashboardNavBarProps {
-  /** When set, replaces the centered Assessment/History/Settings nav with this plain text
-   * instead — for screens dedicated to one specific activity (e.g. "Memory & Thinking" on
-   * Assessment Intro), where those nav links would be a distraction, not a real choice. */
+  /** Plain centered text, e.g. "Memory & Thinking" on Assessment Intro — for screens dedicated
+   * to one specific activity. Dashboard itself passes nothing, so its header center is empty
+   * (the Assessment/History/Settings links that used to live there were removed on request). */
   title?: string
   /** When set, replaces the signed-in user info on the right with an "Exit" link to this path
    * instead — for screens (like Assessment Intro) where leaving is the one thing that matters
@@ -33,12 +27,12 @@ export interface DashboardNavBarProps {
 }
 
 /**
- * DashboardNavBar — the same top bar (logo, and by default a centered primary nav plus
- * signed-in user info) shown on Dashboard and reused on every screen reached from it.
- * Assessment reads as active both on its own route and on /dashboard, since Dashboard has no
- * nav item of its own — landing there selects Assessment by default, as the primary thing to
- * do. Pass `title` to swap the center nav for plain static text, and/or `exitTo` to swap the
- * user info for an "Exit" link (`exitVariant` for its button style) — both independent (see
+ * DashboardNavBar — the same top bar (logo, an optional centered title, and by default the
+ * signed-in user info) shown on Dashboard and reused on every screen reached from it. The
+ * centered Assessment/History/Settings links this used to show on Dashboard were removed on
+ * request; Dashboard's header center is simply empty now. Pass `title` for plain centered
+ * static text on screens dedicated to one activity, and/or `exitTo` to swap the user info for
+ * an "Exit" link (`exitVariant` for its button style) — both independent (see
  * `DashboardNavBarProps`).
  */
 export function DashboardNavBar({
@@ -47,7 +41,6 @@ export function DashboardNavBar({
   exitVariant = 'tertiary',
 }: DashboardNavBarProps = {}) {
   const { profile } = useAuth()
-  const location = useLocation()
   const fullName = profile ? `${profile.firstName} ${profile.lastName}` : 'Account'
 
   return (
@@ -55,27 +48,7 @@ export function DashboardNavBar({
       <Link to="/" className={styles.logoLink} aria-label="Back to start">
         <Logo />
       </Link>
-      {title ? (
-        <span className={styles.navTitle}>{title}</span>
-      ) : (
-        <nav className={styles.nav} aria-label="Primary">
-          {NAV_LINKS.map((link) => {
-            const isActive =
-              location.pathname === link.to ||
-              (link.to === '/assessment' && location.pathname === '/dashboard')
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
-                aria-current={isActive ? 'page' : undefined}
-                className={isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink}
-              >
-                {link.label}
-              </Link>
-            )
-          })}
-        </nav>
-      )}
+      {title ? <span className={styles.navTitle}>{title}</span> : null}
       {exitTo ? (
         <Link to={exitTo} className={`${buttonClassName(exitVariant, 'sm')} ${styles.exitLink}`}>
           {exitVariant === 'outline' ? <SignOutIcon className={styles.exitIcon} /> : null}

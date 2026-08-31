@@ -12,6 +12,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [preferredName, setPreferredName] = useState<string | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [consent, setConsent] = useState<ConsentRecord | null>(null)
+  const [completedActivityIds, setCompletedActivityIds] = useState<string[]>([])
 
   const value = useMemo<AuthState>(
     () => ({
@@ -19,18 +20,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       preferredName,
       profile,
       consent,
+      completedActivityIds,
       login: () => setIsAuthenticated(true),
       logout: () => {
         setIsAuthenticated(false)
         setPreferredName(null)
         setProfile(null)
         setConsent(null)
+        setCompletedActivityIds([])
       },
       setPreferredName: (name: string) => setPreferredName(name),
       saveProfile: (nextProfile: Profile) => setProfile(nextProfile),
       giveConsent: () => setConsent({ acceptedAt: new Date().toISOString() }),
+      completeActivity: (id: string) =>
+        setCompletedActivityIds((ids) => (ids.includes(id) ? ids : [...ids, id])),
     }),
-    [isAuthenticated, preferredName, profile, consent],
+    [isAuthenticated, preferredName, profile, consent, completedActivityIds],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

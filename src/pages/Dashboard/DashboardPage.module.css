@@ -1,6 +1,11 @@
+/* The gradient lives on the page background, not the full-check-in card (which is plain
+   white) — a soft radial wash from secondary-subtle to a light blue, at 10% opacity, on
+   request. */
 .page {
   min-height: 100svh;
-  background: var(--color-background, #faf9f7);
+  background:
+    radial-gradient(ellipse at 48% 49%, rgba(188, 224, 164, 0.1), rgba(145, 213, 233, 0.1)),
+    var(--color-background, #faf9f7);
 }
 
 .content {
@@ -10,28 +15,45 @@
 }
 
 .welcome {
-  font-family: var(--font-headline-3-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-3-semibold-size, 2.0625rem);
-  font-weight: var(--font-headline-3-semibold-weight, 600);
-  line-height: var(--font-headline-3-semibold-line-height, 1.2);
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-lg, 24px);
 }
 
+/* Same headline-5-semibold size/weight/color as .welcome now — Figma sizes both parts of
+   the greeting identically, on request. */
+.welcomeSubtext {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
+}
+
 .copy {
-  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
-  line-height: 1.5;
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-sm, 8px);
+}
+
+/* "Brain health resources" reuses .copy's type style but, unlike "Explore one area", isn't
+   followed by a subtext line — it goes straight into resources-card, so it needs the larger
+   between-sections gap instead of .copy's own tight heading-to-subtext spacing. */
+.copyNoSubtext {
+  margin: 0 0 var(--space-lg, 24px);
 }
 
 .copySubtext {
   font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-primary, #1f2a37);
   line-height: 1.5;
-  margin: 0 0 var(--space-xl, 32px);
+  margin: 0 0 var(--space-lg, 24px);
 }
 
 .activityGrid {
@@ -39,7 +61,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg, 24px);
   list-style: none;
-  margin: 0;
+  margin: 0 0 var(--space-lg, 24px);
   padding: 0;
 }
 

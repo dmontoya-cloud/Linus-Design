@@ -3,12 +3,17 @@
   background: var(--color-background, #faf9f7);
 }
 
+/* Fixed 64px, matching DashboardNavBar's own `.navBar` height, on request — this header used
+   to just be padding-driven (24px top/bottom around the 36px logo, ~84px total), which put it
+   out of step with every screen reached from Dashboard. Height fixed + `align-items: center`
+   centers the same 36px `Logo` (shared, unchanged) the same way DashboardNavBar does. */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md, 16px);
-  padding: var(--space-lg, 24px);
+  height: 64px;
+  padding: 0 var(--space-lg, 24px);
   background: var(--color-surface, #fff);
   border-bottom: 1px solid var(--color-border-subtle, #eff0f2);
 }
@@ -51,7 +56,7 @@
 
 @media (min-width: 768px) {
   .header {
-    padding: var(--space-lg, 24px) var(--space-xxl, 48px);
+    padding: 0 var(--space-xxl, 48px);
   }
 
   .content {

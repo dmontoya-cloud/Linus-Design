@@ -33,7 +33,7 @@ export function ResourcesCard() {
   return (
     <div className={styles.card}>
       <div className={styles.text}>
-        <h2 className={styles.title}>Brain health resources</h2>
+        <h2 className={styles.title}>Linus Health Resources</h2>
         <p className={styles.copy}>
           Exercises, articles and programmes from our clinical team. Free to browse, nothing to
           complete first.
