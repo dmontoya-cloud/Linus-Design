@@ -24,6 +24,10 @@ interface LegalLayoutProps {
   titleClassName?: string
   /** Extra class on the subtitle `<p>`, same purpose as `titleClassName`. */
   subtitleClassName?: string
+  /** Rendered above the title, e.g. Legal Intro's waving-hand illustration — optional and
+   * `aria-hidden` at the call site, since it's decorative. Terms/Privacy/Consent don't pass
+   * one. */
+  illustration?: ReactNode
 }
 
 /** Shared chrome for the Legal Intro / Terms of Use / Privacy Policy flow:
@@ -39,6 +43,7 @@ export function LegalLayout({
   children,
   titleClassName,
   subtitleClassName,
+  illustration,
 }: LegalLayoutProps) {
   const label = `Step ${step} of ${LEGAL_TOTAL_STEPS} · ${title}`
   const { language, setLanguage } = useLanguage()
@@ -52,6 +57,7 @@ export function LegalLayout({
         <ProgressBar value={step} max={LEGAL_TOTAL_STEPS} label={label} />
       </div>
       <div className={styles.content}>
+        {illustration}
         <h1 className={[styles.title, titleClassName].filter(Boolean).join(' ')}>{title}</h1>
         <p className={[styles.subtitle, subtitleClassName].filter(Boolean).join(' ')}>{subtitle}</p>
         {children}

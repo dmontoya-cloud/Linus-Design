@@ -61,7 +61,7 @@ describe('App', () => {
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
     expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Log in to Linus Health' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Send code' })).toBeInTheDocument()
   })
 
   it('redirects /onboarding to /login when not authenticated', () => {
@@ -77,37 +77,35 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /^Welcome, there!/ })).toBeInTheDocument()
   })
 
-  it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Setting Up → Thanks → Onboarding → Gender & Identity → Education → Loading → Dashboard happy path', async () => {
+  it('walks the Login → Verify Email → Verify Account → Legal Intro → Terms → Privacy → Setting Up → Thanks → Onboarding → Education → Gender & Identity → Loading → Dashboard happy path', async () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
     await user.type(screen.getByLabelText('Email address*'), 'ada@example.com')
     await user.click(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ }))
-    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
+    await user.click(screen.getByRole('button', { name: 'Send code' }))
 
     await waitFor(
-      () => expect(screen.getByRole('heading', { name: 'Check your email!' })).toBeInTheDocument(),
+      () =>
+        expect(screen.getByRole('heading', { name: 'We emailed you a code' })).toBeInTheDocument(),
       { timeout: 2000 },
     )
 
-    // Any complete 4-digit code confirms — this repo is mock-data-only. Confirm code stays
+    // Any complete 4-digit code confirms — this repo is mock-data-only. Sign in stays
     // enabled throughout; clicking it early is just a no-op.
-    const confirmButton = screen.getByRole('button', { name: 'Confirm code' })
+    const confirmButton = screen.getByRole('button', { name: 'Sign in' })
     await user.click(screen.getByLabelText('Digit 1 of 4'))
     await user.keyboard('1234')
     await user.click(confirmButton)
-    await waitFor(() => expect(screen.getByText('Logging you in')).toBeInTheDocument(), {
+    await waitFor(() => expect(screen.getByText('Welcome to Linus Health')).toBeInTheDocument(), {
       timeout: 4500,
     })
 
     await waitFor(
       () =>
-        expect(
-          screen.getByRole('heading', { name: "Hey, we're glad to have you" }),
-        ).toBeInTheDocument(),
+        expect(screen.getByRole('heading', { name: "We're glad you're here" })).toBeInTheDocument(),
       { timeout: 4500 },
     )
-    await user.type(screen.getByLabelText(/Preferred name/), 'Ada')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(screen.getByRole('heading', { name: 'Terms of Use' })).toBeInTheDocument()
@@ -124,7 +122,7 @@ describe('App', () => {
       timeout: 1000,
     })
 
-    await waitFor(() => expect(screen.getByText('Thanks, Ada!')).toBeInTheDocument(), {
+    await waitFor(() => expect(screen.getByText('Thanks!')).toBeInTheDocument(), {
       timeout: 3000,
     })
 
@@ -133,23 +131,22 @@ describe('App', () => {
         expect(screen.getByRole('heading', { name: 'Tell us about yourself' })).toBeInTheDocument(),
       { timeout: 3000 },
     )
-    // First name is already pre-filled with the preferred name entered on Legal Intro.
-    expect(screen.getByLabelText('First name')).toHaveValue('Ada')
+    await user.type(screen.getByLabelText('First name'), 'Ada')
     await user.type(screen.getByLabelText('Last name'), 'Lovelace')
     await user.selectOptions(screen.getByLabelText('Month'), '01')
     await user.type(screen.getByLabelText('Day'), '1')
     await user.type(screen.getByLabelText('Year'), '1988')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
-    expect(screen.getByRole('heading', { name: 'A bit more about you' })).toBeInTheDocument()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'female')
-    await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
-    await user.click(screen.getByRole('button', { name: 'Continue' }))
-
     expect(
       screen.getByRole('heading', { name: 'Which best describes your educational background?' }),
     ).toBeInTheDocument()
     await user.selectOptions(screen.getByLabelText('Education background'), 'bachelors-degree')
+    await user.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(screen.getByRole('heading', { name: 'A few more details' })).toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText('Gender'), 'female')
+    await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     await waitFor(() => expect(screen.getByText('Loading')).toBeInTheDocument(), {

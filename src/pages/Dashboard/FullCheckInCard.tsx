@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth'
-import { BarbellIcon, BrainIcon, ListNumbersIcon } from '@/components/atoms/Icon'
+import { BrainIcon, ListNumbersIcon, PersonSimpleRunIcon } from '@/components/atoms/Icon'
 import styles from './FullCheckInCard.module.css'
 
 /** `id` matches `DashboardPage`'s own `PENDING_ACTIVITIES` ids — the one shared key this
  * prototype's mock completion state (`useAuth().completedActivityIds`) is keyed by. */
 const CATEGORIES = [
   { id: 'memory-recall', label: 'Memory & Thinking', Icon: BrainIcon },
-  { id: 'speech-pattern', label: 'Lifestyle', Icon: BarbellIcon },
+  { id: 'speech-pattern', label: 'Lifestyle', Icon: PersonSimpleRunIcon },
   { id: 'visual-attention', label: 'Priorities', Icon: ListNumbersIcon },
 ]
 
@@ -32,8 +32,9 @@ export function FullCheckInCard() {
     <div className={styles.card}>
       <h2 className={styles.title}>Complete your full brain health report</h2>
       <p className={styles.copy}>
-        To get a full picture of your brain health, we suggest completing all three activities. Each
-        looks at a different part of your brain health and helps create a report unique to you.
+        Complete three short activities to learn more about your memory and thinking, lifestyle, and
+        what matters most to you. Together, they help create a brain health report personalized to
+        you.
       </p>
       <div className={styles.trackerBox}>
         <ul className={styles.categories}>

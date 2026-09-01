@@ -30,7 +30,7 @@ describe('LoginPage', () => {
     renderLoginPage()
     expect(screen.getByRole('img', { name: 'Linus Health' })).toBeInTheDocument()
     expect(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ })).not.toBeChecked()
-    expect(screen.getByRole('button', { name: 'Log in to Linus Health' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Send code' })).toBeEnabled()
   })
 
   it('shows an error state on the email field and the age checkbox card when clicked with the form empty', async () => {
@@ -47,7 +47,7 @@ describe('LoginPage', () => {
       screen.queryByText('Please confirm you are over the age of eighteen.'),
     ).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
+    await user.click(screen.getByRole('button', { name: 'Send code' }))
 
     expect(emailField).toHaveAttribute('aria-invalid', 'true')
     expect(ageCheckbox).not.toHaveAttribute('aria-invalid')
@@ -59,7 +59,7 @@ describe('LoginPage', () => {
   it('clears the email error once a valid value is typed, independently of the still-unchecked age checkbox', async () => {
     const user = userEvent.setup()
     renderLoginPage()
-    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
+    await user.click(screen.getByRole('button', { name: 'Send code' }))
     const emailField = screen.getByLabelText('Email address*')
     expect(emailField).toHaveAttribute('aria-invalid', 'true')
 
@@ -74,7 +74,7 @@ describe('LoginPage', () => {
     const emailField = screen.getByLabelText('Email address*')
 
     await user.type(emailField, 'not-an-email')
-    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
+    await user.click(screen.getByRole('button', { name: 'Send code' }))
 
     expect(emailField).toHaveAttribute('aria-invalid', 'true')
     expect(screen.getByText('Please enter a valid email address.')).toBeInTheDocument()
@@ -87,7 +87,7 @@ describe('LoginPage', () => {
     await user.type(screen.getByLabelText('Email address*'), 'david@pi.tech')
     await user.click(screen.getByRole('checkbox', { name: /I'm over the age of eighteen/ }))
 
-    await user.click(screen.getByRole('button', { name: 'Log in to Linus Health' }))
+    await user.click(screen.getByRole('button', { name: 'Send code' }))
     // Loading alone doesn't disable the button — it stays enabled-looking with a spinner.
     expect(screen.getByRole('button', { name: 'Loading' })).toBeEnabled()
     // Nor the email field or the age checkbox — the visual "disabled" cue during the mock

@@ -41,7 +41,7 @@
   margin: 0 0 var(--space-sm, 8px);
 }
 
-/* "Brain health resources" reuses .copy's type style but, unlike "Explore one area", isn't
+/* "Learn more about brain health" reuses .copy's type style but, unlike "Explore one area", isn't
    followed by a subtext line — it goes straight into resources-card, so it needs the larger
    between-sections gap instead of .copy's own tight heading-to-subtext spacing. */
 .copyNoSubtext {

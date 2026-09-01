@@ -26,7 +26,7 @@ function renderVerifyAccountPage() {
 describe('VerifyAccountPage', () => {
   it('shows the logging-in message', () => {
     renderVerifyAccountPage()
-    expect(screen.getByText('Logging you in')).toBeInTheDocument()
+    expect(screen.getByText('Welcome to Linus Health')).toBeInTheDocument()
   })
 
   it('logs in and navigates to /legal-intro once the timer completes', async () => {

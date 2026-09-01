@@ -14,7 +14,7 @@ interface RegistrationState {
   dateOfBirth: string
 }
 
-function GenderIdentityProbe() {
+function EducationProbe() {
   const location = useLocation()
   const state = location.state as RegistrationState | null
   return (
@@ -51,7 +51,7 @@ function renderOnboardingPage({ preferredName }: { preferredName?: string } = {}
               element={<LegalIntroStub name={preferredName ?? ''} />}
             />
             <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route path="/gender-identity" element={<GenderIdentityProbe />} />
+            <Route path="/education" element={<EducationProbe />} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>
@@ -112,7 +112,7 @@ describe('OnboardingPage', () => {
     expect(lastNameField).toHaveValue("O'Brien-Smith ")
   })
 
-  it('hands off first name, last name, and date of birth to /gender-identity on the happy path', async () => {
+  it('hands off first name, last name, and date of birth to /education on the happy path', async () => {
     const user = userEvent.setup()
     renderOnboardingPage()
     await fillHappyPath(user)

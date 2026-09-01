@@ -9,9 +9,11 @@ const THANKS_DURATION_MS = 2000
 /**
  * Thanks — a brief, non-interactive interstitial shown right after Setting
  * Up, before Registration ("Tell us about yourself"). Mirrors Setting Up's
- * own spinner pattern: no user action, just a beat that greets the visitor
- * by the preferred name they gave on Legal Intro before the registration
- * form appears.
+ * own spinner pattern: no user action, just a beat before the registration
+ * form appears. Falls back to a plain "Thanks!" now that Legal Intro no
+ * longer collects a preferred name (that prompt/field was removed on
+ * request) — `preferredName` stays in `AuthContext` for any future caller,
+ * this page just has nothing to greet by anymore.
  */
 export function ThanksPage() {
   const { preferredName } = useAuth()
