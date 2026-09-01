@@ -35,8 +35,8 @@ export function ResourcesCard() {
       <div className={styles.text}>
         <h2 className={styles.title}>Linus Health Resources</h2>
         <p className={styles.copy}>
-          Exercises, articles and programmes from our clinical team. Free to browse, nothing to
-          complete first.
+          Explore trusted information, tips, and tools to help you learn more about brain health and
+          support your wellbeing.
         </p>
       </div>
       <a

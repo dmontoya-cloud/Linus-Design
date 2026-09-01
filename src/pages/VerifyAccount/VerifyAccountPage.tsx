@@ -35,7 +35,7 @@ export function VerifyAccountPage() {
           </div>
         </div>
         <p className={styles.message} role="status" aria-live="polite">
-          Logging you in
+          Welcome to Linus Health
         </p>
       </div>
     </main>

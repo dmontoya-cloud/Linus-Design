@@ -82,7 +82,7 @@
   margin: 0;
 }
 
-/* Sits the boxes and "Confirm code" side by side rather than stacked — the button is the
+/* Sits the boxes and "Sign in" side by side rather than stacked — the button is the
    same lg size/height as the code boxes and as Login's own submit button, so this row reads
    as one continuous control. */
 .codeRow {
@@ -149,6 +149,17 @@
    same technique, and same reason, as LoginPage's *Slot classes. */
 .codeErrorSlot {
   min-height: 17px;
+}
+
+/* Same size/color as .textLink below, on request — reads as the same "quiet" tier of
+   copy while the countdown runs, then swaps for the actual link once it reaches zero,
+   without the text jumping in size/color when that swap happens. Plain text, no
+   underline/cursor — it isn't interactive yet. */
+.resendTimer {
+  margin: 0;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-secondary, #5b6b79);
 }
 
 .textLink {

@@ -62,8 +62,9 @@ function isAtLeastAge(
  * nothing optional to contrast against, it wouldn't tell the visitor anything. Fields
  * cascade in the same rhythm as Terms of Use / Privacy Policy — see
  * src/pages/cascade.ts. Doesn't call `saveProfile` itself — these fields ride along in
- * router state to Gender & Identity, which collects the rest of the Profile and saves it
- * all at once. The age-18+ attestation lives on Login instead, right after the email
+ * router state to Education, then Gender & Identity, which collects the rest of the
+ * Profile and saves it all at once. The age-18+ attestation lives on Login instead, right
+ * after the email
  * field — but since this page is where an actual date of birth gets entered, it's also
  * where that attestation gets checked for real: submitting a date of birth under 18
  * years old shows a `content-danger` message below the date-of-birth fields (the fields
@@ -134,11 +135,14 @@ export function OnboardingPage() {
       return
     }
     const dateOfBirth = `${year}-${month}-${day.padStart(2, '0')}`
-    navigate('/gender-identity', { state: { firstName, lastName, dateOfBirth } })
+    navigate('/education', { state: { firstName, lastName, dateOfBirth } })
   }
 
   return (
     <OnboardingLayout step={1} title="Tell us about yourself">
+      <p className={styles.description}>
+        We use these details about you to help understand and analyze your answers.
+      </p>
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.reveal} style={{ animationDelay: cascadeDelay(0) }}>
           <h2 className={styles.sectionTitle}>What&apos;s your name?</h2>

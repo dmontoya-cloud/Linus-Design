@@ -60,7 +60,7 @@ describe('DashboardPage', () => {
     expect(screen.getByText('Explore one area')).toBeInTheDocument()
     expect(
       screen.getByText(
-        'You can also complete each activity individually. Each activity looks at a different area of brain health, and adding more activities over time will create a new report.',
+        'You can complete each activity one at a time. Each adds more information to your brain health report.',
       ),
     ).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Memory & Thinking' })).toBeInTheDocument()
@@ -81,10 +81,12 @@ describe('DashboardPage', () => {
 
   it('shows the resources card with a real external link to the Linus Health website', () => {
     renderDashboard()
-    expect(screen.getByRole('heading', { name: 'Brain health resources' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Learn more about brain health' }),
+    ).toBeInTheDocument()
     expect(
       screen.getByText(
-        'Exercises, articles and programmes from our clinical team. Free to browse, nothing to complete first.',
+        'Explore trusted information, tips, and tools to help you learn more about brain health and support your wellbeing.',
       ),
     ).toBeInTheDocument()
     const link = screen.getByRole('link', { name: /Open resources on linushealth.com/ })

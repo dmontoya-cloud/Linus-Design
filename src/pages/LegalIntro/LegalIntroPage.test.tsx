@@ -27,44 +27,23 @@ function renderLegalIntroPage() {
 }
 
 describe('LegalIntroPage', () => {
-  it('greets generically and prompts for an optional name before any is entered', () => {
+  it('greets with a fixed title and subtitle, and no name field', () => {
     renderLegalIntroPage()
-    expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: "We're glad you're here" })).toBeInTheDocument()
     expect(
       screen.getByText(
-        'Before we get you set up. We need you to agree to our Terms of Use and Privacy Policy.',
+        'Before you get started, we’ll ask you to review a few important details about using Linus Health.',
       ),
     ).toBeInTheDocument()
-    expect(screen.getByText('How would you like to be called?')).toBeInTheDocument()
-    expect(screen.getByLabelText(/Preferred name/)).toBeInTheDocument()
-    expect(screen.getByText(/Optional/)).toBeInTheDocument()
+    expect(screen.queryByText('How would you like to be called?')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/Preferred name/)).not.toBeInTheDocument()
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Continue' })).toBeEnabled()
   })
 
-  it('swaps the greeting to the typed name live, and back when cleared', async () => {
+  it('sends to /terms on Continue', async () => {
     const user = userEvent.setup()
     renderLegalIntroPage()
-    const nameField = screen.getByLabelText(/Preferred name/)
-
-    await user.type(nameField, 'Ada')
-    expect(screen.getByRole('heading', { name: 'Hey, Ada' })).toBeInTheDocument()
-
-    await user.clear(nameField)
-    expect(screen.getByRole('heading', { name: "Hey, we're glad to have you" })).toBeInTheDocument()
-  })
-
-  it('sends to /terms even with the name left blank, since it is optional', async () => {
-    const user = userEvent.setup()
-    renderLegalIntroPage()
-    await user.click(screen.getByRole('button', { name: 'Continue' }))
-    expect(screen.getByText('Terms screen')).toBeInTheDocument()
-  })
-
-  it('sends to /terms once a name is entered too', async () => {
-    const user = userEvent.setup()
-    renderLegalIntroPage()
-    await user.type(screen.getByLabelText(/Preferred name/), 'Ada')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(screen.getByText('Terms screen')).toBeInTheDocument()
   })

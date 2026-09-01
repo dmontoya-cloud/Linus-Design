@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
@@ -34,7 +34,26 @@ function codeInputs(): [HTMLInputElement, HTMLInputElement, HTMLInputElement, HT
   ]
 }
 
+/** Advances vitest's fake clock one second at a time, `act`-wrapped per tick, rather than
+ * one `vi.advanceTimersByTime(n * 1000)` call — the resend countdown reschedules its own
+ * next `setTimeout` from inside a `useEffect` that only reruns once React commits the
+ * previous tick's state update, so firing all `n` seconds' worth of timers inside a single
+ * `act` call only ever runs the one timer that existed when it was called. */
+function advanceSeconds(seconds: number) {
+  for (let i = 0; i < seconds; i += 1) {
+    act(() => {
+      vi.advanceTimersByTime(1000)
+    })
+  }
+}
+
 describe('VerifyEmailPage', () => {
+  // A no-op when a test never engaged fake timers (only the resend-countdown tests below
+  // do), so this is safe to run unconditionally after every test in this file.
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('shows the email passed via route state', () => {
     renderVerifyEmailPage('david@pi.tech')
     expect(screen.getByText('david@pi.tech')).toBeInTheDocument()
@@ -45,30 +64,54 @@ describe('VerifyEmailPage', () => {
     expect(screen.getByText('your email address')).toBeInTheDocument()
   })
 
-  it('clears the code and refocuses the first box when "Resend verification code" is clicked', async () => {
-    const user = userEvent.setup()
+  it('shows a countdown instead of the resend link at first', () => {
+    renderVerifyEmailPage('david@pi.tech')
+    expect(screen.getByText('Resend code in 0:30')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Send a new code' })).not.toBeInTheDocument()
+  })
+
+  it('counts the resend timer down by one every second, then reveals the link at zero', () => {
+    vi.useFakeTimers()
+    renderVerifyEmailPage('david@pi.tech')
+
+    advanceSeconds(1)
+    expect(screen.getByText('Resend code in 0:29')).toBeInTheDocument()
+
+    advanceSeconds(29)
+    expect(screen.getByRole('button', { name: 'Send a new code' })).toBeInTheDocument()
+    expect(screen.queryByText(/Resend code in/)).not.toBeInTheDocument()
+  })
+
+  it('clears the code, refocuses the first box, and restarts the countdown when "Send a new code" is clicked', () => {
+    vi.useFakeTimers()
     renderVerifyEmailPage('david@pi.tech')
     const [first, second, third, fourth] = codeInputs()
 
-    await user.click(first)
-    await user.keyboard('1234')
+    fireEvent.change(first, { target: { value: '1' } })
+    fireEvent.change(second, { target: { value: '2' } })
+    fireEvent.change(third, { target: { value: '3' } })
+    fireEvent.change(fourth, { target: { value: '4' } })
     expect(fourth).toHaveValue('4')
 
-    await user.click(screen.getByRole('button', { name: 'Resend verification code' }))
+    advanceSeconds(30)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Send a new code' }))
     ;[first, second, third, fourth].forEach((input) => expect(input).toHaveValue(''))
     expect(first).toHaveFocus()
+    expect(screen.getByText('Resend code in 0:30')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Send a new code' })).not.toBeInTheDocument()
   })
 
-  it('renders 4 empty digit boxes and an enabled (but inert) Confirm code button', () => {
+  it('renders 4 empty digit boxes and an enabled (but inert) Sign in button', () => {
     renderVerifyEmailPage('david@pi.tech')
     codeInputs().forEach((input) => expect(input).toHaveValue(''))
-    expect(screen.getByRole('button', { name: 'Confirm code' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Sign in' })).toBeEnabled()
   })
 
-  it('does not navigate when Confirm code is clicked with an incomplete code', async () => {
+  it('does not navigate when Sign in is clicked with an incomplete code', async () => {
     const user = userEvent.setup()
     renderVerifyEmailPage('david@pi.tech')
-    await user.click(screen.getByRole('button', { name: 'Confirm code' }))
+    await user.click(screen.getByRole('button', { name: 'Sign in' }))
     expect(screen.queryByText('Verifying account')).not.toBeInTheDocument()
   })
 
@@ -114,7 +157,7 @@ describe('VerifyEmailPage', () => {
     const user = userEvent.setup()
     renderVerifyEmailPage('david@pi.tech')
     const [first, second, third, fourth] = codeInputs()
-    const confirmButton = screen.getByRole('button', { name: 'Confirm code' })
+    const confirmButton = screen.getByRole('button', { name: 'Sign in' })
 
     await user.click(first)
     await user.keyboard('123')

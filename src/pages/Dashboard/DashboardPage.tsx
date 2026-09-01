@@ -19,7 +19,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     duration: 'About 15 minutes',
     requirement: 'Needs quiet room',
     description:
-      'Complete tasks that look at your brain abilities: memory, attention, language and thinking.',
+      'Tasks that look at your brain abilities: memory, attention, language and thinking.',
     startPath: '/assessment/start',
     detailsContent: <MemoryThinkingDetailsContent />,
   },
@@ -28,7 +28,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     title: 'Lifestyle',
     status: 'not-started',
     duration: 'About 5–10 minutes',
-    description: 'Fifteen questions about your health and lifestyle.',
+    description: 'Tell us about your lifestyle, health, and everyday habits.',
     startPath: '/assessment/lifestyle',
     detailsPath: '/assessment/lifestyle/details',
   },
@@ -37,8 +37,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     title: 'Priorities',
     status: 'not-started',
     duration: 'About 5–10 minutes',
-    description:
-      'Tell us what you want to keep doing in daily life and what matters most for your brain health.',
+    description: 'Share what matters most to you and what you want to keep doing in daily life.',
     startPath: '/assessment/priorities',
     detailsPath: '/assessment/priorities/details',
   },
@@ -51,7 +50,7 @@ const PENDING_ACTIVITIES: Activity[] = [
  * sit there were removed on request) — shared with Assessment Intro and every other screen
  * reached from here — over a short welcome message (name plus a friendly subline, on request).
  * Below the gradient full-check-in card and the three pending-activity
- * cards sits its own "Brain health resources" heading, then `ResourcesCard`, a fourth,
+ * cards sits its own "Learn more about brain health" heading, then `ResourcesCard`, a fourth,
  * plainer card pointing to the real Linus Health website for browsable content — the one
  * genuine external link in this prototype. Everything below the nav bar cascades in on mount —
  * the welcome title, the full-check-in card, the "Explore one area" heading and its subtext,
@@ -91,8 +90,8 @@ export function DashboardPage() {
           className={[styles.copySubtext, styles.reveal].join(' ')}
           style={{ animationDelay: cascadeDelay(3) }}
         >
-          You can also complete each activity individually. Each activity looks at a different area
-          of brain health, and adding more activities over time will create a new report.
+          You can complete each activity one at a time. Each adds more information to your brain
+          health report.
         </p>
         <ul className={styles.activityGrid}>
           {PENDING_ACTIVITIES.map((activity, index) => (
@@ -110,7 +109,7 @@ export function DashboardPage() {
           className={[styles.copy, styles.copyNoSubtext, styles.reveal].join(' ')}
           style={{ animationDelay: cascadeDelay(4 + PENDING_ACTIVITIES.length) }}
         >
-          Brain health resources
+          Learn more about brain health
         </h2>
         <div
           className={styles.reveal}

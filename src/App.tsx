@@ -29,22 +29,25 @@ import './App.css'
 /**
  * Login → Verify Email (magic-link mock) → Legal Intro → Terms of Use →
  * Privacy Policy → Setting Up (spinner) → Thanks (spinner) → Onboarding
- * (registration) → Gender & Identity → Dashboard are real screens, gated by
- * AuthContext's mock auth. Legal Intro is a brief, conversational heads-up
- * ("you'll need to agree to some things") before the two-step Terms/Privacy
- * flow, not a step of its own. There is no separate Consent step — Terms of
- * Use and Privacy Policy's own agreement checkboxes cover that (see
- * TermsOfUsePage / PrivacyPolicyPage), and the age-18+ checkbox now lives
- * on Registration, next to date of birth. Setting Up and Thanks
- * are both brief non-interactive beats between agreeing to Privacy Policy
- * and landing on the registration form — Setting Up marks that consent was
- * recorded, Thanks greets the visitor by the preferred name they gave on
- * Legal Intro. Registration, Gender & Identity, and Education together make
- * up the Profile: Registration collects name/date of birth and Gender &
- * Identity collects gender/sex assigned at birth, both passing their answers
- * forward in router state; Education collects education level and saves the
- * whole thing at once, then hands off to Loading — a last spinner beat
- * before Dashboard appears. Assessment Intro (reached from any Dashboard
+ * (registration) → Education → Gender & Identity → Dashboard are real
+ * screens, gated by AuthContext's mock auth. Legal Intro is a brief,
+ * conversational heads-up ("you'll need to agree to some things") before
+ * the two-step Terms/Privacy flow, not a step of its own. There is no
+ * separate Consent step — Terms of Use and Privacy Policy's own agreement
+ * checkboxes cover that (see TermsOfUsePage / PrivacyPolicyPage), and the
+ * age-18+ checkbox now lives on Registration, next to date of birth.
+ * Setting Up and Thanks are both brief non-interactive beats between
+ * agreeing to Privacy Policy and landing on the registration form — Setting
+ * Up marks that consent was recorded, Thanks greets the visitor by the
+ * preferred name they gave on Legal Intro. Registration, Education, and
+ * Gender & Identity together make up the Profile: Registration collects
+ * name/date of birth and Education collects education level, both passing
+ * their answers forward in router state; Gender & Identity collects
+ * gender/sex assigned at birth and saves the whole thing at once — ordered
+ * last rather than second, on request, since sex assigned at birth is the
+ * more sensitive of the two mid-funnel questions — then hands off to
+ * Loading, a last spinner beat before Dashboard appears. Assessment Intro
+ * (reached from any Dashboard
  * activity card's Start link) is real too — it reads its instructions aloud
  * via the browser's own speech synthesis, same as the device check and the
  * one real assessment item (of 20) that follows it — but items 2-20 and the
@@ -61,8 +64,8 @@ const FUNNEL_STEPS = [
   { path: '/setting-up', label: 'Setting Up' },
   { path: '/thanks', label: 'Thanks' },
   { path: '/onboarding', label: 'Onboarding' },
-  { path: '/gender-identity', label: 'Gender & Identity' },
   { path: '/education', label: 'Education' },
+  { path: '/gender-identity', label: 'Gender & Identity' },
   { path: '/loading', label: 'Loading' },
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/paywall', label: 'Paywall / Subscription' },
@@ -80,8 +83,8 @@ const REAL_STEP_PATHS = [
   '/setting-up',
   '/thanks',
   '/onboarding',
-  '/gender-identity',
   '/education',
+  '/gender-identity',
   '/loading',
   '/dashboard',
   '/assessment',
@@ -292,18 +295,18 @@ export default function App() {
                 }
               />
               <Route
-                path="/gender-identity"
-                element={
-                  <RequireAuth>
-                    <GenderIdentityPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
                 path="/education"
                 element={
                   <RequireAuth>
                     <EducationPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/gender-identity"
+                element={
+                  <RequireAuth>
+                    <GenderIdentityPage />
                   </RequireAuth>
                 }
               />

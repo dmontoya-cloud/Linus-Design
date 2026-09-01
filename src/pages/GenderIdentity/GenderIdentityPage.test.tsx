@@ -1,28 +1,19 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
-import { AuthProvider } from '@/auth'
+import { AuthProvider, useAuth } from '@/auth'
 import { LanguageProvider } from '@/language'
 import { GenderIdentityPage } from './GenderIdentityPage'
 
-interface HandoffState {
-  firstName: string
-  lastName: string
-  dateOfBirth: string
-  gender: string
-  sexAssignedAtBirth: string
-}
-
-function EducationProbe() {
-  const location = useLocation()
-  const state = location.state as HandoffState | null
+function LoadingProbe() {
+  const { profile } = useAuth()
   return (
     <p>
-      Handoff state:{' '}
-      {state
-        ? `${state.firstName} ${state.lastName} ${state.dateOfBirth} ${state.gender} ${state.sexAssignedAtBirth}`
+      Profile:{' '}
+      {profile
+        ? `${profile.firstName} ${profile.lastName} ${profile.dateOfBirth} ${profile.educationLevel} ${profile.gender} ${profile.sexAssignedAtBirth}`
         : 'none'}
     </p>
   )
@@ -36,13 +27,18 @@ function renderGenderIdentityPage() {
           initialEntries={[
             {
               pathname: '/gender-identity',
-              state: { firstName: 'Ada', lastName: 'Lovelace', dateOfBirth: '1988-01-01' },
+              state: {
+                firstName: 'Ada',
+                lastName: 'Lovelace',
+                dateOfBirth: '1988-01-01',
+                educationLevel: 'bachelors-degree',
+              },
             },
           ]}
         >
           <Routes>
             <Route path="/gender-identity" element={<GenderIdentityPage />} />
-            <Route path="/education" element={<EducationProbe />} />
+            <Route path="/loading" element={<LoadingProbe />} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>
@@ -65,7 +61,7 @@ describe('GenderIdentityPage', () => {
     renderGenderIdentityPage()
     expect(
       screen.getByText(
-        'Your results are compared with norms based on biology. This helps us use the right ones.',
+        'These details help us understand your answers using the right reference information.',
       ),
     ).toBeInTheDocument()
   })
@@ -97,8 +93,8 @@ describe('GenderIdentityPage', () => {
     renderGenderIdentityPage()
     await user.selectOptions(screen.getByLabelText('Gender'), 'male')
     expect(screen.getByLabelText('Sex assigned at birth')).toHaveValue('male')
-    expect(screen.getByText('We filled this in from your last answer')).toBeInTheDocument()
-    expect(screen.getByText(/We selected Male from your last answer/)).toBeInTheDocument()
+    expect(screen.getByText('We filled this in based on your last answer.')).toBeInTheDocument()
+    expect(screen.getByText(/We selected Male based on your gender response/)).toBeInTheDocument()
   })
 
   it('auto-fills sex assigned at birth and shows the pre-fill note when gender is Female', async () => {
@@ -106,8 +102,8 @@ describe('GenderIdentityPage', () => {
     renderGenderIdentityPage()
     await user.selectOptions(screen.getByLabelText('Gender'), 'female')
     expect(screen.getByLabelText('Sex assigned at birth')).toHaveValue('female')
-    expect(screen.getByText('We filled this in from your last answer')).toBeInTheDocument()
-    expect(screen.getByText(/We selected Female from your last answer/)).toBeInTheDocument()
+    expect(screen.getByText('We filled this in based on your last answer.')).toBeInTheDocument()
+    expect(screen.getByText(/We selected Female based on your gender response/)).toBeInTheDocument()
   })
 
   it('still lets the visitor change the auto-filled value', async () => {
@@ -131,25 +127,25 @@ describe('GenderIdentityPage', () => {
     expect(screen.queryByText('We filled this in from your last answer')).not.toBeInTheDocument()
   })
 
-  it('hands off registration state + gender + sex to /education on the happy path', async () => {
+  it('saves the combined profile (prior state + gender + sex) and navigates to /loading', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
     await user.selectOptions(screen.getByLabelText('Gender'), 'non-binary')
     await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
-      screen.getByText('Handoff state: Ada Lovelace 1988-01-01 non-binary female'),
+      screen.getByText('Profile: Ada Lovelace 1988-01-01 bachelors-degree non-binary female'),
     ).toBeInTheDocument()
   })
 
-  it('hands off Intersex as sex assigned at birth', async () => {
+  it('saves Intersex as sex assigned at birth', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
     await user.selectOptions(screen.getByLabelText('Gender'), 'non-binary')
     await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'intersex')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
-      screen.getByText('Handoff state: Ada Lovelace 1988-01-01 non-binary intersex'),
+      screen.getByText('Profile: Ada Lovelace 1988-01-01 bachelors-degree non-binary intersex'),
     ).toBeInTheDocument()
   })
 
@@ -162,12 +158,14 @@ describe('GenderIdentityPage', () => {
     expect(screen.getByLabelText('Sex assigned at birth')).toHaveValue('')
   })
 
-  it('hands off with an empty gender when left on "Choose one - Optional", as long as sex assigned at birth is answered', async () => {
+  it('saves with an empty gender when left on "Choose one - Optional", as long as sex assigned at birth is answered', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
     await user.selectOptions(screen.getByLabelText('Sex assigned at birth'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
-    expect(screen.getByText('Handoff state: Ada Lovelace 1988-01-01 female')).toBeInTheDocument()
+    expect(
+      screen.getByText('Profile: Ada Lovelace 1988-01-01 bachelors-degree female'),
+    ).toBeInTheDocument()
   })
 
   it('shows an error on sex assigned at birth when Continue is clicked unanswered, using the field-error variant rather than a native validation bubble, and never shows one for the optional Gender', async () => {
@@ -182,7 +180,7 @@ describe('GenderIdentityPage', () => {
     expect(genderSelect).not.toHaveAttribute('aria-invalid', 'true')
     expect(sexSelect).toHaveAttribute('aria-invalid', 'true')
     expect(screen.getByText('Please select a sex assigned at birth.')).toBeInTheDocument()
-    expect(screen.queryByText('Handoff state:', { exact: false })).not.toBeInTheDocument()
+    expect(screen.queryByText('Profile:', { exact: false })).not.toBeInTheDocument()
   })
 
   it('clears the sex-assigned-at-birth error once auto-filled by picking Male or Female', async () => {

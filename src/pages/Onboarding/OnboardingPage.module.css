@@ -1,3 +1,15 @@
+/* This page's own description, below the title — docs/design.md's `paragraph-2-regular` (the
+   base 16px reading size), in the primary text color rather than the muted secondary tone
+   `OnboardingLayout`'s shared `.subtitle` uses, on request. */
+.description {
+  margin: 0;
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  font-weight: var(--font-paragraph-2-regular-weight, 400);
+  line-height: var(--font-paragraph-2-regular-line-height, 1.5);
+  color: var(--color-text-primary, #1f2a37);
+}
+
 .form {
   display: flex;
   flex-direction: column;

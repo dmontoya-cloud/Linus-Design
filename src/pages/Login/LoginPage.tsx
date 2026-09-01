@@ -27,9 +27,9 @@ function isValidEmail(value: string): boolean {
  * finishes. Login is a gate before the onboarding process, not a step
  * within it, so it doesn't carry the shared OnboardingLayout/progress bar
  * the later screens do. The age-18+ attestation lives here too, right after
- * the email field — required before "Log in to Linus Health" will proceed, since
+ * the email field — required before "Send code" will proceed, since
  * this is the very first gate in the funnel rather than something to
- * re-confirm later on Legal Intro. "Log in to Linus Health" stays enabled at all
+ * re-confirm later on Legal Intro. "Send code" stays enabled at all
  * times rather than being disabled while the form is incomplete — clicking
  * it with something missing reveals which field via its own error state
  * instead of the button just silently refusing to respond. The email field
@@ -97,7 +97,8 @@ export function LoginPage() {
 
             <div className={styles.magicLink}>
               <p className={styles.magicLinkCopy}>
-                Enter your email address below so we can match you to our records.
+                Get started by entering your email. We&rsquo;ll send you a one-time code to sign in
+                or create your account.
               </p>
               <form className={styles.magicLinkForm} onSubmit={handleMagicLink} noValidate>
                 <div
@@ -144,7 +145,7 @@ export function LoginPage() {
                   className={styles.magicLinkSubmit}
                   loading={magicLinkLoading}
                 >
-                  Log in to Linus Health
+                  Send code
                 </Button>
               </form>
             </div>

@@ -1,19 +1,27 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { axe } from 'vitest-axe'
-import { AuthProvider, useAuth } from '@/auth'
+import { AuthProvider } from '@/auth'
 import { LanguageProvider } from '@/language'
 import { EducationPage } from './EducationPage'
 
-function LoadingProbe() {
-  const { profile } = useAuth()
+interface HandoffState {
+  firstName: string
+  lastName: string
+  dateOfBirth: string
+  educationLevel: string
+}
+
+function GenderIdentityProbe() {
+  const location = useLocation()
+  const state = location.state as HandoffState | null
   return (
     <p>
-      Profile:{' '}
-      {profile
-        ? `${profile.firstName} ${profile.lastName} ${profile.dateOfBirth} ${profile.gender} ${profile.sexAssignedAtBirth} ${profile.educationLevel}`
+      Handoff state:{' '}
+      {state
+        ? `${state.firstName} ${state.lastName} ${state.dateOfBirth} ${state.educationLevel}`
         : 'none'}
     </p>
   )
@@ -27,19 +35,13 @@ function renderEducationPage() {
           initialEntries={[
             {
               pathname: '/education',
-              state: {
-                firstName: 'Ada',
-                lastName: 'Lovelace',
-                dateOfBirth: '1988-01-01',
-                gender: 'non-binary',
-                sexAssignedAtBirth: 'female',
-              },
+              state: { firstName: 'Ada', lastName: 'Lovelace', dateOfBirth: '1988-01-01' },
             },
           ]}
         >
           <Routes>
             <Route path="/education" element={<EducationPage />} />
-            <Route path="/loading" element={<LoadingProbe />} />
+            <Route path="/gender-identity" element={<GenderIdentityProbe />} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>
@@ -55,7 +57,7 @@ describe('EducationPage', () => {
     ).toBeInTheDocument()
     expect(
       screen.getByText(
-        'Education gives helpful context for your results. It is part of how we choose the right norms.',
+        'These details help us understand your answers using the right reference information.',
       ),
     ).toBeInTheDocument()
     expect(screen.getByLabelText('Education background')).toBeInTheDocument()
@@ -82,13 +84,13 @@ describe('EducationPage', () => {
     ])
   })
 
-  it('saves the combined profile (prior state + education level) and navigates to /loading', async () => {
+  it('hands off registration state + education level to /gender-identity on the happy path', async () => {
     const user = userEvent.setup()
     renderEducationPage()
     await user.selectOptions(screen.getByLabelText('Education background'), 'bachelors-degree')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
-      screen.getByText('Profile: Ada Lovelace 1988-01-01 non-binary female bachelors-degree'),
+      screen.getByText('Handoff state: Ada Lovelace 1988-01-01 bachelors-degree'),
     ).toBeInTheDocument()
   })
 
@@ -122,7 +124,7 @@ describe('EducationPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
-      screen.getByText('Profile: Ada Lovelace 1988-01-01 non-binary female bachelors-degree'),
+      screen.getByText('Handoff state: Ada Lovelace 1988-01-01 bachelors-degree'),
     ).toBeInTheDocument()
   })
 

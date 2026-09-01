@@ -1,4 +1,4 @@
-import { useRef, useState, type ClipboardEvent, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { Logo } from '@/components/atoms/Logo'
@@ -7,18 +7,30 @@ import styles from './VerifyEmailPage.module.css'
 /** Number of digits in the mock one-time code. */
 const CODE_LENGTH = 4
 
+/** How long "Send a new code" stays hidden behind a countdown before it's
+ * clickable, on request — brought back from an earlier iteration of this screen. Resets
+ * back to this on every resend, mimicking a fresh code cooldown rather than a one-time
+ * wait. */
+const RESEND_COOLDOWN_SECONDS = 30
+
 /**
  * Verify Email — second step of the email sign-in mock flow, reached from
- * LoginPage's "Log in to Linus Health" form. Confirms the mock "send" and offers
- * a "Resend verification code" escape hatch below the code entry (clears
+ * LoginPage's "Send code" form. Confirms the mock "send" and offers
+ * a "Send a new code" escape hatch below the code entry (clears
  * the boxes and refocuses the first one — there's no real backend to
- * re-issue a code from). The confirmation mechanism is a 4-digit one-time
+ * re-issue a code from), gated behind a `RESEND_COOLDOWN_SECONDS`-second
+ * countdown — brought back on request from an earlier iteration of this
+ * screen. While counting down, a plain "Resend code in 0:ss" line sits in
+ * that spot instead of the link; once it reaches zero the link takes over,
+ * and clicking it restarts the same countdown (a fresh mock code, a fresh
+ * wait), rather than staying permanently unlocked after the first resend.
+ * The confirmation mechanism is a 4-digit one-time
  * code: 4 separate boxes, auto-advancing focus as each digit is typed,
  * backspace-to-previous when a box is empty.
  * Since this repo is mock-data-only, **any** complete 4-digit code confirms
  * — there's no real code issued anywhere for a real one to be checked
  * against. Confirming hands off to /verify-account, which owns the actual
- * `login()` call and its own mock-verification delay. "Confirm code" stays
+ * `login()` call and its own mock-verification delay. "Sign in" stays
  * enabled even before all 4 digits are filled, on request — clicking it
  * early is a no-op (guarded in `handleConfirm`) rather than truly disabled;
  * only the cursor still shows `not-allowed` while incomplete, as a hint.
@@ -39,10 +51,17 @@ export function VerifyEmailPage() {
   const email = (location.state as { email?: string } | null)?.email
   const [digits, setDigits] = useState<string[]>(Array(CODE_LENGTH).fill(''))
   const [showCodeValidation, setShowCodeValidation] = useState(false)
+  const [secondsUntilResend, setSecondsUntilResend] = useState(RESEND_COOLDOWN_SECONDS)
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
   const isComplete = digits.every((digit) => digit !== '')
   const codeInvalid = showCodeValidation && !isComplete
+
+  useEffect(() => {
+    if (secondsUntilResend <= 0) return
+    const timer = window.setTimeout(() => setSecondsUntilResend((value) => value - 1), 1000)
+    return () => window.clearTimeout(timer)
+  }, [secondsUntilResend])
 
   function setDigitAt(index: number, value: string) {
     setDigits((prev) => {
@@ -90,12 +109,17 @@ export function VerifyEmailPage() {
   }
 
   /** Mock resend — this repo has no real backend to re-issue a code from, so this just
-   * clears the boxes and refocuses the first one, as if a fresh code were on its way. */
+   * clears the boxes and refocuses the first one, as if a fresh code were on its way — and
+   * restarts the cooldown, so the link hides behind the countdown again. */
   function handleResend() {
     setDigits(Array(CODE_LENGTH).fill(''))
     setShowCodeValidation(false)
+    setSecondsUntilResend(RESEND_COOLDOWN_SECONDS)
     inputRefs.current[0]?.focus()
   }
+
+  const resendMinutes = Math.floor(secondsUntilResend / 60)
+  const resendSeconds = (secondsUntilResend % 60).toString().padStart(2, '0')
 
   return (
     <main className={styles.page}>
@@ -103,10 +127,10 @@ export function VerifyEmailPage() {
         <div className={styles.panel}>
           <Logo className={styles.logo} />
           <div className={styles.formContent}>
-            <h1 className={styles.title}>Check your email!</h1>
+            <h1 className={styles.title}>We emailed you a code</h1>
             <p className={styles.copy}>
-              We emailed you a four-digit code to <strong>{email || 'your email address'}</strong>.
-              Enter the code below to confirm your email address.
+              We sent a 4-digit code to <strong>{email || 'your email address'}</strong>. Enter the
+              code below to continue.
             </p>
             <div className={styles.codeSection}>
               <p id="verify-email-code-label" className={styles.codeLabel}>
@@ -148,7 +172,7 @@ export function VerifyEmailPage() {
                   className={!isComplete ? styles.confirmCodeIncomplete : undefined}
                   onClick={handleConfirm}
                 >
-                  Confirm code
+                  Sign in
                 </Button>
               </div>
               <div className={styles.codeErrorSlot}>
@@ -158,9 +182,15 @@ export function VerifyEmailPage() {
                   </p>
                 ) : null}
               </div>
-              <button type="button" className={styles.textLink} onClick={handleResend}>
-                Resend verification code
-              </button>
+              {secondsUntilResend > 0 ? (
+                <p className={styles.resendTimer} role="status">
+                  Resend code in {resendMinutes}:{resendSeconds}
+                </p>
+              ) : (
+                <button type="button" className={styles.textLink} onClick={handleResend}>
+                  Send a new code
+                </button>
+              )}
             </div>
           </div>
         </div>
