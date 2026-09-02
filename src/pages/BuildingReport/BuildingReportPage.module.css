@@ -1,39 +1,76 @@
 /* Same radial wash as Dashboard/Memory & Thinking Details' .page — secondary-subtle to light
    blue at 10% opacity, on request, replacing the earlier flat light-blue background so this
-   page matches the app's other pale-wash treatment. */
+   page matches the app's other pale-wash treatment. Anchored a fixed distance down from the
+   top rather than vertically centered, on request — `align-items: flex-start`-equivalent via
+   `justify-content: flex-start` on this column, plus that fixed top padding instead of
+   `center`, so the block sits at a consistent distance from the header regardless of viewport
+   height (true centering was pushing it too far down on tall screens). Cut down twice now, on
+   request — 300px, then 100px, now `--space-xxl` (48px) top padding and logo-to-card gap, both
+   still equal to each other. */
 .page {
   min-height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: var(--space-xxl, 48px);
   background:
     radial-gradient(ellipse at 48% 49%, rgba(188, 224, 164, 0.1), rgba(145, 213, 233, 0.1)),
     var(--color-background, #faf9f7);
-  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+  padding: var(--space-xxl, 48px) var(--space-lg, 24px) var(--space-xl, 32px);
 }
 
+/* `align-self: center` overrides `Logo`'s own `align-self: flex-start` (that default exists so
+   a logo in a header row never stretches full-height — not relevant here, where it needs to be
+   horizontally centered in this page's own column instead, like `.content` below it). */
+.logo {
+  height: 40px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* The one white box for this whole screen, on request — everything (icon, message, and the
+   "Did you know" tip, or the Download/Go to Dashboard buttons once ready) lives inside it,
+   rather than floating loose on the page's own background the way only `.tipCard` used to.
+   Same card recipe `.tipCard` used to carry on its own: surface background, rounded-xl,
+   shadow-card, padding-xl. */
 .content {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   max-width: 560px;
   text-align: center;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-xl, 24px);
+  box-shadow: var(
+    --shadow-card,
+    0 2px 8px rgba(32, 37, 42, 0.06),
+    0 1px 2px rgba(32, 37, 42, 0.04)
+  );
+  padding: var(--space-xl, 32px);
 }
 
+/* No `color` here (unlike the hand-drawn icon this replaced) — `DotLottieReact` renders onto a
+   `<canvas>`, not recolorable via `currentColor`, and the provided animation carries its own
+   fixed skeleton-loading gray fills anyway. */
 .icon {
-  width: 112px;
-  height: 112px;
-  color: var(--color-primary, #087dae);
+  width: 89px;
+  height: 89px;
   margin-bottom: var(--space-lg, 24px);
   opacity: 0;
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
 }
 
+/* Dropped one step from headline-2-regular (40px) to headline-3-regular (33px), on request —
+   the next size down in the same type-scale family, reusing an existing token rather than a
+   one-off size, now that the card around it reads tighter/more compact than it used to. */
 .title {
-  font-family: var(--font-headline-2-regular-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-2-regular-size, 2.5rem);
-  font-weight: var(--font-headline-2-regular-weight, 400);
-  line-height: var(--font-headline-2-regular-line-height, 1.2);
+  font-family: var(--font-headline-3-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-3-regular-size, 2.0625rem);
+  font-weight: var(--font-headline-3-regular-weight, 400);
+  line-height: var(--font-headline-3-regular-line-height, 1.2);
   color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-md, 16px);
   opacity: 0;
@@ -42,27 +79,44 @@
 
 /* 24px gap to the buttons below, on request — wider than the 16px this title uses above the
    subtitle in the "building" state, so it gets its own override here rather than changing the
-   shared `.title` margin. */
+   shared `.title` margin. Also one step smaller than that shared size, on request — headline-4-
+   regular (28px) instead of the base `.title`'s headline-3-regular (33px) — scoped to this
+   ready-state variant alone so "Building your report!" (which got its own one-step-down pass
+   already) isn't affected a second time. */
 .title.titleReady {
+  font-family: var(--font-headline-4-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-4-regular-size, 1.75rem);
+  font-weight: var(--font-headline-4-regular-weight, 400);
+  line-height: var(--font-headline-4-regular-line-height, 1.25);
   margin-bottom: var(--space-lg, 24px);
 }
 
-/* Building-to-ready transition, on request — rather than the headline/subtitle/spinner just
-   vanishing the instant the Download button is ready to appear, they briefly continue the same
-   upward drift their own entrance used (see `fade-rise`) and fade out, so leaving reads as a
-   continuation of the same motion rather than a cut. `EXIT_DURATION_MS` in the component gives
-   these just enough time to finish before the "ready" elements mount. Compound selectors (two
-   classes, not one) so this reliably overrides the element's own base `animation` regardless of
-   rule order in this file. */
-.title.titleExiting {
-  animation: fade-rise-out 0.35s ease both;
+/* Both hold their children the same way `.content` used to hold everything directly — a plain
+   centered flex column — now that the icon/title/subtitle/tip vs. icon/title/actions/next-
+   activities each move and fade as one unit instead of each element choreographing its own
+   exit or entrance (see the component's own doc comment on `showReady` for why: a real
+   crossfade, not a sequential vanish-then-reappear). */
+.buildingBlock,
+.readyBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
-.subtitle.subtitleExiting {
-  animation: fade-rise-out 0.35s ease both;
-}
-
-.spinnerWrap.spinnerWrapExiting {
+/* `position: absolute` once exiting, on request — `DotLottieReact` doesn't reliably tear down
+   its canvas the instant React unmounts it (a library quirk, not something this app's own code
+   controls), so the outgoing block can in practice outlive its own 0.35s fade-out. Pulling the
+   whole block out of flow the moment it starts exiting means that, however long it actually
+   takes to fully disappear, it can never push `.readyBlock` (mounted in normal flow from the
+   same instant, so it's what actually sizes the card from here on) out of position — the exact
+   bug `.icon.iconExiting` used to patch for just the icon, now handled once for the whole
+   block. `top: 0` matches `.content`'s own padding edge, where this block already sat in
+   normal flow. */
+.buildingBlockExiting {
+  position: absolute;
+  top: 0;
+  left: 0;
   animation: fade-rise-out 0.35s ease both;
 }
 
@@ -88,85 +142,118 @@
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
-/* The emphasized half of the subtitle sentence — darker and bolder than the surrounding
-   context text, on request, so "stay on this screen" reads as the one thing that matters. */
-.subtitle strong {
-  color: var(--color-text-primary, #1f2a37);
-  font-weight: 700;
-}
-
-/* Same breathing + spinning recipe as Loading/Setting Up/Thanks's own spinner (see
-   LoadingPage.module.css) — reused rather than reinvented, since this is the same "keep
-   waiting" signal those screens already establish. Three nested elements, not one, so the
-   entrance fade/rise, the continuous breathe, and the continuous spin each own their own
-   `transform` — stacking more than one of these on a single element would make the
-   later-listed animation clobber the others instead of composing with them. */
-.spinnerWrap {
-  margin-bottom: var(--space-xl, 32px);
-  opacity: 0;
-  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
-}
-
-.spinnerPulse {
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: spinner-breathe 2.4s ease-in-out infinite;
-}
-
-.spinnerRing {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 3px solid var(--color-border, #ced3d7);
-  border-top-color: var(--color-primary, #087dae);
-  animation: spinner-spin 0.9s linear infinite;
-}
-
-@keyframes spinner-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.08);
-  }
-}
-
-/* Replaces the subtitle/spinner once the report is "ready" — the same fade-rise entrance those
-   two used, so swapping to this state doesn't just pop the buttons in. Download report
-   (primary) plus a secondary "Go to Dashboard", on request. */
+/* Replaces the subtitle once the report is "ready" — the same fade-rise entrance that used, so
+   swapping to this state doesn't just pop the buttons in. Download report (primary) plus a
+   secondary "Go to Dashboard", on request. Sits below `.nextActivities` now, on request — the
+   Lifestyle/Priorities nudge comes first so finishing the full check-in reads as the priority,
+   with Go to Dashboard/Download report as the secondary "leave" actions after it — so no
+   `margin-bottom` here any more; it's the last element in the block, and `.content`'s own
+   padding already gives it room at the bottom. */
 .readyActions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-md, 16px);
-  margin-bottom: var(--space-xl, 32px);
   opacity: 0;
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
 }
 
-/* Centered, not left-aligned, on request — overflow hidden so the push-up-and-fade-in
-   transition below (see .tipContent) never briefly pokes a rising line of text out past the
-   card's own rounded corners. */
+/* The "start something else" nudge shown once ready, on request — `text-align: left` overrides
+   `.content`'s own centered text, since `NextActivityCard` (see the component file) is a
+   left-aligned card. Now sits above `.readyActions` (see that rule's own comment), so it carries
+   the trailing `margin-bottom` that element used to have, to keep the same gap before the
+   buttons below it. A second divider, on request, closes out the list the same way
+   `.nextActivityCard`'s own `border-bottom` separates Lifestyle from Priorities — this one
+   separates the whole list from the buttons below, via `padding-bottom` + `border-bottom` here
+   rather than on the list itself, so the divider sits inside this block's own fade-rise instead
+   of introducing a third animated element. */
+.nextActivities {
+  width: 100%;
+  text-align: left;
+  margin-bottom: var(--space-xl, 32px);
+  padding-bottom: var(--space-lg, 24px);
+  border-bottom: 1px solid var(--color-border-subtle, #eff0f2);
+  opacity: 0;
+  animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.nextActivitiesIntro {
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-secondary, #5b6b79);
+  line-height: 1.5;
+  margin: 0 0 var(--space-lg, 24px);
+}
+
+.nextActivitiesList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* No border/box around each row any more, on request — a divider between the two rows instead
+   (`border-bottom` on every row but the last), so Lifestyle/Priorities read as one continuous
+   list rather than two separate boxed cards. Title and duration sit closer together now too
+   (`--space-xs` instead of `--space-sm`), on request. */
+.nextActivityCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs, 4px);
+  padding: var(--space-md, 16px) 0;
+}
+
+.nextActivityCard:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-subtle, #eff0f2);
+}
+
+/* Title and Start/Download report share this one row — title left, button right — on request,
+   instead of `ActivityCard`'s title-then-description-then-button-row-at-the-bottom layout. */
+.nextActivityHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md, 16px);
+}
+
+.nextActivityTitle {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0;
+}
+
+.nextActivityDuration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs, 4px);
+  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-semibold-size, 0.6875rem);
+  font-weight: var(--font-label-m-semibold-weight, 600);
+  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0;
+}
+
+.nextActivityDurationIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* An inset panel, not its own floating card, now that `.content` is the one white box holding
+   this whole screen — a flat `--color-background` tint (the page's own base tone) reads as
+   "set apart from the surrounding card" without a second white-on-white card the eye can't
+   actually distinguish from its parent. Centered, not left-aligned, on request — overflow
+   hidden so the push-up-and-fade-in transition below (see .tipContent) never briefly pokes a
+   rising line of text out past the panel's own rounded corners. */
 .tipCard {
   width: 100%;
-  background: var(--color-surface, #fff);
-  border-radius: var(--radius-xl, 24px);
-  box-shadow: var(
-    --shadow-card,
-    0 2px 8px rgba(32, 37, 42, 0.06),
-    0 1px 2px rgba(32, 37, 42, 0.04)
-  );
-  padding: var(--space-xl, 32px);
+  background: var(--color-background, #faf9f7);
+  border-radius: var(--radius-lg, 16px);
+  padding: var(--space-lg, 24px);
   text-align: center;
   overflow: hidden;
   opacity: 0;
@@ -181,16 +268,6 @@
   margin: 0 0 var(--space-sm, 8px);
 }
 
-/* Remounted (via React `key`) every time the tip rotates — replays this push-up-and-fade-in on
-   the eyebrow/title/body together, on request, rather than the text just snapping to something
-   new every 15 seconds. A bigger rise (20px) and a touch slower than the page's own entrance
-   `fade-rise` (10px/0.7s) so the motion reads as a distinct "next fact" beat, not a repeat of
-   the initial page-load animation. Only the text transitions this way; the card itself
-   (`.tipCard`) doesn't re-animate its own entrance on every rotation. */
-.tipContent {
-  animation: fade-rise-tip 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @keyframes fade-rise-tip {
   from {
     opacity: 0;
@@ -202,6 +279,9 @@
   }
 }
 
+/* Title first, on request — a bigger rise (20px) and a touch slower than the page's own
+   entrance `fade-rise` (10px/0.7s) so the motion reads as a distinct "next fact" beat, not a
+   repeat of the initial page-load animation. */
 .tipTitle {
   font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-headline-5-semibold-size, 1.125rem);
@@ -209,9 +289,16 @@
   color: var(--color-text-primary, #1f2a37);
   line-height: 1.3;
   margin: 0 0 var(--space-sm, 8px);
+  opacity: 0;
+  animation: fade-rise-tip 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
 }
 
+/* ...then the body, on request — same animation as the title just above, delayed to start only
+   once the title's own entrance is most of the way done, so the two read as one element after
+   another rather than a single simultaneous block. */
 .tipBody {
+  opacity: 0;
+  animation: fade-rise-tip 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
   font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-paragraph-2-regular-size, 1rem);
   color: var(--color-text-secondary, #5b6b79);

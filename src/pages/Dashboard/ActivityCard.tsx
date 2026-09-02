@@ -1,14 +1,13 @@
-import { useState, type CSSProperties, type ReactNode } from 'react'
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
 import { ClockIcon } from '@/components/atoms/Icon'
-import { Modal } from '@/components/atoms/Modal'
 import styles from './ActivityCard.module.css'
 
-/** This mock-data prototype has no real assessment flow yet to actually progress through, so
- * `completed` only ever gets set one way today: `BuildingReportPage`'s "Go to Dashboard" button
- * marking Memory & Thinking done via `useAuth().completeActivity` — see `DashboardPage`, which
- * computes each activity's live status from `completedActivityIds` rather than a fixed value. */
+/** `completed` only ever gets set one way today: `BuildingReportPage`'s "Go to Dashboard" button
+ * marking whichever activity was just finished done via `useAuth().completeActivity` — see
+ * `DashboardPage`, which computes each activity's live status from `completedActivityIds` rather
+ * than a fixed value. */
 export type ActivityStatus = 'not-started' | 'completed'
 
 const STATUS_LABELS: Record<ActivityStatus, string> = {
@@ -26,19 +25,26 @@ export interface Activity {
    * only activities with a real setup requirement (like the listening/speaking tasks) carry one. */
   requirement?: string
   description: string
-  /** Where this card's Start button hands off to. Only Memory & Thinking has a real
-   * intro screen (`/assessment`, with its instructions voice-over) — the other activities
-   * route to their own not-yet-built placeholder rather than sharing that one. */
+  /** Where this card's Start button hands off to. Memory & Thinking has its own real intro
+   * screen (`/assessment`, with its instructions voice-over); Lifestyle and Priorities each
+   * route to their own details screen, which in turn hands off to their own real question flow
+   * (`LifestyleQuestionsPage`/`PrioritiesQuestionsPage`) — three different intros, not one
+   * shared screen. */
   startPath: string
-  /** Where this card's Details button hands off to — a not-yet-built placeholder page. Not
-   * needed (and not rendered as a Link) when `detailsContent` is set instead (see below). */
-  detailsPath?: string
-  /** When set, Details opens a Modal with this content in place instead of navigating to
-   * `detailsPath` — on request, for Memory & Thinking, so seeing what the activity involves
-   * (its instructions and task list) doesn't require leaving Dashboard for a whole separate
-   * screen. Lifestyle/Priorities have no real detail content yet, so they still fall back to
-   * their placeholder route. */
-  detailsContent?: ReactNode
+  /** Only Memory & Thinking carries this, on request — a real minimum-wait-before-redoing rule,
+   * unlike Lifestyle/Priorities which can be redone any time. This prototype has no real
+   * completion timestamp to count forward from (just the boolean `completedActivityIds`), so the
+   * shown date is always this many months from today, recomputed on every render — a stand-in
+   * for a real "redo eligible on" date once completion timestamps exist. Display-only: nothing
+   * here actually disables the button before that date, since there's no real date to check it
+   * against yet. */
+  redoCooldownMonths?: number
+}
+
+function formatRedoDate(months: number): string {
+  const redoDate = new Date()
+  redoDate.setMonth(redoDate.getMonth() + months)
+  return redoDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 /** One pending assessment activity — a status badge on its own line above the title (never
@@ -46,20 +52,18 @@ export interface Activity {
  * space for it), title, a clock-icon-led duration estimate, description, an optional
  * requirement note on its own line below the description (e.g. "Needs quiet room", on
  * activities where that matters — on request, moved off the duration row to give it its own
- * line), and a primary CTA that's either Start (hands off to `activity.startPath` — only Memory
- * & Thinking's points at the real Assessment Intro screen, the other two still point at
- * not-yet-built placeholders) or, once `activity.status` is `'completed'`, Download report (to
- * `/report`, on request — there's nothing left to "start" once it's done). Details either opens
- * a Modal in place (when `activity.detailsContent` is set — currently just Memory & Thinking,
- * showing its instructions/task list) or navigates to `activity.detailsPath`'s own not-yet-built
- * placeholder, same as Lifestyle/Priorities' Start above; Details stays available even once
- * completed, so the activity's own instructions/tasks are still reviewable. Cascades in on
- * mount (fade-rise) same as every other card on Dashboard — `style` carries the per-card
- * `animationDelay` DashboardPage staggers by, since a `<li>` can't be wrapped in an extra
- * element without breaking the `<ul>`'s content model. */
+ * line), and a CTA that's either a primary Start (hands off to `activity.startPath` — see that
+ * field's own doc comment) or, once `activity.status` is `'completed'`, a secondary "Redo
+ * activity" back to that same `startPath` — plain, with no date, for an activity that can be
+ * redone any time, or with a "Redo activity on {date}" suffix for one that carries a
+ * `redoCooldownMonths` (only Memory & Thinking today — see that field's own doc comment).
+ * Replaces the earlier "Download report" button, since redoing (not re-downloading) is this
+ * card's own completed-state action; the dashboard-wide download lives on `FullCheckInCard`
+ * instead. Cascades in on mount (fade-rise)
+ * same as every other card on Dashboard — `style` carries the per-card `animationDelay`
+ * DashboardPage staggers by, since a `<li>` can't be wrapped in an extra element without
+ * breaking the `<ul>`'s content model. */
 export function ActivityCard({ activity, style }: { activity: Activity; style?: CSSProperties }) {
-  const [detailsOpen, setDetailsOpen] = useState(false)
-
   return (
     <li className={[styles.card, styles.reveal].join(' ')} style={style}>
       <span
@@ -78,24 +82,12 @@ export function ActivityCard({ activity, style }: { activity: Activity; style?: 
       {activity.requirement ? (
         <span className={styles.requirement}>{activity.requirement}</span>
       ) : null}
-      <hr className={styles.divider} />
       <div className={styles.buttonRow}>
-        {activity.detailsContent ? (
-          <button
-            type="button"
-            className={buttonClassName('outline', 'sm')}
-            onClick={() => setDetailsOpen(true)}
-          >
-            Details
-          </button>
-        ) : activity.detailsPath ? (
-          <Link to={activity.detailsPath} className={buttonClassName('outline', 'sm')}>
-            Details
-          </Link>
-        ) : null}
         {activity.status === 'completed' ? (
-          <Link to="/report" className={buttonClassName('primary', 'sm')}>
-            Download report
+          <Link to={activity.startPath} className={buttonClassName('secondary', 'sm')}>
+            {activity.redoCooldownMonths
+              ? `Redo activity on ${formatRedoDate(activity.redoCooldownMonths)}`
+              : 'Redo activity'}
           </Link>
         ) : (
           <Link to={activity.startPath} className={buttonClassName('primary', 'sm')}>
@@ -103,16 +95,6 @@ export function ActivityCard({ activity, style }: { activity: Activity; style?: 
           </Link>
         )}
       </div>
-      {activity.detailsContent ? (
-        <Modal
-          open={detailsOpen}
-          onClose={() => setDetailsOpen(false)}
-          title={activity.title}
-          size="lg"
-        >
-          {activity.detailsContent}
-        </Modal>
-      ) : null}
     </li>
   )
 }

@@ -5,7 +5,7 @@ import { ArrowRightBoldIcon, ClockIcon } from '@/components/atoms/Icon'
 import { DashboardNavBar } from '../DashboardNavBar'
 import { cascadeDelay } from '../cascade'
 import { MemoryThinkingDetailsContent } from './MemoryThinkingDetailsContent'
-import styles from './MemoryThinkingDetailsPage.module.css'
+import styles from './ActivityDetailsPage.module.css'
 
 const ACTIVITY_NAME = 'Memory & Thinking'
 
@@ -19,10 +19,10 @@ const START_ICON_DELAY_MS = 2000
 /**
  * Memory & Thinking Details — the new step between Dashboard's "Start Activity"/"Start" and
  * the existing voice-over intro screen (`AssessmentIntroPage`), on request: what to expect
- * before committing, not the "get ready" moment itself. Duration matches the "About 15
+ * before committing, not the "get ready" moment itself. Duration matches the "About 7–10
  * minutes" estimate shown everywhere else this activity appears (Dashboard's `ActivityCard`,
- * `PENDING_ACTIVITIES`) rather than the reference mock's own "5–10 minutes", so this prototype
- * never shows two different estimates for the same activity. "Start Activity" in the header —
+ * `PENDING_ACTIVITIES`), so this prototype never shows two different estimates for the same
+ * activity. "Start Activity" in the header —
  * the only way forward on this screen, on request — continues into the real intro flow at
  * `/assessment` unchanged; leaving goes through `DashboardNavBar`'s own "Exit" link instead of
  * a dedicated Back button.
@@ -57,7 +57,7 @@ export function MemoryThinkingDetailsPage() {
             </div>
             <p className={styles.duration}>
               <ClockIcon className={styles.durationIcon} />
-              About 15 minutes
+              About 7–10 minutes
             </p>
             <hr className={styles.divider} />
           </div>

@@ -1,0 +1,104 @@
+/* The dashed example callout on every topic's instructions screen and on the Rating
+   instructions screen — primary-soft fill, dashed primary border (the one deliberate dashed
+   border in this system, since a solid one would read as just another bordered card rather
+   than a quoted example set apart from the surrounding prose), primary-hover text for
+   contrast against the light fill. `white-space: pre-line` lets the Rating instructions'
+   two-paragraph example (joined with a blank line) render as two real paragraphs. */
+.exampleBox {
+  margin: 0 0 var(--space-lg, 24px);
+  padding: var(--space-md, 16px);
+  border: 2px dashed var(--color-primary, #087dae);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-primary-soft, #e6f2f7);
+  color: var(--color-primary-hover, #065e83);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+/* The small lead-in line above each Rating question's actual priority text (e.g. "How
+   confident do you feel about this at the moment?" above "Manage my finances") — both live
+   inside the same `<legend>` (see `flowStyles.question`) so the fieldset's accessible name
+   covers the whole question, but this one line reads smaller/secondary rather than matching
+   the bold priority text below it. */
+.ratingLead {
+  display: block;
+  margin: 0 0 var(--space-xs, 4px);
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+.answerFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg, 24px);
+  margin: 0 0 var(--space-lg, 24px);
+}
+
+/* "Add another" — an outline pill matching every other secondary action in this system
+   (`Button` variant="outline"), just with a leading icon instead of a trailing one. */
+.addAnotherIcon {
+  width: 20px;
+  height: 20px;
+  margin-right: var(--space-sm, 8px);
+}
+
+/* The "Top five" ranking list — plain rows separated by hairline dividers rather than
+   `AnswerOption`'s bordered cards, on request (Figma's own treatment): a star leads each row,
+   filling and bolding the row's text once selected, with a soft primary tint behind it — the
+   same "tint once selected" language `AnswerOption`/`nav-bar-item-active` already use, just
+   without a border around each row. */
+.rankingList {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border-subtle, #eff0f2);
+}
+
+.rankingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 16px);
+  width: 100%;
+  padding: var(--space-md, 16px) var(--space-sm, 8px);
+  border: none;
+  border-bottom: 1px solid var(--color-border-subtle, #eff0f2);
+  background: none;
+  color: var(--color-text-primary, #1f2a37);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rankingRowSelected {
+  background: var(--color-primary-soft, #e6f2f7);
+  font-weight: 600;
+}
+
+.rankingRowDisabled {
+  color: var(--color-text-tertiary, #94a3ad);
+  cursor: not-allowed;
+}
+
+.rankingIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-primary, #087dae);
+}
+
+.rankingRowDisabled .rankingIcon {
+  color: var(--color-text-tertiary, #94a3ad);
+}
+
+.rankingRow:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-surface, #fff),
+    0 0 0 5px var(--color-primary, #087dae);
+}

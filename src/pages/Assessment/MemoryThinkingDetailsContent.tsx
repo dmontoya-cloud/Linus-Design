@@ -6,7 +6,7 @@ import {
   SpeakerHighIcon,
 } from '@/components/atoms/Icon'
 import { Tooltip } from '@/components/atoms/Tooltip'
-import styles from './MemoryThinkingDetailsPage.module.css'
+import styles from './ActivityDetailsPage.module.css'
 
 const INSTRUCTIONS = [
   {
@@ -54,13 +54,13 @@ const TASKS = [
 ]
 
 /**
- * The instructions row and task list — shared between `MemoryThinkingDetailsPage` (the full
- * details screen reached from Dashboard's "Start") and Dashboard's own "Details" modal for the
- * same activity (see `ActivityCard`/`DashboardPage`), on request, so the two surfaces never
- * drift apart on what the activity actually involves. Reuses `MemoryThinkingDetailsPage`'s own
- * CSS module rather than duplicating it — the instructions row's `flex-wrap` (see that file)
- * is what lets four fixed-180px columns still fit inside a much narrower modal panel with no
- * modal-specific styling of its own.
+ * The instructions row and task list shown on `MemoryThinkingDetailsPage` (the details screen
+ * reached from Dashboard's "Start") — split out into its own component since Dashboard's
+ * `ActivityCard` briefly rendered this same content in a Details modal; that modal (and its
+ * Details button) has since been removed, but the split stayed since it keeps
+ * `MemoryThinkingDetailsPage` itself focused on layout. Reuses `ActivityDetailsPage.module.css`,
+ * the styling shared with every other activity's details screen (see `LifestyleDetailsPage`),
+ * rather than duplicating it.
  */
 export function MemoryThinkingDetailsContent() {
   return (

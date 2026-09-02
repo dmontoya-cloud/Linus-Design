@@ -21,6 +21,10 @@ import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
 import { ProfilePage } from '@/pages/Profile/ProfilePage'
 import { AssessmentIntroPage } from '@/pages/Assessment/AssessmentIntroPage'
 import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
+import { LifestyleDetailsPage } from '@/pages/Assessment/LifestyleDetailsPage'
+import { LifestyleQuestionsPage } from '@/pages/Assessment/LifestyleQuestions/LifestyleQuestionsPage'
+import { PrioritiesDetailsPage } from '@/pages/Assessment/PrioritiesDetailsPage'
+import { PrioritiesQuestionsPage } from '@/pages/Assessment/PrioritiesQuestions/PrioritiesQuestionsPage'
 import { DeviceSetupPage } from '@/pages/DeviceSetup/DeviceSetupPage'
 import { DeviceReadyPage } from '@/pages/DeviceSetup/DeviceReadyPage'
 import { ShoppingListIntroPage } from '@/pages/Assessment/MemoryThinkingTask/ShoppingListIntroPage'
@@ -52,9 +56,10 @@ import './App.css'
  * activity card's Start link) is real too — it reads its instructions aloud
  * via the browser's own speech synthesis, same as the device check and the
  * one real assessment item (of 20) that follows it — but items 2-20 and the
- * actual shopping-list task itself don't exist yet. Paywall/Report are still
- * PoD-4 stubs, as are History/Settings (reachable only from Dashboard's own
- * nav, not listed in this funnel).
+ * actual shopping-list task itself don't exist yet. Report is still a PoD-4
+ * stub, as are History/Settings (reachable only from Dashboard's own nav,
+ * not listed in this funnel). There's no paywall or subscription in this
+ * product, so no stub for one is listed here either.
  */
 const FUNNEL_STEPS = [
   { path: '/login', label: 'Login' },
@@ -69,7 +74,6 @@ const FUNNEL_STEPS = [
   { path: '/gender-identity', label: 'Gender & Identity' },
   { path: '/loading', label: 'Loading' },
   { path: '/dashboard', label: 'Dashboard' },
-  { path: '/paywall', label: 'Paywall / Subscription' },
   { path: '/assessment', label: 'Assessment Intro' },
   { path: '/report/building', label: 'Building your report' },
   { path: '/report', label: 'In-App Report' },
@@ -356,13 +360,22 @@ export default function App() {
                   </RequireAuth>
                 }
               />
-              {/* Lifestyle/Priorities aren't built yet — only Memory & Thinking's Start (and
-                  the full check-in button) reach the real Assessment Intro screen above. */}
+              {/* Only Memory & Thinking's Start (and the full check-in button) reach the real
+                  Assessment Intro screen above; Lifestyle and Priorities each have their own
+                  details screen below instead, same pattern as Memory & Thinking's. */}
               <Route
                 path="/assessment/lifestyle"
                 element={
                   <RequireAuth>
-                    <Placeholder title="Lifestyle" />
+                    <LifestyleDetailsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/assessment/lifestyle/questions"
+                element={
+                  <RequireAuth>
+                    <LifestyleQuestionsPage />
                   </RequireAuth>
                 }
               />
@@ -370,27 +383,15 @@ export default function App() {
                 path="/assessment/priorities"
                 element={
                   <RequireAuth>
-                    <Placeholder title="Priorities" />
-                  </RequireAuth>
-                }
-              />
-              {/* Dashboard's activity cards each added a Details button alongside Start — Memory
-                  & Thinking's now opens a Modal in place (see ActivityCard/DashboardPage)
-                  instead of routing anywhere; Lifestyle/Priorities have no real detail content
-                  yet, so those two still fall back to placeholders below. */}
-              <Route
-                path="/assessment/lifestyle/details"
-                element={
-                  <RequireAuth>
-                    <Placeholder title="Lifestyle Details" />
+                    <PrioritiesDetailsPage />
                   </RequireAuth>
                 }
               />
               <Route
-                path="/assessment/priorities/details"
+                path="/assessment/priorities/questions"
                 element={
                   <RequireAuth>
-                    <Placeholder title="Priorities Details" />
+                    <PrioritiesQuestionsPage />
                   </RequireAuth>
                 }
               />

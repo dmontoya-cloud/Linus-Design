@@ -1,0 +1,15 @@
+.track {
+  width: 100%;
+  height: 8px;
+  background: var(--color-border, #ced3d7);
+  border-radius: var(--radius-pill, 999px);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--color-primary, #087dae);
+  border-radius: var(--radius-pill, 999px);
+  transition: width var(--motion-duration-base, 150ms)
+    var(--motion-easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+}
