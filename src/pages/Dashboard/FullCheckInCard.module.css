@@ -26,6 +26,27 @@
   margin: 0 0 var(--space-lg, 24px);
 }
 
+/* Clock icon + a rough duration estimate for the full three-part check-in, on request —
+   same treatment as ActivityCard's own `.duration`/`.durationIcon`, so the estimate reads
+   consistently whether it's on this card or one of the three below it. */
+.duration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs, 4px);
+  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-semibold-size, 0.6875rem);
+  font-weight: var(--font-label-m-semibold-weight, 600);
+  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0 0 var(--space-md, 16px);
+}
+
+.durationIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 /* Bordered container around the progress tracker + "X/3 complete" summary, on request —
    border-subtle stroke, no fill, radius-md. Padding bumped up by 8px in both directions (was
    space-sm/space-md, 8px/16px) on request — the content was reading a little tight against the
@@ -84,12 +105,13 @@
     var(--motion-easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
-/* label-l-semibold, on request — same size as the regular tier (0.8125rem), just bolder;
-   both are real tokens from the same type-scale family, not a one-off font-weight. */
+/* Bumped up one step from label-l-semibold (13px) to paragraph-2-semibold (16px), on request —
+   the same next-tier-up move `ActivityCard`'s own `.instructionTitle` already made, reusing an
+   existing type-scale token rather than inventing a one-off size. */
 .categoryLabel {
-  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-label-l-semibold-size, 0.8125rem);
-  font-weight: var(--font-label-l-semibold-weight, 600);
+  font-family: var(--font-paragraph-2-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-semibold-size, 1rem);
+  font-weight: var(--font-paragraph-2-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
 }
 
@@ -112,6 +134,15 @@
   font-size: var(--font-label-l-regular-size, 0.8125rem);
   color: var(--color-text-secondary, #5b6b79);
   margin: 0;
+}
+
+/* Holds the main CTA plus, once at least one activity is done, a secondary "Download report"
+   button beside it — `flex-wrap` so the pair still reflows to two lines on a narrow card rather
+   than overflowing or shrinking either button. */
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md, 16px);
 }
 
 /* Inverted from the old white-on-navy button (white background, dark text) to dark-on-light
@@ -143,6 +174,25 @@
   box-shadow:
     0 0 0 2px var(--color-surface, #fff),
     0 0 0 4px var(--color-primary, #087dae);
+}
+
+/* A couple of quick hops on mount, on request, so a "Download report" button that's new to
+   this card (it only appears once at least one activity is done) actually gets noticed rather
+   than blending in as if it had always been there — same bounce recipe `ScrollDownHint`
+   already uses elsewhere in this app (two hops here, not three, since this button doesn't need
+   as insistent a nudge as a scroll affordance easy to miss below the fold). */
+.downloadButton {
+  animation: fullCheckInDownloadBounce 0.5s ease-in-out 0.4s 2;
+}
+
+@keyframes fullCheckInDownloadBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @media (max-width: 640px) {

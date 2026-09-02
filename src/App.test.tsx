@@ -27,7 +27,6 @@ describe('App', () => {
       'Education',
       'Loading',
       'Dashboard',
-      'Paywall / Subscription',
       'Assessment Intro',
       'In-App Report',
     ].forEach((label) => {
@@ -38,8 +37,8 @@ describe('App', () => {
   it('navigates to a placeholder screen and back', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByRole('link', { name: 'Paywall / Subscription' }))
-    expect(screen.getByRole('heading', { name: 'Paywall / Subscription' })).toBeInTheDocument()
+    await user.click(screen.getByRole('link', { name: 'In-App Report' }))
+    expect(screen.getByRole('heading', { name: 'In-App Report' })).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: /back to prototype index/i }))
     expect(screen.getByRole('heading', { name: /prototype/i })).toBeInTheDocument()
   })
@@ -50,7 +49,7 @@ describe('App', () => {
     render(<App />)
     scrollToSpy.mockClear() // drop the initial-mount call, only care about navigation
 
-    await user.click(screen.getByRole('link', { name: 'Paywall / Subscription' }))
+    await user.click(screen.getByRole('link', { name: 'In-App Report' }))
     expect(scrollToSpy).toHaveBeenCalledWith(0, 0)
 
     scrollToSpy.mockRestore()

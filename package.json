@@ -22,6 +22,7 @@
     "test-storybook": "test-storybook"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.19.16",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.9.5"

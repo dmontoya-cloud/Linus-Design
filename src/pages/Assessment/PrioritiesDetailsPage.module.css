@@ -1,0 +1,32 @@
+/* One-off sub-heading matching Figma's own treatment for this activity (node 600:9441) — 21px/
+   600, primary-hover blue — doesn't correspond to an existing type-scale step, so it's a literal
+   value here rather than a token reference. Left-aligned, on request, rather than centered like
+   the rest of this card's own text isn't (title/body copy below are already left-aligned). */
+.subheading {
+  margin: 0 0 var(--space-lg, 24px);
+  text-align: left;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: 1.3125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-primary-hover, #065e83);
+}
+
+/* Same visual weight as `ActivityDetailsPage.module.css`'s `.taskIntro` paragraphs (bold
+   lead-in for the bullet list right below it), but semibold rather than regular. */
+.topicsLead {
+  margin: 0 0 var(--space-sm, 8px);
+  font-family: var(--font-paragraph-2-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-semibold-size, 1rem);
+  font-weight: var(--font-paragraph-2-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.topicsList {
+  margin: 0 0 var(--space-lg, 24px);
+  padding-left: var(--space-lg, 24px);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-primary, #1f2a37);
+  line-height: 1.7;
+}

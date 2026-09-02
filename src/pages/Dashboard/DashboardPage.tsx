@@ -4,7 +4,6 @@ import { ActivityCard, type Activity } from './ActivityCard'
 import { FullCheckInCard } from './FullCheckInCard'
 import { ResourcesCard } from './ResourcesCard'
 import { cascadeDelay } from '../cascade'
-import { MemoryThinkingDetailsContent } from '../Assessment/MemoryThinkingDetailsContent'
 import styles from './DashboardPage.module.css'
 
 /** Mock pending activities — this repo has no real backend, so this list is a fixed
@@ -16,30 +15,28 @@ const PENDING_ACTIVITIES: Activity[] = [
     id: 'memory-recall',
     title: 'Memory & Thinking',
     status: 'not-started',
-    duration: 'About 15 minutes',
+    duration: 'About 7–10 minutes',
     requirement: 'Needs quiet room',
     description:
       'Tasks that look at your brain abilities: memory, attention, language and thinking.',
     startPath: '/assessment/start',
-    detailsContent: <MemoryThinkingDetailsContent />,
+    redoCooldownMonths: 3,
   },
   {
     id: 'speech-pattern',
     title: 'Lifestyle',
     status: 'not-started',
-    duration: 'About 5–10 minutes',
+    duration: 'About 5 minutes',
     description: 'Tell us about your lifestyle, health, and everyday habits.',
     startPath: '/assessment/lifestyle',
-    detailsPath: '/assessment/lifestyle/details',
   },
   {
     id: 'visual-attention',
     title: 'Priorities',
     status: 'not-started',
-    duration: 'About 5–10 minutes',
+    duration: 'About 7 minutes',
     description: 'Share what matters most to you and what you want to keep doing in daily life.',
     startPath: '/assessment/priorities',
-    detailsPath: '/assessment/priorities/details',
   },
 ]
 

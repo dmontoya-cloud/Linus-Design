@@ -1,6 +1,11 @@
 /* 19px is an exact pixel match to Figma's own itemSpacing — not one of the 4/8/16/24/32/48
-   scale tokens, but consistent across all six gaps in this card (status→title→duration→
-   description→requirement→divider→buttons), so it's a real deliberate value, not noise. */
+   scale tokens, but consistent across every gap in this card (status→title→duration→
+   description→requirement→buttons), so it's a real deliberate value, not noise. Three gaps
+   are pulled in by 8px on request, each via the later element's own negative margin-top
+   rather than changing this shared `gap`: title (tighter under status), duration (tighter
+   under title), and the button row (tighter under description/requirement) — shortening
+   every card by the same amount without touching the description's own `flex: 1`, which is
+   what keeps all three cards in a row the same height regardless of description length. */
 .card {
   display: flex;
   flex-direction: column;
@@ -39,7 +44,7 @@
   font-size: var(--font-headline-5-semibold-size, 1.125rem);
   font-weight: var(--font-headline-5-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
-  margin: 0;
+  margin: -8px 0 0;
 }
 
 /* Its own line above the title (not pinned to a corner, not inline beside it) so a long
@@ -78,7 +83,7 @@
   font-weight: var(--font-label-m-semibold-weight, 600);
   letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
   color: var(--color-text-secondary, #5b6b79);
-  margin: 0;
+  margin: -8px 0 0;
 }
 
 .durationIcon {
@@ -104,7 +109,7 @@
 }
 
 /* flex: 1 so this box absorbs whatever height the card's siblings in the same
-   grid row don't need — the divider/Start button that follow it always sit
+   grid row don't need — the Start button that follows it always sits
    flush with the card's bottom edge, so every card's button lines up
    regardless of how long its description text is. */
 .description {
@@ -116,16 +121,9 @@
   margin: 0;
 }
 
-.divider {
-  width: 100%;
-  height: 0;
-  margin: 0;
-  border: none;
-  border-top: 1px solid var(--color-border-subtle, #eff0f2);
-}
-
 .buttonRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  margin-top: -8px;
 }

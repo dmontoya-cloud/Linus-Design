@@ -1,14 +1,32 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth'
-import { BrainIcon, ListNumbersIcon, PersonSimpleRunIcon } from '@/components/atoms/Icon'
+import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
+import { BrainIcon, ClockIcon, ListNumbersIcon, PersonSimpleRunIcon } from '@/components/atoms/Icon'
 import styles from './FullCheckInCard.module.css'
 
 /** `id` matches `DashboardPage`'s own `PENDING_ACTIVITIES` ids — the one shared key this
- * prototype's mock completion state (`useAuth().completedActivityIds`) is keyed by. */
+ * prototype's mock completion state (`useAuth().completedActivityIds`) is keyed by.
+ * `startPath` matches that same list's own per-activity `startPath`, so "Start Next Activity"
+ * below can hand off to whichever of these is actually next, not just Memory & Thinking's. */
 const CATEGORIES = [
-  { id: 'memory-recall', label: 'Memory & Thinking', Icon: BrainIcon },
-  { id: 'speech-pattern', label: 'Lifestyle', Icon: PersonSimpleRunIcon },
-  { id: 'visual-attention', label: 'Priorities', Icon: ListNumbersIcon },
+  {
+    id: 'memory-recall',
+    label: 'Memory & Thinking',
+    Icon: BrainIcon,
+    startPath: '/assessment/start',
+  },
+  {
+    id: 'speech-pattern',
+    label: 'Lifestyle',
+    Icon: PersonSimpleRunIcon,
+    startPath: '/assessment/lifestyle',
+  },
+  {
+    id: 'visual-attention',
+    label: 'Priorities',
+    Icon: ListNumbersIcon,
+    startPath: '/assessment/priorities',
+  },
 ]
 
 /** Full-width hero card at the top of the Dashboard, pointing to the complete three-part
@@ -19,18 +37,36 @@ const CATEGORIES = [
  * solid `success` green, and the "X/3 complete" summary below is a real computed count, not a
  * fixed "0/3" display. Once at least one category is done, the next incomplete one in order
  * gets a "Next" label beside its title, on request — pointing at where to go, not just showing
- * what's finished. */
+ * what's finished. The main CTA relabels to "Start Next Activity" once anything's done, on
+ * request, rather than staying "Start Activity" forever regardless of progress, and hands off to
+ * whichever category is actually next (`nextActivity`) rather than always Memory & Thinking's
+ * own `startPath` — once all three are done, on request, it relabels again to "Build my report"
+ * and points at `/report/building` instead, since there's no more "next activity" to start but
+ * generating the combined report is still the primary action. A secondary "Download report"
+ * button appears beside it while at least one activity is done and at least one still isn't — a
+ * report exists to download the moment the first activity is complete, not only once all three
+ * are — but disappears once all three are done, on request, leaving "Build my report" as the one
+ * CTA rather than two competing actions. `ActivityCard`'s own completed-state action is a
+ * secondary "Redo activity" instead, on request, since redoing is that per-activity card's more
+ * relevant next step. */
 export function FullCheckInCard() {
   const { completedActivityIds } = useAuth()
   const completedCount = CATEGORIES.filter(({ id }) => completedActivityIds.includes(id)).length
+  // The first not-yet-done category, in order — `null` once all three are done, since there's
+  // nothing left to start. Also what "Start Next Activity" below hands off to, on request,
+  // rather than always pointing at Memory & Thinking's own `startPath` regardless of progress.
+  const nextActivity = CATEGORIES.find(({ id }) => !completedActivityIds.includes(id)) ?? null
   // Only meaningful once something's actually been completed, on request — with nothing done
   // yet there's no real "next" to point at, just the same starting line for all three.
-  const nextIndex =
-    completedCount > 0 ? CATEGORIES.findIndex(({ id }) => !completedActivityIds.includes(id)) : -1
+  const nextBadgeId = completedCount > 0 ? nextActivity?.id : undefined
 
   return (
     <div className={styles.card}>
       <h2 className={styles.title}>Complete your full brain health report</h2>
+      <p className={styles.duration}>
+        <ClockIcon className={styles.durationIcon} />
+        About 20 minutes
+      </p>
       <p className={styles.copy}>
         Complete three short activities to learn more about your memory and thinking, lifestyle, and
         what matters most to you. Together, they help create a brain health report personalized to
@@ -38,14 +74,14 @@ export function FullCheckInCard() {
       </p>
       <div className={styles.trackerBox}>
         <ul className={styles.categories}>
-          {CATEGORIES.map(({ id, label, Icon }, index) => {
+          {CATEGORIES.map(({ id, label, Icon }) => {
             const isComplete = completedActivityIds.includes(id)
             return (
               <li key={id} className={styles.category}>
                 <span className={styles.categoryHeader}>
                   <Icon className={styles.categoryIcon} />
                   <span className={styles.categoryLabel}>{label}</span>
-                  {index === nextIndex ? <span className={styles.nextBadge}>Next</span> : null}
+                  {id === nextBadgeId ? <span className={styles.nextBadge}>Next</span> : null}
                 </span>
                 <span className={styles.categoryBar} aria-hidden="true">
                   <span
@@ -59,9 +95,25 @@ export function FullCheckInCard() {
         </ul>
         <p className={styles.categoriesComplete}>{completedCount}/3 complete</p>
       </div>
-      <Link to="/assessment/start" className={styles.startButton}>
-        Start Activity
-      </Link>
+      <div className={styles.buttonRow}>
+        {nextActivity ? (
+          <Link to={nextActivity.startPath} className={styles.startButton}>
+            {completedCount > 0 ? 'Start Next Activity' : 'Start Activity'}
+          </Link>
+        ) : (
+          <Link to="/report/building" className={styles.startButton}>
+            Build my report
+          </Link>
+        )}
+        {completedCount > 0 && nextActivity ? (
+          <Link
+            to="/report"
+            className={`${buttonClassName('secondary', 'lg')} ${styles.downloadButton}`}
+          >
+            Download report
+          </Link>
+        ) : null}
+      </div>
     </div>
   )
 }

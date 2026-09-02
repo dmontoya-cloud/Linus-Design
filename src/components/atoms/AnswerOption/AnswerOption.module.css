@@ -1,0 +1,109 @@
+/* The whole row is the tap target — border-strong at rest (docs/design.md's `radio`/`checkbox`
+   resting border, reused here for the row itself, not just the small control), text-secondary
+   on hover, primary border + primary-soft fill once checked (the same soft-tint-once-selected
+   language `nav-bar-item-active`/`Tag` already use elsewhere in this system). */
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-md, 16px);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-md, 16px) var(--space-lg, 24px);
+  border: 2px solid var(--color-border-strong, #81909c);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-surface, #fff);
+  color: var(--color-text-primary, #1f2a37);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.option:hover {
+  border-color: var(--color-text-secondary, #5b6b79);
+}
+
+/* Yes/No-style rows (and any other single-select option), on request — no visible dot, just
+   the row's own border/fill doing the work, so the text can sit centered rather than making
+   room for a glyph beside it. */
+.centered {
+  justify-content: center;
+  text-align: center;
+}
+
+.checked {
+  border-color: var(--color-primary, #087dae);
+  background: var(--color-primary-soft, #e6f2f7);
+}
+
+.checked:hover {
+  border-color: var(--color-primary-hover, #065e83);
+}
+
+/* Visually hidden but still focusable/keyboard-operable — real radio semantics for a row that
+   otherwise shows no dot, per `.centered` above. Clipped rather than `display: none`, so
+   Tab/Space/arrow-key behavior and screen-reader announcement all still work normally. */
+.radioInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Same checked-state recipe as this repo's `Checkbox` atom (rounded-sm, border-strong →
+   primary, white check mark) — reused rather than duplicated, just sized to sit comfortably
+   inside this larger row. */
+.checkboxInput {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin: 0;
+  border-radius: var(--radius-sm, 8px);
+  border: 2px solid var(--color-border-strong, #81909c);
+  background: var(--color-surface, #fff);
+  position: relative;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.checkboxInput:checked {
+  background: var(--color-primary, #087dae);
+  border-color: var(--color-primary, #087dae);
+}
+
+.checkboxInput:checked::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--color-on-primary, #fff);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.label {
+  flex: 1;
+}
+
+.option:has(:focus-visible) {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-surface, #fff),
+    0 0 0 5px var(--color-primary, #087dae);
+}
