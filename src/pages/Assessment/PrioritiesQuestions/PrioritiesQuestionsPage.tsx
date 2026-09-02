@@ -285,11 +285,7 @@ export function PrioritiesQuestionsPage() {
           <>
             <h1 className={flowStyles.question}>{TOP_FIVE.selectTitle}</h1>
             <p className={flowStyles.paragraph}>{TOP_FIVE.selectSubtitle}</p>
-            <div
-              className={styles.rankingList}
-              role="group"
-              aria-label={TOP_FIVE.selectTitle}
-            >
+            <div className={styles.rankingList} role="group" aria-label={TOP_FIVE.selectTitle}>
               {allEntries.map((entry) => {
                 const isSelected = selectedKeys.includes(entry.key)
                 const isDisabled = !isSelected && selectedKeys.length >= TOP_FIVE.maxSelections

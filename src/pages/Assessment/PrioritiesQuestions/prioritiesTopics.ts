@@ -55,7 +55,8 @@ export const NAMED_TOPICS: PriorityTopic[] = [
       'It can be anything that relates to other people around you.',
     ],
     example: 'My ability to chat with friends.',
-    answerLeadIn: 'What matters most to me about relationships and social connections in my life is:',
+    answerLeadIn:
+      'What matters most to me about relationships and social connections in my life is:',
   },
   {
     id: 'thinking-skills',
@@ -84,7 +85,8 @@ export const NAMED_TOPICS: PriorityTopic[] = [
 export const OTHER_TOPIC = {
   id: 'other',
   progressLabel: 'Other',
-  answerLeadIn: 'If there is anything else that is important to you, please write your answer in the box below.',
+  answerLeadIn:
+    'If there is anything else that is important to you, please write your answer in the box below.',
 }
 
 export const TOP_FIVE = {
@@ -100,7 +102,8 @@ export const TOP_FIVE = {
 export const RATING = {
   progressLabel: 'Rating',
   instructionsTitle: 'Rating your confidence in doing the things that matter to you the most',
-  instructionsBody: 'Please rate how confident you feel in doing the things that matter to you the most.',
+  instructionsBody:
+    'Please rate how confident you feel in doing the things that matter to you the most.',
   instructionsExample:
     'For example, maybe you said "Ability to use public transport" matters to you. If you feel you are able to use public transport confidently, rate your confidence as high.\n\nIf you feel you are not able to use public transport confidently, rate your confidence as low.',
   questionLead: 'How confident do you feel about this at the moment?',

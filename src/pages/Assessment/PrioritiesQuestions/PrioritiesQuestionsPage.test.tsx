@@ -43,7 +43,9 @@ describe('PrioritiesQuestionsPage', () => {
     renderPage()
     expect(screen.getByText('Daily tasks (1 of 13)')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Daily tasks' })).toBeInTheDocument()
-    expect(screen.getByText(/An example could be .My ability to drive my car\./)).toBeInTheDocument()
+    expect(
+      screen.getByText(/An example could be .My ability to drive my car\./),
+    ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled()
   })
 

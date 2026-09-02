@@ -65,12 +65,12 @@ export function LifestyleDetailsPage() {
               Now, you will answer questions about your health and lifestyle.
             </p>
             <p className={styles.taskIntro}>
-              Some questions only require a yes or no answer. If the question has multiple
-              answers, tap all that apply to you.
+              Some questions only require a yes or no answer. If the question has multiple answers,
+              tap all that apply to you.
             </p>
             <p className={styles.taskIntro}>
-              You can change your answer anytime. Press the Next button to move forward or the
-              Back button to return to a previous answer.
+              You can change your answer anytime. Press the Next button to move forward or the Back
+              button to return to a previous answer.
             </p>
           </div>
         </div>

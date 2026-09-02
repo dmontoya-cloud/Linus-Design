@@ -14,7 +14,10 @@ import styles from './BuildingReportPage.module.css'
  * (see the JSX comment where this is used) — without it, the two files' own differing internal
  * compositions land at different spots inside the same-sized box, reading as a jump/misalign
  * when one swaps for the other. */
-const ICON_LAYOUT: { fit: 'contain'; align: [number, number] } = { fit: 'contain', align: [0.5, 0.5] }
+const ICON_LAYOUT: { fit: 'contain'; align: [number, number] } = {
+  fit: 'contain',
+  align: [0.5, 0.5],
+}
 
 /** How long each "Did you know" fact stays up before rotating to the next one, on request. */
 const TIP_ROTATION_MS = 15000
@@ -131,7 +134,6 @@ function NextActivityCard({
   )
 }
 
-
 /**
  * Building your report — reached today only via each device-setup/assessment screen's "Skip
  * to report" corner link (see App.tsx's `ROUTES_WITH_REPORT_SKIP`), standing in for where a
@@ -173,7 +175,9 @@ export function BuildingReportPage() {
   // is clicked (see `handleGoToDashboard`), so this page computes its own union for display
   // rather than waiting on that click to know what's actually done.
   const allCompletedIds = new Set([...completedActivityIds, completedActivityId])
-  const remainingActivities = NEXT_ACTIVITIES.filter((activity) => !allCompletedIds.has(activity.id))
+  const remainingActivities = NEXT_ACTIVITIES.filter(
+    (activity) => !allCompletedIds.has(activity.id),
+  )
   const completedTitle = ACTIVITY_TITLES[completedActivityId] ?? 'that activity'
   const completedCount = allCompletedIds.size
   const headlineLead =
@@ -293,9 +297,8 @@ export function BuildingReportPage() {
               <div className={styles.nextActivities}>
                 <p className={styles.nextActivitiesIntro}>
                   Completing the {completedTitle} exercise helps inform one view of your brain
-                  health. Add{' '}
-                  {remainingActivities.map((activity) => activity.title).join(' and ')} to make
-                  your report even more personalized to you.
+                  health. Add {remainingActivities.map((activity) => activity.title).join(' and ')}{' '}
+                  to make your report even more personalized to you.
                 </p>
                 <ul className={styles.nextActivitiesList}>
                   {remainingActivities.map((activity) => (

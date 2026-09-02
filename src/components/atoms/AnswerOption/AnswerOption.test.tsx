@@ -8,7 +8,14 @@ import { AnswerOption } from './AnswerOption'
 describe('AnswerOption', () => {
   it('renders a radio option and reports its checked state accessibly', () => {
     render(
-      <AnswerOption type="radio" name="q1" value="yes" label="Yes" checked={false} onChange={() => {}} />,
+      <AnswerOption
+        type="radio"
+        name="q1"
+        value="yes"
+        label="Yes"
+        checked={false}
+        onChange={() => {}}
+      />,
     )
     expect(screen.getByRole('radio', { name: 'Yes' })).not.toBeChecked()
   })
@@ -31,7 +38,14 @@ describe('AnswerOption', () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(
-      <AnswerOption type="radio" name="q1" value="no" label="No" checked={false} onChange={onChange} />,
+      <AnswerOption
+        type="radio"
+        name="q1"
+        value="no"
+        label="No"
+        checked={false}
+        onChange={onChange}
+      />,
     )
     await user.click(screen.getByText('No'))
     expect(onChange).toHaveBeenCalledTimes(1)
@@ -71,7 +85,14 @@ describe('AnswerOption', () => {
 
   it('has no automatically detectable accessibility violations (axe)', async () => {
     const { container } = render(
-      <AnswerOption type="checkbox" name="q2-fruit" value="fruit" label="Fruit" checked={false} onChange={() => {}} />,
+      <AnswerOption
+        type="checkbox"
+        name="q2-fruit"
+        value="fruit"
+        label="Fruit"
+        checked={false}
+        onChange={() => {}}
+      />,
     )
     const results = await axe(container)
     expect(results.violations).toEqual([])

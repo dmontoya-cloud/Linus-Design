@@ -9,7 +9,12 @@ import styles from './FullCheckInCard.module.css'
  * `startPath` matches that same list's own per-activity `startPath`, so "Start Next Activity"
  * below can hand off to whichever of these is actually next, not just Memory & Thinking's. */
 const CATEGORIES = [
-  { id: 'memory-recall', label: 'Memory & Thinking', Icon: BrainIcon, startPath: '/assessment/start' },
+  {
+    id: 'memory-recall',
+    label: 'Memory & Thinking',
+    Icon: BrainIcon,
+    startPath: '/assessment/start',
+  },
   {
     id: 'speech-pattern',
     label: 'Lifestyle',

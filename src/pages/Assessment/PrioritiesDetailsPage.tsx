@@ -76,12 +76,12 @@ export function PrioritiesDetailsPage() {
           <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
             <h2 className={prioritiesStyles.subheading}>Learning what is important to you</h2>
             <p className={styles.taskIntro}>
-              Please think about all the things you use your brain for. What are some of the
-              most important things that matter to you?
+              Please think about all the things you use your brain for. What are some of the most
+              important things that matter to you?
             </p>
             <p className={styles.taskIntro}>
-              These are things you want to be able to continue doing even if your brain health
-              got worse through conditions such as Alzheimer&rsquo;s disease.
+              These are things you want to be able to continue doing even if your brain health got
+              worse through conditions such as Alzheimer&rsquo;s disease.
             </p>
             <p className={prioritiesStyles.topicsLead}>We will show you five topics:</p>
             <ul className={prioritiesStyles.topicsList}>
@@ -93,8 +93,8 @@ export function PrioritiesDetailsPage() {
               Please use your own words to tell us what matters to you in these topics.
             </p>
             <p className={styles.taskIntro}>
-              There are no wrong answers. These are personally meaningful things to you. Feel
-              free to name anything at all that is important for you to hold on to.
+              There are no wrong answers. These are personally meaningful things to you. Feel free
+              to name anything at all that is important for you to hold on to.
             </p>
           </div>
         </div>
