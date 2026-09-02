@@ -43,14 +43,33 @@ const EXIT_DURATION_MS = 350
  * exists. */
 const DEFAULT_COMPLETED_ACTIVITY_ID = 'memory-recall'
 
-/** Display title for every activity id this prototype tracks completion for — `NEXT_ACTIVITIES`
- * below already carries Lifestyle/Priorities' titles, but the headline and intro copy also need
- * to name whichever activity was *just* finished, which might be Memory & Thinking (not itself
- * one of the "next" suggestions). */
-const ACTIVITY_TITLES: Record<string, string> = {
-  'memory-recall': 'Memory & Thinking',
-  'speech-pattern': 'Lifestyle',
-  'visual-attention': 'Priorities',
+/** Every completed-count/combination's exact copy, matching Figma's "WIREFRAMES / Content Only"
+ * reference set (Assessment & Device Setup page) rather than one generic templated sentence —
+ * on request. Keyed by the sorted, comma-joined set of completed activity ids (see
+ * `combinationKey`), since the wording is bespoke per combination, not derivable from a
+ * template. The all-three-done combination has no entry — nothing is left to recommend there,
+ * so `remainingActivities.length === 0` skips this block entirely rather than looking up a key
+ * that would never resolve to a "here's what's next" sentence anyway. */
+const INTRO_COPY: Record<string, string> = {
+  'memory-recall':
+    'Completing the Memory & Thinking exercise helps inform one view of your brain health. Add Lifestyle and Priorities to make your report even more personalized to you.',
+  'speech-pattern':
+    "You've added information about your lifestyle and health habits. Add another activity to make your report more detailed and personalized.",
+  'visual-attention':
+    "You've added what matters most to you. Add another activity to make your report more detailed and personalized.",
+  'memory-recall,speech-pattern':
+    "You've added information about your brain function and lifestyle. Add Priorities to include what matters most to you in daily life.",
+  'memory-recall,visual-attention':
+    "You've added information about your brain function and what matters most to you. Add Lifestyle to include more about your health and everyday habits.",
+  'speech-pattern,visual-attention':
+    "You've added information about your lifestyle and what matters most to you. Add Memory & Thinking to include how your brain abilities are working.",
+}
+
+/** Builds the lookup key `INTRO_COPY` is keyed by — the sorted, comma-joined set of completed
+ * activity ids, so `{'speech-pattern', 'memory-recall'}` and `{'memory-recall', 'speech-pattern'}`
+ * resolve to the same entry regardless of completion order. */
+function combinationKey(ids: Iterable<string>): string {
+  return [...ids].sort().join(',')
 }
 
 /** Mock brain-health facts — this prototype has no real report to pull one from, so this is a
@@ -79,17 +98,25 @@ const TIPS = [
   },
 ]
 
-/** The two activities that can be nudged from here — whichever of these isn't already done (see
- * `completedActivityIds`/`completedActivityId` in the component below) gets suggested; on
- * request, an already-completed one is dropped from this list entirely rather than shown with
- * its own "Download report" action, so the suggestion always points at what's actually left, not
- * what's already done. `duration` matches the "About 5 minutes"/"About 7 minutes" shown
- * everywhere else these two activities appear (Dashboard's own `PENDING_ACTIVITIES`), so this
+/** All three activities, any of which can be nudged from here once it isn't already done (see
+ * `completedActivityIds`/`completedActivityId` in the component below) — on request, matching
+ * Figma's reference set where an "only Lifestyle done" or "only Priorities done" state still
+ * recommends Memory & Thinking alongside whichever other one is left, not just Lifestyle/
+ * Priorities between themselves. An already-completed activity is dropped from this list
+ * entirely rather than shown with its own "Download report" action, so the suggestion always
+ * points at what's actually left, not what's already done. `duration` matches the estimates
+ * shown everywhere else these activities appear (Dashboard's own `PENDING_ACTIVITIES`), so this
  * prototype never shows two different estimates for the same activity. No `description` field,
  * unlike Dashboard's own `ActivityCard` data — this compact card (see `NextActivityCard` below)
  * is a deliberately smaller, title-and-button-on-one-line variant just for this nudge, on
  * request, not the full card Dashboard uses; Dashboard's own cards are untouched. */
-const NEXT_ACTIVITIES = [
+const ALL_ACTIVITIES = [
+  {
+    id: 'memory-recall',
+    title: 'Memory & Thinking',
+    duration: 'About 7–10 minutes',
+    startPath: '/assessment/start',
+  },
   {
     id: 'speech-pattern',
     title: 'Lifestyle',
@@ -104,11 +131,13 @@ const NEXT_ACTIVITIES = [
   },
 ]
 
-/** A compact nudge card for `NEXT_ACTIVITIES` — title and Start share one row (title left,
- * button right), on request, rather than Dashboard's `ActivityCard` layout (status badge, title,
- * duration, description, then a separate button row at the bottom). No description or status
- * badge here at all, on request — only ever rendered for an activity that isn't done yet (see
- * the filter in the component below), so there's nothing for a badge to distinguish. */
+/** A compact nudge card for `ALL_ACTIVITIES` — title and a "Start {title}" button share one row
+ * (title left, button right, the button naming the activity rather than a bare "Start", on
+ * request, matching Figma's "Start Lifestyle"/"Start Priorities"/"Start Memory & Thinking"), on
+ * request, rather than Dashboard's `ActivityCard` layout (status badge, title, duration,
+ * description, then a separate button row at the bottom). No description or status badge here
+ * at all, on request — only ever rendered for an activity that isn't done yet (see the filter in
+ * the component below), so there's nothing for a badge to distinguish. */
 function NextActivityCard({
   title,
   duration,
@@ -123,7 +152,7 @@ function NextActivityCard({
       <div className={styles.nextActivityHeader}>
         <h3 className={styles.nextActivityTitle}>{title}</h3>
         <Link to={startPath} className={buttonClassName('primary', 'sm')}>
-          Start
+          Start {title}
         </Link>
       </div>
       <p className={styles.nextActivityDuration}>
@@ -152,10 +181,10 @@ function NextActivityCard({
  * ready, a secondary
  * "Go to Dashboard" button sits alongside Download report — clicking it marks whichever activity
  * was just finished complete (see `completedActivityId` below) so Dashboard's own card/tracker
- * reflect it, then navigates there. The headline, intro copy, and `NEXT_ACTIVITIES` nudges all
- * key off that same id plus `completedActivityIds`, on request — reached after finishing
- * Lifestyle or Priorities (not just the original Memory & Thinking "Skip to report" shortcut),
- * this page shouldn't keep suggesting an activity that's already done.
+ * reflect it, then navigates there. The headline, intro copy (`INTRO_COPY`), and `ALL_ACTIVITIES`
+ * nudges all key off that same id plus `completedActivityIds`, on request — reached after
+ * finishing Lifestyle or Priorities (not just the original Memory & Thinking "Skip to report"
+ * shortcut), this page shouldn't keep suggesting an activity that's already done.
  */
 export function BuildingReportPage() {
   const navigate = useNavigate()
@@ -175,17 +204,20 @@ export function BuildingReportPage() {
   // is clicked (see `handleGoToDashboard`), so this page computes its own union for display
   // rather than waiting on that click to know what's actually done.
   const allCompletedIds = new Set([...completedActivityIds, completedActivityId])
-  const remainingActivities = NEXT_ACTIVITIES.filter(
-    (activity) => !allCompletedIds.has(activity.id),
-  )
-  const completedTitle = ACTIVITY_TITLES[completedActivityId] ?? 'that activity'
+  const remainingActivities = ALL_ACTIVITIES.filter((activity) => !allCompletedIds.has(activity.id))
   const completedCount = allCompletedIds.size
-  const headlineLead =
+  // Matches Figma's reference set exactly rather than one formula covering every count — the
+  // three states don't share a sentence pattern (the third drops the second line entirely), on
+  // request. `introCopy` is the bespoke per-combination sentence (see `INTRO_COPY`) — undefined
+  // once nothing's left to recommend (`remainingActivities.length === 0`), which the render below
+  // already guards on, so a missing key there is never actually rendered.
+  const headlineLines =
     completedCount >= 3
-      ? 'All activities complete.'
+      ? ['All three activities are complete!']
       : completedCount === 2
-        ? 'Two activities complete.'
-        : 'One activity complete.'
+        ? ['Two activities complete.', 'Your report has more details about you!']
+        : ['One activity complete.', 'Your report is taking shape.']
+  const introCopy = INTRO_COPY[combinationKey(allCompletedIds)]
   const [tipIndex, setTipIndex] = useState(0)
   // 'building' -> 'exiting' (the whole building block fades out in place, absolutely
   // positioned, while the ready block mounts underneath it and fades in over the same window —
@@ -289,17 +321,17 @@ export function BuildingReportPage() {
               role="status"
               aria-live="polite"
             >
-              {headlineLead}
-              <br />
-              Your report is taking shape.
+              {headlineLines[0]}
+              {headlineLines[1] && (
+                <>
+                  <br />
+                  {headlineLines[1]}
+                </>
+              )}
             </h1>
             {remainingActivities.length > 0 && (
               <div className={styles.nextActivities}>
-                <p className={styles.nextActivitiesIntro}>
-                  Completing the {completedTitle} exercise helps inform one view of your brain
-                  health. Add {remainingActivities.map((activity) => activity.title).join(' and ')}{' '}
-                  to make your report even more personalized to you.
-                </p>
+                <p className={styles.nextActivitiesIntro}>{introCopy}</p>
                 <ul className={styles.nextActivitiesList}>
                   {remainingActivities.map((activity) => (
                     <NextActivityCard
