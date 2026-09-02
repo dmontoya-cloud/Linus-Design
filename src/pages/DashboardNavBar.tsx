@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { Logo } from '@/components/atoms/Logo'
 import { buttonClassName, type ButtonVariant } from '@/components/atoms/Button/buttonClassName'
-import { SignOutIcon } from '@/components/atoms/Icon'
+import { SignOutIcon, UserIcon } from '@/components/atoms/Icon'
 import styles from './DashboardNavBar.module.css'
 
 function initialsFor(firstName: string, lastName: string) {
@@ -24,6 +25,9 @@ export interface DashboardNavBarProps {
    * `DeviceReadyPage`, `ShoppingListIntroPage`) uses this, on request, so leaving looks the same
    * at every step of that flow; screens before it (Dashboard) keep the plain default. */
   exitVariant?: ButtonVariant
+  /** The Exit link's label. Defaults to "Exit"; Profile uses "Back to Dashboard" instead, on
+   * request, since it's a settings-style screen rather than a step in a flow. */
+  exitLabel?: string
 }
 
 /**
@@ -39,9 +43,43 @@ export function DashboardNavBar({
   title,
   exitTo,
   exitVariant = 'tertiary',
+  exitLabel = 'Exit',
 }: DashboardNavBarProps = {}) {
-  const { profile } = useAuth()
+  const { profile, logout } = useAuth()
+  const navigate = useNavigate()
   const fullName = profile ? `${profile.firstName} ${profile.lastName}` : 'Account'
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Closes on an outside click/tap or Escape — a menu with no way to dismiss it other than
+  // picking an option would trap keyboard and pointer users alike.
+  useEffect(() => {
+    if (!menuOpen) {
+      return
+    }
+    function handlePointerDown(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [menuOpen])
+
+  function handleSignOut() {
+    setMenuOpen(false)
+    logout()
+    navigate('/login')
+  }
 
   return (
     <header className={styles.navBar}>
@@ -52,14 +90,35 @@ export function DashboardNavBar({
       {exitTo ? (
         <Link to={exitTo} className={`${buttonClassName(exitVariant, 'sm')} ${styles.exitLink}`}>
           {exitVariant === 'outline' ? <SignOutIcon className={styles.exitIcon} /> : null}
-          Exit
+          {exitLabel}
         </Link>
       ) : (
-        <div className={styles.userInfo}>
-          <span className={styles.avatar} aria-hidden="true">
-            {profile ? initialsFor(profile.firstName, profile.lastName) : '?'}
-          </span>
-          <span className={styles.userName}>{fullName}</span>
+        <div className={styles.userMenu} ref={menuRef}>
+          <button
+            type="button"
+            className={styles.userInfo}
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-controls="account-menu"
+          >
+            <span className={styles.avatar} aria-hidden="true">
+              {profile ? initialsFor(profile.firstName, profile.lastName) : '?'}
+            </span>
+            <span className={styles.userName}>{fullName}</span>
+          </button>
+          {menuOpen ? (
+            <div className={styles.menu} id="account-menu">
+              <Link to="/profile" className={styles.menuItem} onClick={() => setMenuOpen(false)}>
+                <UserIcon className={styles.menuItemIcon} />
+                Profile
+              </Link>
+              <hr className={styles.menuDivider} />
+              <button type="button" className={styles.menuItem} onClick={handleSignOut}>
+                <SignOutIcon className={styles.menuItemIcon} />
+                Sign out
+              </button>
+            </div>
+          ) : null}
         </div>
       )}
     </header>

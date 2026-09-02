@@ -18,6 +18,7 @@ import { SettingUpPage } from '@/pages/SettingUp/SettingUpPage'
 import { ThanksPage } from '@/pages/Thanks/ThanksPage'
 import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
+import { ProfilePage } from '@/pages/Profile/ProfilePage'
 import { AssessmentIntroPage } from '@/pages/Assessment/AssessmentIntroPage'
 import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
 import { DeviceSetupPage } from '@/pages/DeviceSetup/DeviceSetupPage'
@@ -323,6 +324,16 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <DashboardPage />
+                  </RequireAuth>
+                }
+              />
+              {/* Reached via the account menu opened by clicking the initials avatar in
+                  DashboardNavBar (see DashboardNavBar.tsx) — not part of the funnel above. */}
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
                   </RequireAuth>
                 }
               />

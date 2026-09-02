@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { axe } from 'vitest-axe'
 import { AuthProvider, useAuth, type Profile } from '@/auth'
@@ -32,6 +33,8 @@ function renderNavBar({
     <MemoryRouter initialEntries={[path]}>
       <Routes>
         <Route path={path} element={<DashboardNavBar {...navBarProps} />} />
+        <Route path="/profile" element={<p>Profile stub</p>} />
+        <Route path="/login" element={<p>Login stub</p>} />
       </Routes>
     </MemoryRouter>
   )
@@ -80,8 +83,86 @@ describe('DashboardNavBar', () => {
     expect(exitLink.querySelector('svg')).toBeInTheDocument()
   })
 
+  it('uses exitLabel for the Exit link text when given', () => {
+    renderNavBar({ exitTo: '/dashboard', exitLabel: 'Back to Dashboard' })
+    expect(screen.getByRole('link', { name: 'Back to Dashboard' })).toHaveAttribute(
+      'href',
+      '/dashboard',
+    )
+    expect(screen.queryByRole('link', { name: 'Exit' })).not.toBeInTheDocument()
+  })
+
+  it('opens an account menu with Profile and Sign out when the avatar button is clicked', async () => {
+    const user = userEvent.setup()
+    renderNavBar()
+    const trigger = screen.getByRole('button', { name: 'Ada Lovelace' })
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    expect(screen.queryByRole('link', { name: 'Profile' })).not.toBeInTheDocument()
+
+    await user.click(trigger)
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    const profileLink = screen.getByRole('link', { name: 'Profile' })
+    expect(profileLink).toHaveAttribute('href', '/profile')
+    expect(profileLink.querySelector('svg')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument()
+  })
+
+  it('shows a divider between Profile and Sign out in the account menu', async () => {
+    const user = userEvent.setup()
+    renderNavBar()
+    await user.click(screen.getByRole('button', { name: 'Ada Lovelace' }))
+    expect(screen.getByRole('separator')).toBeInTheDocument()
+  })
+
+  it('navigates to /profile when Profile is clicked, closing the menu', async () => {
+    const user = userEvent.setup()
+    renderNavBar()
+    await user.click(screen.getByRole('button', { name: 'Ada Lovelace' }))
+    await user.click(screen.getByRole('link', { name: 'Profile' }))
+    expect(screen.getByText('Profile stub')).toBeInTheDocument()
+  })
+
+  it('signs out and navigates to /login when Sign out is clicked', async () => {
+    const user = userEvent.setup()
+    renderNavBar()
+    await user.click(screen.getByRole('button', { name: 'Ada Lovelace' }))
+    await user.click(screen.getByRole('button', { name: 'Sign out' }))
+    expect(screen.getByText('Login stub')).toBeInTheDocument()
+  })
+
+  it('closes the account menu on Escape', async () => {
+    const user = userEvent.setup()
+    renderNavBar()
+    await user.click(screen.getByRole('button', { name: 'Ada Lovelace' }))
+    expect(screen.getByRole('link', { name: 'Profile' })).toBeInTheDocument()
+
+    await user.keyboard('{Escape}')
+
+    expect(screen.queryByRole('link', { name: 'Profile' })).not.toBeInTheDocument()
+  })
+
+  it('closes the account menu on an outside click', async () => {
+    const user = userEvent.setup()
+    renderNavBar()
+    await user.click(screen.getByRole('button', { name: 'Ada Lovelace' }))
+    expect(screen.getByRole('link', { name: 'Profile' })).toBeInTheDocument()
+
+    await user.click(document.body)
+
+    expect(screen.queryByRole('link', { name: 'Profile' })).not.toBeInTheDocument()
+  })
+
   it('has no automatically detectable accessibility violations (axe)', async () => {
     const { container } = renderNavBar()
+    const results = await axe(container)
+    expect(results.violations).toEqual([])
+  })
+
+  it('has no automatically detectable accessibility violations with the account menu open', async () => {
+    const user = userEvent.setup()
+    const { container } = renderNavBar()
+    await user.click(screen.getByRole('button', { name: 'Ada Lovelace' }))
     const results = await axe(container)
     expect(results.violations).toEqual([])
   })
