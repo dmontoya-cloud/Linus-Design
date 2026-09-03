@@ -91,7 +91,7 @@ describe('DashboardPage', () => {
         'Explore trusted information, tips, and tools to help you learn more about brain health and support your wellbeing.',
       ),
     ).toBeInTheDocument()
-    const link = screen.getByRole('link', { name: /Open resources on linushealth.com/ })
+    const link = screen.getByRole('link', { name: /Open on linushealth.com/ })
     expect(link).toHaveAttribute('href', 'https://www.linushealth.com')
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')

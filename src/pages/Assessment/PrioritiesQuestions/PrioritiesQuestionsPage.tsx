@@ -122,7 +122,7 @@ function stepLabelFor(screen: Screen): string {
  * needs (a non-empty answer, an exact five picks, a rating, a yes/no) — "Other" and every
  * instructions-only screen have nothing to require, so they're always enabled. Nothing here is
  * persisted beyond this component's own state, the same as `LifestyleQuestionsPage`, and on the
- * closing question it hands off to `BuildingReportPage` (`/report/building`) with
+ * closing question it hands off to `ReportReadyPage` (`/report/ready`) with
  * `state: { completedActivityId: 'visual-attention' }` rather than marking Priorities complete
  * itself, for the same reason that page's own doc comment gives.
  */
@@ -213,7 +213,7 @@ export function PrioritiesQuestionsPage() {
 
   function handleNext() {
     if (isFinalScreen) {
-      navigate('/report/building', { state: { completedActivityId: 'visual-attention' } })
+      navigate('/report/ready', { state: { completedActivityId: 'visual-attention' } })
       return
     }
     setScreenIndex((index) => index + 1)

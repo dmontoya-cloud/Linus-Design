@@ -67,6 +67,13 @@ describe('DashboardNavBar', () => {
     expect(screen.getByText('Memory & Thinking')).toBeInTheDocument()
   })
 
+  it('renders neither the signed-in user info nor an Exit link when hideAccountMenu is set', () => {
+    renderNavBar({ hideAccountMenu: true })
+    expect(screen.queryByText('Ada Lovelace')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Ada Lovelace/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Exit' })).not.toBeInTheDocument()
+  })
+
   it('replaces the signed-in user info with a tertiary Exit link when exitTo is given', () => {
     renderNavBar({ exitTo: '/dashboard' })
     const exitLink = screen.getByRole('link', { name: 'Exit' })

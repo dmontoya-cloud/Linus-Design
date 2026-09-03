@@ -21,13 +21,17 @@ export interface DashboardNavBarProps {
   exitTo?: string
   /** The Exit link's button style. Defaults to a plain tertiary text link; pass `'outline'` for
    * a bordered pill with a `SignOutIcon` alongside the label instead — every screen in the
-   * assessment-intro-through-task flow (`AssessmentIntroPage`, `DeviceSetupPage`,
-   * `DeviceReadyPage`, `ShoppingListIntroPage`) uses this, on request, so leaving looks the same
-   * at every step of that flow; screens before it (Dashboard) keep the plain default. */
+   * assessment-intro-through-task flow (`MemoryThinkingTaskPage`, the Lifestyle/Priorities
+   * Details/question-flow pages) uses this, on request, so leaving looks the same at every step
+   * of that flow; screens before it (Dashboard) keep the plain default. */
   exitVariant?: ButtonVariant
   /** The Exit link's label. Defaults to "Exit"; Profile uses "Back to Dashboard" instead, on
    * request, since it's a settings-style screen rather than a step in a flow. */
   exitLabel?: string
+  /** When true, renders neither the signed-in user info nor an `exitTo` link — just the logo and
+   * `title` — for screens (like the activity Details pages) that put their own way back
+   * elsewhere on the page instead of in this header, on request. */
+  hideAccountMenu?: boolean
 }
 
 /**
@@ -37,13 +41,15 @@ export interface DashboardNavBarProps {
  * request; Dashboard's header center is simply empty now. Pass `title` for plain centered
  * static text on screens dedicated to one activity, and/or `exitTo` to swap the user info for
  * an "Exit" link (`exitVariant` for its button style) — both independent (see
- * `DashboardNavBarProps`).
+ * `DashboardNavBarProps`). Pass `hideAccountMenu` instead of `exitTo` to render neither — for
+ * screens (the activity Details pages) that put their own way back elsewhere on the page.
  */
 export function DashboardNavBar({
   title,
   exitTo,
   exitVariant = 'tertiary',
   exitLabel = 'Exit',
+  hideAccountMenu = false,
 }: DashboardNavBarProps = {}) {
   const { profile, logout } = useAuth()
   const navigate = useNavigate()
@@ -92,7 +98,7 @@ export function DashboardNavBar({
           {exitVariant === 'outline' ? <SignOutIcon className={styles.exitIcon} /> : null}
           {exitLabel}
         </Link>
-      ) : (
+      ) : hideAccountMenu ? null : (
         <div className={styles.userMenu} ref={menuRef}>
           <button
             type="button"

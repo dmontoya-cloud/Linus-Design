@@ -6,13 +6,13 @@ import { axe } from 'vitest-axe'
 import { AuthProvider } from '@/auth'
 import { PrioritiesQuestionsPage } from './PrioritiesQuestionsPage'
 
-/** Stands in for `BuildingReportPage` at `/report/building` — asserts on the router `state` the
- * real page reads its `completedActivityId` from, without pulling that whole page's Lottie/timer
- * machinery into this test. */
-function BuildingReportStub() {
+/** Stands in for `ReportReadyPage` at `/report/ready` — asserts on the router `state` the real
+ * page reads its `completedActivityId` from, without pulling that whole page's Lottie/next-
+ * activity machinery into this test. */
+function ReportReadyStub() {
   const location = useLocation()
   const state = location.state as { completedActivityId?: string } | null
-  return <p>Building report stub: {state?.completedActivityId ?? 'none'}</p>
+  return <p>Report ready stub: {state?.completedActivityId ?? 'none'}</p>
 }
 
 function renderPage() {
@@ -22,7 +22,7 @@ function renderPage() {
         <Routes>
           <Route path="/assessment/priorities/questions" element={<PrioritiesQuestionsPage />} />
           <Route path="/assessment/priorities" element={<p>Priorities Details stub</p>} />
-          <Route path="/report/building" element={<BuildingReportStub />} />
+          <Route path="/report/ready" element={<ReportReadyStub />} />
         </Routes>
       </MemoryRouter>
     </AuthProvider>,
@@ -139,7 +139,7 @@ describe('PrioritiesQuestionsPage', () => {
     await user.click(screen.getByRole('radio', { name: 'No' }))
     expect(finishButton).toBeEnabled()
     await user.click(finishButton)
-    expect(screen.getByText('Building report stub: visual-attention')).toBeInTheDocument()
+    expect(screen.getByText('Report ready stub: visual-attention')).toBeInTheDocument()
   })
 
   it('caps Top five at five selections, disabling the rest until one is deselected', async () => {

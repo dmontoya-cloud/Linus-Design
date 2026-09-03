@@ -32,7 +32,10 @@ const CATEGORIES = [
 /** Full-width hero card at the top of the Dashboard, pointing to the complete three-part
  * check-in (Memory, Lifestyle, Priorities) rather than any single activity below it — the
  * dark, high-contrast treatment is deliberate so it reads as the primary way in, not just
- * another card in the grid. Each category gets a leading icon and its own progress track,
+ * another card in the grid. The title itself changes per `completedCount` (see
+ * `titleLinesFor`), on request — a two-line "status, then what's next" headline once anything's
+ * done, matching `ReportReadyPage`'s own headline pattern, rather than one generic title
+ * regardless of progress. Each category gets a leading icon and its own progress track,
  * on request — a completed category (per `useAuth().completedActivityIds`) fills its track
  * solid `success` green, and the "X/3 complete" summary below is a real computed count, not a
  * fixed "0/3" display. Once at least one category is done, the next incomplete one in order
@@ -42,13 +45,35 @@ const CATEGORIES = [
  * whichever category is actually next (`nextActivity`) rather than always Memory & Thinking's
  * own `startPath` — once all three are done, on request, it relabels again to "Build my report"
  * and points at `/report/building` instead, since there's no more "next activity" to start but
- * generating the combined report is still the primary action. A secondary "Download report"
- * button appears beside it while at least one activity is done and at least one still isn't — a
- * report exists to download the moment the first activity is complete, not only once all three
- * are — but disappears once all three are done, on request, leaving "Build my report" as the one
- * CTA rather than two competing actions. `ActivityCard`'s own completed-state action is a
+ * generating the combined report is still the primary action. A secondary "Build my report"
+ * button (same label as the main CTA once it takes over that role, on request — previously
+ * "Generate report") appears beside it while at least one activity is done and at least one
+ * still isn't — a report can be generated the moment the first activity is complete, not only
+ * once all three are — but disappears once all three are done, on request, since the main CTA
+ * has already relabeled to the same thing by then, leaving one CTA rather than two competing
+ * (and now identically-labeled) actions. Both point at `/report/building` (not straight to
+ * `/report`), on request, so clicking either one always sits through the same loading
+ * interstitial before landing on the real report, regardless of which one got you there.
+ * `ActivityCard`'s own completed-state action is a
  * secondary "Redo activity" instead, on request, since redoing is that per-activity card's more
  * relevant next step. */
+/** The title's own copy per `completedCount`, on request — one and two done are each a single
+ * line; all three done keeps the two-line "status, then what's next" treatment
+ * `ReportReadyPage`'s own `headlineLines` uses, since "All activities are in!" reads as its own
+ * short beat before the instruction that follows it. */
+function titleLinesFor(completedCount: number): [string] | [string, string] {
+  switch (completedCount) {
+    case 1:
+      return ['Your report is taking shape']
+    case 2:
+      return ['Your report has more detail']
+    case 3:
+      return ['All activities are in!', 'Build your full brain health report.']
+    default:
+      return ['Complete your full brain health report']
+  }
+}
+
 export function FullCheckInCard() {
   const { completedActivityIds } = useAuth()
   const completedCount = CATEGORIES.filter(({ id }) => completedActivityIds.includes(id)).length
@@ -59,10 +84,19 @@ export function FullCheckInCard() {
   // Only meaningful once something's actually been completed, on request — with nothing done
   // yet there's no real "next" to point at, just the same starting line for all three.
   const nextBadgeId = completedCount > 0 ? nextActivity?.id : undefined
+  const [titleLine1, titleLine2] = titleLinesFor(completedCount)
 
   return (
     <div className={styles.card}>
-      <h2 className={styles.title}>Complete your full brain health report</h2>
+      <h2 className={styles.title}>
+        {titleLine1}
+        {titleLine2 && (
+          <>
+            <br />
+            {titleLine2}
+          </>
+        )}
+      </h2>
       <p className={styles.duration}>
         <ClockIcon className={styles.durationIcon} />
         About 20 minutes
@@ -107,10 +141,10 @@ export function FullCheckInCard() {
         )}
         {completedCount > 0 && nextActivity ? (
           <Link
-            to="/report"
+            to="/report/building"
             className={`${buttonClassName('secondary', 'lg')} ${styles.downloadButton}`}
           >
-            Download report
+            Build my report
           </Link>
         ) : null}
       </div>
