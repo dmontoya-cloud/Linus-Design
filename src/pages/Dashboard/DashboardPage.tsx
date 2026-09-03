@@ -20,7 +20,6 @@ const PENDING_ACTIVITIES: Activity[] = [
     description:
       'Tasks that look at your brain abilities: memory, attention, language and thinking.',
     startPath: '/assessment/start',
-    redoCooldownMonths: 3,
   },
   {
     id: 'speech-pattern',

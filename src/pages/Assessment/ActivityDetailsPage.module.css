@@ -29,6 +29,41 @@
   text-align: left;
 }
 
+/* The way back once `DashboardNavBar`'s own "Exit" link was dropped from this page (see the
+   component's own doc comment), on request — an outline/sm pill above the title, matching
+   Figma's reference frames exactly, rather than the nav bar's usual top-right placement. */
+.backButton {
+  display: inline-flex;
+  margin: 0 0 var(--space-lg, 24px);
+}
+
+/* `MemoryThinkingDetailsPage` only, on request — the redo-cooldown notice that used to be a
+   "Redo activity on {date}" label on Dashboard's own card, moved here so it's a real message
+   once you're actually looking at this activity again, not just a button suffix. Info-soft/info
+   colors, on request — this is a heads-up, not a warning (nothing here is actually wrong or
+   blocked), so the same blue `Toast`'s own `.info` variant uses reads more accurately than the
+   orange/red `.warning` one this started with. */
+.redoNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm, 8px);
+  background: var(--color-info-soft, #e9effd);
+  color: var(--color-info, #2563eb);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-md, 16px);
+  margin: 0 0 var(--space-lg, 24px);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  line-height: 1.5;
+}
+
+.redoNoticeIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -46,49 +81,12 @@
   margin: 0;
 }
 
-/* No .gap here, on purpose — the icon's own width/margin-left animate together (see
-   .startIcon/.startIconVisible below) so the button grows smoothly as the icon appears,
-   rather than snapping to a fixed gap the instant the icon mounts. */
-.startButton {
-  overflow: hidden;
-}
-
-/* Always mounted at 0 width/opacity, on request — grows and fades in on its own after a
-   delay (see START_ICON_DELAY_MS) rather than popping in, using the same
-   fade-rise easing this app's other reveals already use (see src/pages/cascade.ts). */
-.startIcon {
-  width: 0;
-  height: 16px;
-  margin-left: 0;
-  opacity: 0;
-  flex-shrink: 0;
-  transition:
-    width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    margin-left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.startIconVisible {
-  width: 16px;
-  margin-left: var(--space-sm, 8px);
-  opacity: 1;
-}
-
 .duration {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs, 4px);
   font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-label-l-semibold-size, 0.8125rem);
   font-weight: var(--font-label-l-semibold-weight, 600);
   color: var(--color-text-secondary, #5b6b79);
   margin: 0 0 var(--space-lg, 24px);
-}
-
-.durationIcon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
 }
 
 /* Centered row of fixed-width columns, on request (180px each). One column holds what was

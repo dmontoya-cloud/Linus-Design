@@ -31,20 +31,6 @@ export interface Activity {
    * (`LifestyleQuestionsPage`/`PrioritiesQuestionsPage`) — three different intros, not one
    * shared screen. */
   startPath: string
-  /** Only Memory & Thinking carries this, on request — a real minimum-wait-before-redoing rule,
-   * unlike Lifestyle/Priorities which can be redone any time. This prototype has no real
-   * completion timestamp to count forward from (just the boolean `completedActivityIds`), so the
-   * shown date is always this many months from today, recomputed on every render — a stand-in
-   * for a real "redo eligible on" date once completion timestamps exist. Display-only: nothing
-   * here actually disables the button before that date, since there's no real date to check it
-   * against yet. */
-  redoCooldownMonths?: number
-}
-
-function formatRedoDate(months: number): string {
-  const redoDate = new Date()
-  redoDate.setMonth(redoDate.getMonth() + months)
-  return redoDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 /** One pending assessment activity — a status badge on its own line above the title (never
@@ -54,12 +40,15 @@ function formatRedoDate(months: number): string {
  * activities where that matters — on request, moved off the duration row to give it its own
  * line), and a CTA that's either a primary Start (hands off to `activity.startPath` — see that
  * field's own doc comment) or, once `activity.status` is `'completed'`, a secondary "Redo
- * activity" back to that same `startPath` — plain, with no date, for an activity that can be
- * redone any time, or with a "Redo activity on {date}" suffix for one that carries a
- * `redoCooldownMonths` (only Memory & Thinking today — see that field's own doc comment).
- * Replaces the earlier "Download report" button, since redoing (not re-downloading) is this
- * card's own completed-state action; the dashboard-wide download lives on `FullCheckInCard`
- * instead. Cascades in on mount (fade-rise)
+ * activity" back to that same `startPath` — plain, with no date, on request: the card always
+ * lets you click through regardless of any redo-cooldown rule, so a completed activity's own
+ * Details page is where that warning now lives (see `MemoryThinkingDetailsPage`'s own
+ * `redoNotice`, the one activity with a real minimum-wait-before-redoing rule today) — this
+ * card used to show a "Redo activity on {date}" suffix for that one directly, which blocked
+ * clicking through to see it without reading the date first. Replaces the earlier "Download
+ * report" button, since redoing (not regenerating) is this card's own completed-state action;
+ * the dashboard-wide "Generate report" lives on `FullCheckInCard` instead. Cascades in on mount
+ * (fade-rise)
  * same as every other card on Dashboard — `style` carries the per-card `animationDelay`
  * DashboardPage staggers by, since a `<li>` can't be wrapped in an extra element without
  * breaking the `<ul>`'s content model. */
@@ -85,9 +74,7 @@ export function ActivityCard({ activity, style }: { activity: Activity; style?: 
       <div className={styles.buttonRow}>
         {activity.status === 'completed' ? (
           <Link to={activity.startPath} className={buttonClassName('secondary', 'sm')}>
-            {activity.redoCooldownMonths
-              ? `Redo activity on ${formatRedoDate(activity.redoCooldownMonths)}`
-              : 'Redo activity'}
+            Redo activity
           </Link>
         ) : (
           <Link to={activity.startPath} className={buttonClassName('primary', 'sm')}>

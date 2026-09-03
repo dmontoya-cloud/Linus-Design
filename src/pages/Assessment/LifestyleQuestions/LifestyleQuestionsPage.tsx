@@ -27,12 +27,12 @@ const NONE_OF_THE_ABOVE = 'None of the above'
  * on the very first question exits to `LifestyleDetailsPage` instead of decrementing below it.
  * "Next" is disabled until the current question has at least one answer, and relabels to
  * "Finish" on the last question, on request, matching `PrioritiesQuestionsPage`'s own closing
- * button. Answering it there hands off to `BuildingReportPage` (`/report/building`) with
+ * button. Answering it there hands off to `ReportReadyPage` (`/report/ready`) with
  * `state: { completedActivityId: 'speech-pattern' }`, on request — there's no real scoring for
- * this activity yet, so that page's own "Go to Dashboard" is what actually marks Lifestyle
- * complete (see its `completedActivityId`), same deferred-until-you-leave pattern Memory &
- * Thinking's "Skip to report" shortcut already uses; this page itself never touches
- * `AuthProvider`. Answers live only in this component's own state, on request — nothing is
+ * this activity yet, so that page's own "Go to Dashboard"/"Generate report" is what actually
+ * marks Lifestyle complete (see its `completedActivityId`), same deferred-until-you-leave
+ * pattern Memory & Thinking's "Skip to report" shortcut already uses; this page itself never
+ * touches `AuthProvider`. Answers live only in this component's own state, on request — nothing is
  * persisted to `AuthProvider` or anywhere else, so navigating away and back starts over, the
  * same as this prototype's other unsaved forms before their own final "submit" step. Keeps
  * `DashboardNavBar`'s chrome (logo, Exit link)
@@ -88,7 +88,7 @@ export function LifestyleQuestionsPage() {
 
   function handleNext() {
     if (currentIndex === total - 1) {
-      navigate('/report/building', { state: { completedActivityId: 'speech-pattern' } })
+      navigate('/report/ready', { state: { completedActivityId: 'speech-pattern' } })
       return
     }
     setCurrentIndex((index) => index + 1)

@@ -35,10 +35,14 @@ describe('App', () => {
   })
 
   it('navigates to a placeholder screen and back', async () => {
+    // History/Settings are real `Placeholder` routes but aren't linked from the prototype
+    // index (see `ROUTES_WITH_OWN_NAV`'s own comment — reachable only from Dashboard's own nav
+    // in the real app), so this pushes directly to one rather than clicking an index link —
+    // every screen the index itself links to is a real page now, `/report` included.
     const user = userEvent.setup()
+    window.history.pushState({}, '', '/web/history')
     render(<App />)
-    await user.click(screen.getByRole('link', { name: 'In-App Report' }))
-    expect(screen.getByRole('heading', { name: 'In-App Report' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'History' })).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: /back to prototype index/i }))
     expect(screen.getByRole('heading', { name: /prototype/i })).toBeInTheDocument()
   })

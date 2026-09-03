@@ -1,0 +1,153 @@
+/* Centered heading for every instructions/prompt/status screen — this flow's own paragraphs
+   stay left-aligned via `flowStyles.paragraph` (a longer read, same as
+   `ShoppingListIntroPage`'s instructions), but the short one-line headings above an icon read
+   better centered, matching that same page's `.listeningTitle`. */
+.centerTitle {
+  text-align: center;
+}
+
+.centerParagraph {
+  text-align: center;
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+/* Category Fluency's own closing instruction line ("Be sure to say them out loud.") — Figma
+   bolds this one line to set it apart from the three plain paragraphs above it. */
+.paragraphStrong {
+  font-weight: 600;
+}
+
+/* The illustrative "listening"/"recording" circle every audio-only step in this flow shows in
+   place of a real waveform or mic level meter — static on purpose (see this page's own doc
+   comment for why: no real audio, no real animation). `.iconCircleActive` is the "recording
+   now" state (Figma's green pulse ring, minus the actual pulsing), reused for every step that
+   would otherwise expect the visitor to be speaking. */
+.iconCircle {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto var(--space-lg, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-strong, #81909c);
+}
+
+.iconCircleActive {
+  border-color: var(--color-secondary, #86c65a);
+  box-shadow: 0 0 0 10px var(--color-secondary-soft, #f3f9ef);
+}
+
+.iconGlyph {
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+.iconGlyphActive {
+  color: var(--color-secondary-hover, #659544);
+}
+
+/* The small "task complete" checkmark badge overlapping the icon circle's own bottom-right
+   corner, matching Figma's compound done-state icon (a plain mic/speaker circle plus a
+   checkmark) rather than swapping the whole circle out for a different glyph. */
+.doneBadge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  color: var(--color-success, #15803d);
+  background: var(--color-surface, #fff);
+  border-radius: 50%;
+}
+
+/* The small uppercase "PRACTICE" pill Figma shows above Backward Digit Span's own practice
+   round, distinguishing it from the three real, scored trials that follow. */
+.practiceBadge {
+  display: inline-block;
+  margin: 0 0 var(--space-md, 16px);
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-primary-soft, #e6f2f7);
+  color: var(--color-primary-hover, #065e83);
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* The dashed worked-example callout on Backward Digit Span's instructions screen ("If you
+   hear... you would say...") — same treatment `PrioritiesQuestionsPage`'s own `.exampleBox`
+   uses for its own worked examples, kept as this page's own copy since the two pages' styles
+   aren't shared. */
+.exampleBox {
+  margin: 0 0 var(--space-lg, 24px);
+  padding: var(--space-md, 16px);
+  border: 2px dashed var(--color-primary, #087dae);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-primary-soft, #e6f2f7);
+  color: var(--color-primary-hover, #065e83);
+  text-align: center;
+}
+
+.exampleLabel {
+  margin: 0 0 var(--space-sm, 8px);
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.exampleDigits {
+  margin: 0 0 var(--space-sm, 8px);
+  font-family: var(--font-headline-4-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2em;
+}
+
+.exampleDigits:last-child {
+  margin-bottom: 0;
+}
+
+/* The info callout under a live recall/recording step ("Press done when you are finished",
+   "Keep going...") — same info-soft treatment `ActivityDetailsPage.module.css`'s own
+   `.redoNotice` uses for its own inline hint. */
+.hintBox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm, 8px);
+  margin: var(--space-lg, 24px) 0 0;
+  padding: var(--space-md, 16px);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-info-soft, #e9effd);
+  color: var(--color-info, #2563eb);
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  line-height: 1.5;
+}
+
+.hintIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Backward Digit Span's practice-result screen ("If you said... You are correct!") reuses
+   `.exampleBox` for the quoted result, then two ordinary paragraphs below it, then a two-button
+   Retry/Start row instead of the usual Back/Next pair — `.resultActions` gives that row the same
+   spacing `flowStyles.actions` gives every other screen's own action row without also taking on
+   that class's `justify-content: space-between` (Retry/Start reads better start-aligned here,
+   since there's no "go back to the previous screen" meaning attached to Retry). */
+.resultActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 16px);
+  margin-top: var(--space-xl, 32px);
+}

@@ -7,13 +7,13 @@ import { AuthProvider } from '@/auth'
 import { LifestyleQuestionsPage } from './LifestyleQuestionsPage'
 import { LIFESTYLE_QUESTIONS } from './lifestyleQuestions'
 
-/** Stands in for `BuildingReportPage` at `/report/building` — asserts on the router `state` the
- * real page reads its `completedActivityId` from, without pulling that whole page's Lottie/timer
- * machinery into this test. */
-function BuildingReportStub() {
+/** Stands in for `ReportReadyPage` at `/report/ready` — asserts on the router `state` the real
+ * page reads its `completedActivityId` from, without pulling that whole page's Lottie/next-
+ * activity machinery into this test. */
+function ReportReadyStub() {
   const location = useLocation()
   const state = location.state as { completedActivityId?: string } | null
-  return <p>Building report stub: {state?.completedActivityId ?? 'none'}</p>
+  return <p>Report ready stub: {state?.completedActivityId ?? 'none'}</p>
 }
 
 function renderPage() {
@@ -23,7 +23,7 @@ function renderPage() {
         <Routes>
           <Route path="/assessment/lifestyle/questions" element={<LifestyleQuestionsPage />} />
           <Route path="/assessment/lifestyle" element={<p>Lifestyle Details stub</p>} />
-          <Route path="/report/building" element={<BuildingReportStub />} />
+          <Route path="/report/ready" element={<ReportReadyStub />} />
         </Routes>
       </MemoryRouter>
     </AuthProvider>,
@@ -122,7 +122,7 @@ describe('LifestyleQuestionsPage', () => {
       await user.click(screen.getByRole('button', { name: /Next|Finish/ }))
     }
 
-    expect(screen.getByText('Building report stub: speech-pattern')).toBeInTheDocument()
+    expect(screen.getByText('Report ready stub: speech-pattern')).toBeInTheDocument()
   })
 
   it('relabels the last question\'s button to "Finish" instead of "Next"', async () => {

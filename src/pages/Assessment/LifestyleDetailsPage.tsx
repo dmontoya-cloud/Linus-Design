@@ -1,16 +1,10 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
-import { ArrowRightBoldIcon, ClockIcon } from '@/components/atoms/Icon'
 import { DashboardNavBar } from '../DashboardNavBar'
 import { cascadeDelay } from '../cascade'
 import styles from './ActivityDetailsPage.module.css'
 
 const ACTIVITY_NAME = 'Lifestyle'
-
-/** The arrow affordance on "Start Activity" appears after this delay, on request — same
- * treatment as `MemoryThinkingDetailsPage`'s own Start button (see that file for why). */
-const START_ICON_DELAY_MS = 2000
 
 /**
  * Lifestyle Details — the new step between Dashboard's Lifestyle card and its (not yet built)
@@ -22,43 +16,38 @@ const START_ICON_DELAY_MS = 2000
  * three paragraphs explaining how answering works (yes/no vs. multi-select, and that Back/Next
  * let you revisit or change any answer). Duration matches the "About 5 minutes" estimate shown
  * everywhere else this activity appears (Dashboard's `ActivityCard`, `PENDING_ACTIVITIES`), so
- * this prototype never shows two different estimates for the same activity. "Start Activity" in
- * the header — the only way forward on this screen, on request — hands off to a not-yet-built
- * placeholder for the actual question flow; leaving goes through `DashboardNavBar`'s own "Exit"
- * link instead of a dedicated Back button.
+ * this prototype never shows two different estimates for the same activity, and now renders as
+ * plain text with no leading `ClockIcon`, matching Figma's reference frame for this page (node
+ * 657:948). "I'm ready" in the header (previously "Start Activity", with a trailing arrow that
+ * grew in after a delay — both dropped, matching that same reference) is the only way forward on
+ * this screen; it hands off to a not-yet-built placeholder for the actual question flow. A
+ * dedicated "Back to dashboard" button (`.backButton`, outline/sm) now sits above the title, on
+ * request, matching Figma — `DashboardNavBar`'s own "Exit" link is dropped in favor of it, so the
+ * nav bar here shows just the logo and title.
  */
 export function LifestyleDetailsPage() {
-  const [showStartIcon, setShowStartIcon] = useState(false)
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setShowStartIcon(true), START_ICON_DELAY_MS)
-    return () => window.clearTimeout(timer)
-  }, [])
-
   return (
     <div className={styles.page}>
-      <DashboardNavBar title={ACTIVITY_NAME} exitTo="/dashboard" exitVariant="outline" />
+      <DashboardNavBar title={ACTIVITY_NAME} hideAccountMenu />
       <main className={styles.content}>
         <div className={styles.card}>
           <div className={styles.reveal} style={{ animationDelay: cascadeDelay(0) }}>
+            <Link
+              to="/dashboard"
+              className={`${buttonClassName('outline', 'sm')} ${styles.backButton}`}
+            >
+              Back to dashboard
+            </Link>
             <div className={styles.header}>
               <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
               <Link
                 to="/assessment/lifestyle/questions"
-                className={`${buttonClassName('primary', 'md')} ${styles.startButton}`}
+                className={buttonClassName('primary', 'lg')}
               >
-                Start Activity
-                <ArrowRightBoldIcon
-                  className={[styles.startIcon, showStartIcon ? styles.startIconVisible : '']
-                    .filter(Boolean)
-                    .join(' ')}
-                />
+                I&rsquo;m ready
               </Link>
             </div>
-            <p className={styles.duration}>
-              <ClockIcon className={styles.durationIcon} />
-              About 5 minutes
-            </p>
+            <p className={styles.duration}>About 5 minutes</p>
           </div>
           <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
             <p className={styles.taskIntro}>

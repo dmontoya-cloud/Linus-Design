@@ -19,16 +19,15 @@ import { ThanksPage } from '@/pages/Thanks/ThanksPage'
 import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
 import { ProfilePage } from '@/pages/Profile/ProfilePage'
-import { AssessmentIntroPage } from '@/pages/Assessment/AssessmentIntroPage'
 import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
+import { MemoryThinkingTaskPage } from '@/pages/Assessment/MemoryThinkingTask/MemoryThinkingTaskPage'
 import { LifestyleDetailsPage } from '@/pages/Assessment/LifestyleDetailsPage'
 import { LifestyleQuestionsPage } from '@/pages/Assessment/LifestyleQuestions/LifestyleQuestionsPage'
 import { PrioritiesDetailsPage } from '@/pages/Assessment/PrioritiesDetailsPage'
 import { PrioritiesQuestionsPage } from '@/pages/Assessment/PrioritiesQuestions/PrioritiesQuestionsPage'
-import { DeviceSetupPage } from '@/pages/DeviceSetup/DeviceSetupPage'
-import { DeviceReadyPage } from '@/pages/DeviceSetup/DeviceReadyPage'
-import { ShoppingListIntroPage } from '@/pages/Assessment/MemoryThinkingTask/ShoppingListIntroPage'
 import { BuildingReportPage } from '@/pages/BuildingReport/BuildingReportPage'
+import { ReportReadyPage } from '@/pages/BuildingReport/ReportReadyPage'
+import { ReportPage } from '@/pages/BuildingReport/ReportPage'
 import './App.css'
 
 /**
@@ -52,14 +51,17 @@ import './App.css'
  * last rather than second, on request, since sex assigned at birth is the
  * more sensitive of the two mid-funnel questions — then hands off to
  * Loading, a last spinner beat before Dashboard appears. Assessment Intro
- * (reached from any Dashboard
- * activity card's Start link) is real too — it reads its instructions aloud
- * via the browser's own speech synthesis, same as the device check and the
- * one real assessment item (of 20) that follows it — but items 2-20 and the
- * actual shopping-list task itself don't exist yet. Report is still a PoD-4
- * stub, as are History/Settings (reachable only from Dashboard's own nav,
- * not listed in this funnel). There's no paywall or subscription in this
- * product, so no stub for one is listed here either.
+ * (reached from Memory & Thinking's own Details screen, `MemoryThinkingDetailsPage`'s "I'm
+ * ready") is real too — a click-through recreation of the real assessment task screens
+ * (Immediate Recall, Category Fluency, Backward Digit Span, Delayed Recall, Delayed
+ * Recognition), on request: no real microphone/audio recording, no voice grading, no real
+ * timers, just Next/Continue advancing — see `MemoryThinkingTaskPage`'s own doc comment. An
+ * earlier version of this same activity spoke its instructions aloud via the browser's own
+ * speech synthesis and ran a real live microphone check before it; that whole flow has been
+ * archived (see `archive/memory-thinking-device-setup-voiceover` in git) and replaced by this
+ * one, on request, rather than kept alongside it. Report is still a PoD-4 stub, as are
+ * History/Settings (reachable only from Dashboard's own nav, not listed in this funnel).
+ * There's no paywall or subscription in this product, so no stub for one is listed here either.
  */
 const FUNNEL_STEPS = [
   { path: '/login', label: 'Login' },
@@ -75,6 +77,7 @@ const FUNNEL_STEPS = [
   { path: '/loading', label: 'Loading' },
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/assessment', label: 'Assessment Intro' },
+  { path: '/report/ready', label: 'Report Ready' },
   { path: '/report/building', label: 'Building your report' },
   { path: '/report', label: 'In-App Report' },
 ] as const
@@ -93,7 +96,9 @@ const REAL_STEP_PATHS = [
   '/loading',
   '/dashboard',
   '/assessment',
+  '/report/ready',
   '/report/building',
+  '/report',
 ]
 
 const STUB_STEPS = FUNNEL_STEPS.filter((step) => !REAL_STEP_PATHS.includes(step.path))
@@ -133,34 +138,48 @@ function RequireAuth({ children }: { children: ReactNode }) {
  * pointing at itself would be pointless). */
 const ROUTES_WITH_OWN_NAV = ['/dashboard']
 
-/** Every screen in the device-setup/assessment flow reached from Dashboard — each already has
- * its own header "Exit" button to /dashboard (via `DashboardNavBar`'s `exitTo`), plus the same
- * logo Link to "/" every `DashboardNavBar` screen has. The corner link becomes a "Skip to
- * report" shortcut on these instead, on request — a way to jump straight past the whole
- * device-setup/assessment flow (none of which is the point of a walkthrough) to Building your
- * report (`BuildingReportPage`), the screen that will sit right after the assessment finishes
- * once that flow is actually built out. */
-const ROUTES_WITH_REPORT_SKIP = [
-  '/assessment',
-  '/assessment/start',
-  '/assessment/memory-and-thinking',
-  '/assessment/memory-and-thinking/microphone-check',
-  '/assessment/memory-and-thinking/task',
-]
+/** Every screen in the device-setup/assessment flow reached from Dashboard, for all three
+ * activities now, on request — Lifestyle and Priorities' own Details/question-flow routes join
+ * Memory & Thinking's here. Each already has its own way back to Dashboard (`DashboardNavBar`'s
+ * `exitTo`, or the Details pages' own in-card "Back to dashboard" button), plus the same logo
+ * Link to "/" every `DashboardNavBar` screen has. The corner link becomes a "Skip to report"
+ * shortcut on these instead — a way to jump straight past whichever activity's flow (none of
+ * which is the point of a walkthrough) to Report Ready (`ReportReadyPage`), the same page every
+ * activity's real "Finish"/"I'm ready" hands off to, so this shortcut lands in the same place
+ * actually finishing would have. Keyed by the `completedActivityId` that activity's own
+ * "Finish"/"I'm ready" hands to `ReportReadyPage` (see `LifestyleQuestionsPage`/
+ * `PrioritiesQuestionsPage`'s own `navigate` calls) — on request, fixing a bug where this
+ * shortcut always credited Memory & Thinking regardless of which activity's route it was
+ * actually clicked from, so `ReportReadyPage` kept recommending an activity right after
+ * "finishing" it from here. */
+const REPORT_SKIP_ACTIVITY_BY_ROUTE: Record<string, string> = {
+  '/assessment': 'memory-recall',
+  '/assessment/start': 'memory-recall',
+  '/assessment/lifestyle': 'speech-pattern',
+  '/assessment/lifestyle/questions': 'speech-pattern',
+  '/assessment/priorities': 'visual-attention',
+  '/assessment/priorities/questions': 'visual-attention',
+}
 
 /** On most routes, a quick corner shortcut back to the very beginning of the funnel. Hidden on
  * ROUTES_WITH_OWN_NAV (redundant with that page's own logo link); replaced with a "Skip to
- * report" shortcut to /report/building on ROUTES_WITH_REPORT_SKIP. Same `.back-to-start`
- * styling and bottom-right position in every case — only whether it renders, and its
- * label/destination, change. */
+ * report" shortcut to /report/ready on every route in `REPORT_SKIP_ACTIVITY_BY_ROUTE`, passing
+ * that route's own activity id along as router `state` the same way a real "Finish" would.
+ * Same `.back-to-start` styling and bottom-right position in every case — only whether it
+ * renders, and its label/destination, change. */
 function BackToStart() {
   const location = useLocation()
   if (ROUTES_WITH_OWN_NAV.includes(location.pathname)) {
     return null
   }
-  if (ROUTES_WITH_REPORT_SKIP.includes(location.pathname)) {
+  const skipActivityId = REPORT_SKIP_ACTIVITY_BY_ROUTE[location.pathname]
+  if (skipActivityId) {
     return (
-      <Link to="/report/building" className="back-to-start">
+      <Link
+        to="/report/ready"
+        state={{ completedActivityId: skipActivityId }}
+        className="back-to-start"
+      >
         Skip to report
       </Link>
     )
@@ -341,9 +360,9 @@ export default function App() {
                   </RequireAuth>
                 }
               />
-              {/* Details screen shown before the voice-over intro below — on request, a new
-                  step between Dashboard's "Start Activity"/"Start" and AssessmentIntroPage,
-                  not a replacement for it. */}
+              {/* Details screen shown before the task flow below — on request, a new step
+                  between Dashboard's "Start Activity"/"Start" and MemoryThinkingTaskPage, not
+                  a replacement for it. */}
               <Route
                 path="/assessment/start"
                 element={
@@ -352,11 +371,20 @@ export default function App() {
                   </RequireAuth>
                 }
               />
+              {/* Memory & Thinking's real assessment task screens (Immediate Recall, Category
+                  Fluency, Backward Digit Span, Delayed Recall, Delayed Recognition) — a
+                  click-through recreation, on request: no real microphone/audio recording, no
+                  voice grading, no real timers, just Next/Continue advancing through each step
+                  (see `MemoryThinkingTaskPage`'s own doc comment). Replaces an earlier flow that
+                  spoke its instructions aloud via the browser's own speech synthesis and ran a
+                  real live microphone check first — that flow has been archived (git branch
+                  `archive/memory-thinking-device-setup-voiceover`) rather than kept alongside
+                  this one, on request. */}
               <Route
                 path="/assessment"
                 element={
                   <RequireAuth>
-                    <AssessmentIntroPage />
+                    <MemoryThinkingTaskPage />
                   </RequireAuth>
                 }
               />
@@ -395,60 +423,40 @@ export default function App() {
                   </RequireAuth>
                 }
               />
-              {/* Where Assessment Intro's "I'm Ready to Begin" hands off to — a device check
-                  (hearing, then a real live microphone level check, swapped in place on this
-                  one page) before the actual Memory & Thinking task flow. The microphone check
-                  hands off automatically once it's confirmed working (no button — see
-                  DeviceSetupPage's MicrophoneCheckStep) to DeviceReadyPage below, whose own
-                  "Continue to test" leads to ShoppingListIntroPage — item 1 of the assessment's
-                  20 items. That page has three of its own in-place steps (same pattern as
-                  DeviceSetupPage): instructions, then "Start" swaps to reading the list to
-                  remember aloud, then a fixed 30-second "repeat it back" window with live mic
-                  bars, which hands off automatically (no button) to the placeholder below —
-                  items 2-20 and any real scoring of what the visitor said aren't built yet. */}
+              {/* The confirmation screen every activity's "Finish"/"I'm ready" hands off to, or
+                  any route's own "Skip to report" corner link — see
+                  REPORT_SKIP_ACTIVITY_BY_ROUTE above. Shows how many activities are done and,
+                  from there, either "Go to Dashboard" or "Build my report" (which continues on
+                  to /report/building below). */}
               <Route
-                path="/assessment/memory-and-thinking"
+                path="/report/ready"
                 element={
                   <RequireAuth>
-                    <DeviceSetupPage />
+                    <ReportReadyPage />
                   </RequireAuth>
                 }
               />
-              <Route
-                path="/assessment/memory-and-thinking/microphone-check"
-                element={
-                  <RequireAuth>
-                    <DeviceReadyPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/assessment/memory-and-thinking/task"
-                element={
-                  <RequireAuth>
-                    <ShoppingListIntroPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/assessment/memory-and-thinking/task/next"
-                element={
-                  <RequireAuth>
-                    <Placeholder title="Next Assessment Item" />
-                  </RequireAuth>
-                }
-              />
-              {/* Where the real assessment flow will hand off once it's actually built —
-                  reachable today only via each device-setup/assessment screen's "Skip to
-                  report" corner link (see ROUTES_WITH_REPORT_SKIP above), since items 2-20
-                  and any real scoring don't exist yet. Hands off to /report (still a
-                  placeholder) after a brief non-interactive beat, same pattern as
-                  Loading/Setting Up/Thanks. */}
+              {/* The loading interstitial `ReportReadyPage`'s "Build my report" (above) or
+                  Dashboard's own identically-labeled CTA (`FullCheckInCard`, once all three
+                  activities are done) hand off to. Hands off to /report after a brief
+                  non-interactive beat, same pattern as Loading/Setting Up/Thanks. */}
               <Route
                 path="/report/building"
                 element={
                   <RequireAuth>
                     <BuildingReportPage />
+                  </RequireAuth>
+                }
+              />
+              {/* The real destination `BuildingReportPage`'s loading interstitial hands off to
+                  once it finishes — on request, follows the same page rules (chrome, title/
+                  subtitle treatment) as `BuildingReportPage`/`ReportReadyPage` rather than a
+                  one-off layout. */}
+              <Route
+                path="/report"
+                element={
+                  <RequireAuth>
+                    <ReportPage />
                   </RequireAuth>
                 }
               />

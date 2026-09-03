@@ -22,12 +22,14 @@ function ExternalLinkIcon() {
  * recipe as `ActivityCard` above it — rather than the gradient `FullCheckInCard` uses, so it
  * reads as "one more card on this page," not another hero moment. The link is a real
  * `<a target="_blank">` (not client-side routing) since it genuinely leaves the app; the
- * external-link icon and copy both call that out so it's never a surprise. The link reuses
- * `outline` — the same quiet bordered-pill button variant Terms of Use/Privacy Policy's own
- * "Back" actions use — applied via `buttonClassName` directly to a real `<a>`, same as
- * `ActivityCard`'s own "Start" link. Two columns: title + copy on the left, the button alone
- * on the right (vertically centered against the text block), stacking back to one column on
- * narrow viewports the same way `FullCheckInCard`'s own category grid does.
+ * external-link icon and copy both call that out so it's never a surprise. The link uses
+ * `secondary` — the design system's blue-outline pill — on request, replacing `outline` (a
+ * neutral grey-bordered pill meant for quiet actions like Terms of Use/Privacy Policy's own
+ * "Back") which read as detached from the rest of the page's blue accent. Applied via
+ * `buttonClassName` directly to a real `<a>`, same as `ActivityCard`'s own "Start" link. Two
+ * columns: title + copy on the left, the button alone on the right (vertically centered against
+ * the text block), stacking back to one column on narrow viewports the same way
+ * `FullCheckInCard`'s own category grid does.
  */
 export function ResourcesCard() {
   return (
@@ -43,9 +45,9 @@ export function ResourcesCard() {
         href={RESOURCES_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className={`${buttonClassName('outline', 'lg')} ${styles.link}`}
+        className={`${buttonClassName('secondary', 'lg')} ${styles.link}`}
       >
-        Open resources on linushealth.com
+        Open on linushealth.com
         <ExternalLinkIcon />
       </a>
     </div>
