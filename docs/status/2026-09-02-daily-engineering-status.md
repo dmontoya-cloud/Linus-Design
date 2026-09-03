@@ -9,8 +9,8 @@ This report satisfies no gate and grants no approval.
 
 ## 1. Portfolio snapshot
 
-| PoD | Feature (ADO) | Phase | Branch | PR | CI |
-| --- | --- | --- | --- | --- | --- |
+| PoD                                        | Feature (ADO)                                                                                           | Phase                                                                                                                                                                                                                                                                                                                   | Branch                                      | PR                                                                                       | CI                                                                                                                                                                       |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Ad hoc — design-system reference (WI-0002) | data unavailable — ADO not connected ([WI-0002](../work-items/WI-0002-design-system-reference-page.md)) | PR #14 (merged 2026-09-02T06:33:37Z UTC) is still the last **PR'd** state. One commit (`e77379f`, this morning's own status report) sits committed locally but unpushed. On top of that, a large uncommitted working-tree delta — 5 separable pieces of work across ~50 files — has landed since, none of it committed. | `feature/0002-design-system-reference-page` | none open — last merged is [#14](https://github.com/dmontoya-cloud/Linus-Design/pull/14) | 🟡 Green on the last **pushed** commit (`466f25f`) — but CI has not run against `e77379f` or against anything in the current working tree, since neither has been pushed |
 
 ## 2. Movement, since the 2026-09-02 10:28 report (commit `e77379f`)
@@ -30,7 +30,7 @@ and a local `npx vitest run`.
 ### In the local working tree — substantial, entirely uncommitted
 
 - **`e77379f`** (the 10:28 report's own commit) remains **pushed to nowhere** — `git log
-  origin/feature/0002-design-system-reference-page..HEAD` shows it as the only commit ahead of
+origin/feature/0002-design-system-reference-page..HEAD` shows it as the only commit ahead of
   origin. Unchanged from the baseline report's own finding.
 - **On top of that, five separable pieces of work now sit uncommitted** (`git status --short`:
   ~20 modified, ~25 deleted, ~5 new/untracked; `git diff --stat` on the modified files alone:
@@ -157,21 +157,21 @@ and a local `npx vitest run`.
 
 ## 6. Appendix — sourcing
 
-| Field | Source | Command / call |
-| --- | --- | --- |
-| PR list | GitHub API | `gh pr list --state all --limit 10 --json number,title,state,headRefName,baseRefName,mergedAt,createdAt` |
-| PR #13/#14 reviews | GitHub API | `gh api repos/dmontoya-cloud/Linus-Design/pulls/{13,14}/reviews` (both `[]`) |
-| Branch protection | GitHub API | `gh api repos/.../branches/{main,feature/0001-repo-ci-scaffold}/protection` (both 404) |
-| CI runs | GitHub Actions | `gh run list --limit 15 --json databaseId,status,conclusion,createdAt,headBranch,event,displayTitle,headSha` — newest is still `466f25f` |
-| Local vs. origin commit gap | git | `git log origin/feature/0002-design-system-reference-page..HEAD --oneline` → `e77379f` only |
-| Local commit history | git | `git log --oneline -20` |
-| Uncommitted working-tree state | git | `git status --short`; `git diff --stat` (21 modified files, +468/−719; plus ~25 deletions and ~5 untracked files not counted in that stat) |
-| Local branches | git | `git branch -a` — confirms `archive/memory-thinking-device-setup-voiceover` exists locally only (no `remotes/origin/archive/...`) |
-| Local test run | vitest | `npx vitest run` → 246/246 passing, 42 files |
-| Gate/sign-off state per PoD | repo files | `docs/work-items/WI-0002-design-system-reference-page.md`; last content edit 2026-07-30 per `git log`; 6/9 acceptance criteria checked |
-| Remediation/review tooling | repo files | `find . -iname "*remediation-log*"` (none found; only the skill placeholders exist) |
-| Figma design work this window | direct session record only | no repo/GitHub/ADO source captures this — see §2's flow-recreation and icon-resync items |
-| Azure DevOps fields | data unavailable — no ADO connection | — |
+| Field                          | Source                               | Command / call                                                                                                                             |
+| ------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| PR list                        | GitHub API                           | `gh pr list --state all --limit 10 --json number,title,state,headRefName,baseRefName,mergedAt,createdAt`                                   |
+| PR #13/#14 reviews             | GitHub API                           | `gh api repos/dmontoya-cloud/Linus-Design/pulls/{13,14}/reviews` (both `[]`)                                                               |
+| Branch protection              | GitHub API                           | `gh api repos/.../branches/{main,feature/0001-repo-ci-scaffold}/protection` (both 404)                                                     |
+| CI runs                        | GitHub Actions                       | `gh run list --limit 15 --json databaseId,status,conclusion,createdAt,headBranch,event,displayTitle,headSha` — newest is still `466f25f`   |
+| Local vs. origin commit gap    | git                                  | `git log origin/feature/0002-design-system-reference-page..HEAD --oneline` → `e77379f` only                                                |
+| Local commit history           | git                                  | `git log --oneline -20`                                                                                                                    |
+| Uncommitted working-tree state | git                                  | `git status --short`; `git diff --stat` (21 modified files, +468/−719; plus ~25 deletions and ~5 untracked files not counted in that stat) |
+| Local branches                 | git                                  | `git branch -a` — confirms `archive/memory-thinking-device-setup-voiceover` exists locally only (no `remotes/origin/archive/...`)          |
+| Local test run                 | vitest                               | `npx vitest run` → 246/246 passing, 42 files                                                                                               |
+| Gate/sign-off state per PoD    | repo files                           | `docs/work-items/WI-0002-design-system-reference-page.md`; last content edit 2026-07-30 per `git log`; 6/9 acceptance criteria checked     |
+| Remediation/review tooling     | repo files                           | `find . -iname "*remediation-log*"` (none found; only the skill placeholders exist)                                                        |
+| Figma design work this window  | direct session record only           | no repo/GitHub/ADO source captures this — see §2's flow-recreation and icon-resync items                                                   |
+| Azure DevOps fields            | data unavailable — no ADO connection | —                                                                                                                                          |
 
 No field in this report was inferred or assumed; anything not directly observed is marked
 `data unavailable` above, and the one category with no reachable source at all (this window's
