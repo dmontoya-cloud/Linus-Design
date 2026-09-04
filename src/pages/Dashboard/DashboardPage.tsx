@@ -1,7 +1,10 @@
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { DashboardNavBar } from '../DashboardNavBar'
 import { ActivityCard, type Activity } from './ActivityCard'
 import { FullCheckInCard } from './FullCheckInCard'
+import { PostReportSurvey } from './PostReportSurvey'
 import { ResourcesCard } from './ResourcesCard'
 import { cascadeDelay } from '../cascade'
 import styles from './DashboardPage.module.css'
@@ -39,6 +42,11 @@ const PENDING_ACTIVITIES: Activity[] = [
   },
 ]
 
+/** How long Dashboard waits after mount before showing `PostReportSurvey`, on request — the
+ * page loads and settles first, then the survey pushes in a beat later, rather than both
+ * appearing at once. */
+const SURVEY_DELAY_MS = 1000
+
 /**
  * Dashboard — the post-onboarding home screen, reached once Login →
  * Onboarding → Gender & Identity all complete. Deliberately minimal: `DashboardNavBar`'s quiet
@@ -57,9 +65,25 @@ const PENDING_ACTIVITIES: Activity[] = [
  * Memory & Thinking's Start both hand off to the real Assessment Intro screen (`/assessment`);
  * Lifestyle/Priorities' Start buttons and History/Settings are still PoD-4+ stubs, same as the
  * other placeholders reachable from the prototype index.
+ *
+ * `PostReportSurvey` renders as a fixed bottom-right card once `location.state.showSurvey` is
+ * set, on request — only `ReportPage`'s Download button hands off with that flag, so the survey
+ * shows once an actual download happens, not on every Dashboard visit. Delayed by
+ * `SURVEY_DELAY_MS` after mount, on request, so Dashboard itself loads and settles first rather
+ * than the survey pushing in at the same instant as everything else's own cascade-in.
  */
 export function DashboardPage() {
   const { profile, completedActivityIds } = useAuth()
+  const location = useLocation()
+  const [showSurvey, setShowSurvey] = useState(false)
+
+  useEffect(() => {
+    const wasReportDownloaded =
+      (location.state as { showSurvey?: boolean } | null)?.showSurvey === true
+    if (!wasReportDownloaded) return
+    const timer = window.setTimeout(() => setShowSurvey(true), SURVEY_DELAY_MS)
+    return () => window.clearTimeout(timer)
+  }, [location.state])
 
   return (
     <div className={styles.page}>
@@ -114,6 +138,7 @@ export function DashboardPage() {
           <ResourcesCard />
         </div>
       </main>
+      {showSurvey ? <PostReportSurvey onClose={() => setShowSurvey(false)} /> : null}
     </div>
   )
 }

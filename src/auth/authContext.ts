@@ -46,12 +46,22 @@ export interface AuthState {
    * actually complete one, so the only way in today is `BuildingReportPage`'s "Go to Dashboard"
    * button standing in for "you just finished a real assessment." */
   completedActivityIds: string[]
+  /** Whether the visitor has actually finished a report download since the last newly
+   * completed activity — on request, distinct from `completedActivityIds`, so Dashboard's
+   * `FullCheckInCard` can stop offering "Build my report" once they've already done so, and
+   * only offer it again once there's fresh, not-yet-built progress. Set by `ReportPage`'s
+   * Download button (the actual "build report AND download it" action); reset back to `false`
+   * by `completeActivity` any time a genuinely new activity finishes, since a report already
+   * downloaded no longer reflects the full picture once something new is done — including via
+   * `ReportReadyPage`'s "Go to Dashboard", which is the one path this stays `false` on request. */
+  hasBuiltReport: boolean
   login: () => void
   logout: () => void
   setPreferredName: (name: string) => void
   saveProfile: (profile: Profile) => void
   giveConsent: () => void
   completeActivity: (id: string) => void
+  markReportBuilt: () => void
 }
 
 export const AuthContext = createContext<AuthState | undefined>(undefined)

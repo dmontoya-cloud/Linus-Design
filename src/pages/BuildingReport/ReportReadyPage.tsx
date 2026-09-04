@@ -200,6 +200,12 @@ export function ReportReadyPage() {
             autoplay
             layout={ICON_LAYOUT}
             className={`${styles.icon} ${styles.iconSuccess}`}
+            // Explicit `.play()` alongside `autoplay`, on request — in dev, React StrictMode's
+            // double-invoked mount/unmount cycle occasionally left this canvas blank (the
+            // `autoplay` prop's own timing lost the race); calling `play()` directly off the
+            // ref callback whenever a fresh instance attaches is a guaranteed kick regardless
+            // of that race. No-op once the animation's already playing.
+            dotLottieRefCallback={(dotLottie) => dotLottie?.play()}
           />
           <h1
             className={[styles.title, styles.titleReady].join(' ')}

@@ -1,0 +1,111 @@
+/* Border-subtle stroke added (Dashboard 1's FullCheckInCard has none) — matches the Figma mock,
+   which leans on a hairline border rather than the page's tinted background alone to separate
+   this card, now that it also contains the activity row below. */
+.card {
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border-subtle, #eff0f2);
+  border-radius: var(--radius-xl, 24px);
+  overflow: hidden;
+  margin-bottom: var(--space-lg, 24px);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 16px);
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  width: 100%;
+}
+
+.headerText {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm, 8px);
+}
+
+.title {
+  font-family: var(--font-headline-3-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-3-semibold-size, 2.0625rem);
+  font-weight: var(--font-headline-3-semibold-weight, 600);
+  line-height: var(--font-headline-3-semibold-line-height, 1.2);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0;
+}
+
+.progressLine {
+  font-family: var(--font-label-l-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-regular-size, 0.8125rem);
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0;
+}
+
+.copy {
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-primary, #1f2a37);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Same recipe as Dashboard 1's FullCheckInCard `.startButton` — dark navy pill, no longer paired
+   with a secondary sibling button here since `ReportCTACard` now owns that role. */
+.startButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 56px;
+  padding: 0 var(--space-xl, 32px);
+  border-radius: var(--radius-pill, 999px);
+  background: var(--color-primary-hover, #065e83);
+  color: var(--color-text-on-primary, #fff);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-button-size, 1rem);
+  font-weight: 500;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background-color 0.12s ease;
+}
+
+.startButton:hover {
+  background: var(--color-primary-pressed, #044560);
+}
+
+.startButton:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-surface, #fff),
+    0 0 0 4px var(--color-primary, #087dae);
+}
+
+.activityRow {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  .headerRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .startButton {
+    width: 100%;
+  }
+
+  .activityRow {
+    flex-direction: column;
+  }
+}

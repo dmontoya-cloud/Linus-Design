@@ -56,7 +56,18 @@ const CATEGORIES = [
  * interstitial before landing on the real report, regardless of which one got you there.
  * `ActivityCard`'s own completed-state action is a
  * secondary "Redo activity" instead, on request, since redoing is that per-activity card's more
- * relevant next step. */
+ * relevant next step.
+ *
+ * Once a report has actually been built and downloaded (`useAuth().hasBuiltReport`, set by
+ * `ReportPage`'s Download button), on request, neither "Build my report" CTA re-offers building
+ * the same report again: the secondary button disappears entirely (matching the "at least one
+ * activity is done and at least one still isn't" condition it already required), and once all
+ * three are done, the main CTA relabels to "View report" and points straight at `/report`
+ * instead of sitting through `/report/building` again for a report that's already built. Either
+ * CTA reappears the moment a newly completed activity makes the existing report stale —
+ * `completeActivity` resets `hasBuiltReport` to `false` for exactly this reason — including via
+ * `ReportReadyPage`'s "Go to Dashboard", which finishes an activity without building, on
+ * request: that's the one path that leaves the button showing. */
 /** The title's own copy per `completedCount`, on request — one and two done are each a single
  * line; all three done keeps the two-line "status, then what's next" treatment
  * `ReportReadyPage`'s own `headlineLines` uses, since "All activities are in!" reads as its own
@@ -75,7 +86,7 @@ function titleLinesFor(completedCount: number): [string] | [string, string] {
 }
 
 export function FullCheckInCard() {
-  const { completedActivityIds } = useAuth()
+  const { completedActivityIds, hasBuiltReport } = useAuth()
   const completedCount = CATEGORIES.filter(({ id }) => completedActivityIds.includes(id)).length
   // The first not-yet-done category, in order — `null` once all three are done, since there's
   // nothing left to start. Also what "Start Next Activity" below hands off to, on request,
@@ -134,12 +145,16 @@ export function FullCheckInCard() {
           <Link to={nextActivity.startPath} className={styles.startButton}>
             {completedCount > 0 ? 'Start Next Activity' : 'Start Activity'}
           </Link>
+        ) : hasBuiltReport ? (
+          <Link to="/report" className={styles.startButton}>
+            View report
+          </Link>
         ) : (
           <Link to="/report/building" className={styles.startButton}>
             Build my report
           </Link>
         )}
-        {completedCount > 0 && nextActivity ? (
+        {completedCount > 0 && nextActivity && !hasBuiltReport ? (
           <Link
             to="/report/building"
             className={`${buttonClassName('secondary', 'lg')} ${styles.downloadButton}`}

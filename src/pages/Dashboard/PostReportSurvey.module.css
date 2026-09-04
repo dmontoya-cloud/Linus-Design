@@ -1,0 +1,236 @@
+/* Fixed to the viewport's bottom-right corner, on request — same fixed-positioning recipe
+   `App.css`'s own `.back-to-start` corner link already uses, just with real card chrome
+   (surface, radius-xl, shadow-modal) instead of bare text. Sits above everything else on the
+   page (`z-index`), and caps its own height so a long question list scrolls internally rather
+   than growing past the viewport on a short screen. Entrance is a genuine push up from off-
+   screen, on request — `translateY(120%)` starts it a fifth of its own height below its own
+   bottom edge (already flush with the viewport bottom, so that's fully offscreen) rather than
+   just nudging up a few pixels, and `easeOutBack` (the slight overshoot past `translateY(0)`
+   before settling) is what makes that push read as "nice" rather than a flat linear slide. */
+.card {
+  position: fixed;
+  right: var(--space-lg, 24px);
+  bottom: var(--space-lg, 24px);
+  z-index: 20;
+  /* 20% wider than the original 380px, on request — gives the 0-10 recommend scale's 11
+     buttons enough room to sit in one row at a readable size instead of wrapping. */
+  width: 456px;
+  max-width: calc(100vw - var(--space-lg, 24px) * 2);
+  max-height: calc(100vh - var(--space-lg, 24px) * 2);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: var(--space-lg, 24px);
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-xl, 24px);
+  box-shadow: var(
+    --shadow-modal,
+    0 16px 40px rgba(32, 37, 42, 0.14),
+    0 4px 12px rgba(32, 37, 42, 0.08)
+  );
+  animation: push-up 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes push-up {
+  from {
+    opacity: 0;
+    transform: translateY(120%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md, 16px);
+  margin-bottom: var(--space-md, 16px);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+.closeButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary, #5b6b79);
+  cursor: pointer;
+}
+
+.closeButton svg {
+  width: 100%;
+  height: 100%;
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.closeButton:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-surface, #fff),
+    0 0 0 4px var(--color-primary, #087dae);
+  border-radius: var(--radius-sm, 8px);
+}
+
+.prompt {
+  margin: 0;
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: 1.3;
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.controlWrap {
+  margin-top: var(--space-md, 16px);
+}
+
+/* Scale (1-5 / 0-10) — a single row of equal-width number buttons, on request, rather than
+   wrapping: `flex-wrap` left leftover buttons on their own line stretched to the full row
+   width (e.g. 9 and 10 each filling an entire row by themselves), which read as broken, not
+   just cramped. `flex: 1 1 0` with `min-width: 0` divides the row evenly across however many
+   buttons a question has (5 or 11) instead. */
+.scaleRow {
+  display: flex;
+  gap: var(--space-xs, 4px);
+}
+
+.scaleButton {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 40px;
+  border: 1px solid var(--color-border, #ced3d7);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-background, #faf9f7);
+  color: var(--color-text-primary, #1f2a37);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  cursor: pointer;
+}
+
+.scaleButton:hover {
+  border-color: var(--color-border-strong, #81909c);
+}
+
+.scaleButtonSelected,
+.scaleButtonSelected:hover {
+  border-color: var(--color-primary, #087dae);
+  background: var(--color-primary, #087dae);
+  color: var(--color-on-primary, #fff);
+}
+
+.scaleButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
+}
+
+.scaleLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-xs, 4px);
+  font-family: var(--font-label-m-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-regular-size, 0.6875rem);
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+/* Choice (single-select) — same checked-row treatment (border + primary-soft fill) as
+   `AnswerOption`'s own checkbox/radio rows, kept local here rather than reused directly since
+   this survey's rows are more compact (smaller padding, no letter badge) than that atom's. */
+.choiceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs, 4px);
+}
+
+.choiceOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  padding: var(--space-sm, 8px) var(--space-md, 16px);
+  border: 1px solid var(--color-border, #ced3d7);
+  border-radius: var(--radius-md, 12px);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-primary, #1f2a37);
+  cursor: pointer;
+}
+
+.choiceOption:hover {
+  border-color: var(--color-border-strong, #81909c);
+}
+
+.choiceOptionSelected {
+  border-color: var(--color-primary, #087dae);
+  background: var(--color-primary-soft, #e6f2f7);
+}
+
+.choiceInput {
+  flex-shrink: 0;
+  accent-color: var(--color-primary, #087dae);
+}
+
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-sm, 8px) var(--space-md, 16px);
+  border: 1px solid var(--color-border, #ced3d7);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-surface, #fff);
+  color: var(--color-text-primary, #1f2a37);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-primary, #087dae);
+  box-shadow: 0 0 0 3px var(--color-primary-soft, #e6f2f7);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-lg, 24px);
+}
+
+/* Holds the same height the last question's own body had (`frozenBodyHeight`, captured just
+   before submitting), on request, so the confirmation doesn't visibly shrink the card down to
+   fit one short line — centers `.thanks` within that held-open height instead. */
+.thanksWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.thanks {
+  margin: 0;
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
+}
