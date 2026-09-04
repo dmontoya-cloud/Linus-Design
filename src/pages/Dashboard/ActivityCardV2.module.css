@@ -1,0 +1,122 @@
+/* One column of the row inside FullCheckInCardV2 — plain dividers, not a separate elevated
+   card, since all three now live inside one shared white surface. */
+.column {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm, 8px);
+  padding: var(--space-xl, 32px) var(--space-lg, 24px);
+  border-top: 1px solid var(--color-border-subtle, #eff0f2);
+}
+
+.column:not(:last-child) {
+  border-right: 1px solid var(--color-border-subtle, #eff0f2);
+}
+
+/* 45px/25px — 25% larger than the original 36px/20px, on request (the icons were reading too
+   small against the rest of the card). */
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border-subtle, #eff0f2);
+}
+
+/* Success-green fill + a lightened icon, on completion — the same recoloring the Figma mock's
+   own Memory & Thinking-completed asset uses, not a different icon per activity. */
+.iconCircleComplete {
+  background: var(--color-success, #15803d);
+  border-color: var(--color-success, #15803d);
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.iconCircleComplete .icon {
+  color: var(--color-secondary-subtle, #bce0a4);
+}
+
+.title {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  color: var(--color-text-primary, #1f2a37);
+  text-align: left;
+  margin: var(--space-xs, 4px) 0 0;
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm, 8px);
+  font-family: var(--font-label-l-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-regular-size, 0.8125rem);
+  color: var(--color-text-secondary, #5b6b79);
+  margin: 0;
+}
+
+/* docs/design.md's documented `badge-success` recipe (success-soft background, success text) —
+   the same pair ActivityCard's own `.statusCompleted` uses. */
+.completedBadge {
+  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-semibold-size, 0.6875rem);
+  font-weight: var(--font-label-m-semibold-weight, 600);
+  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
+  color: var(--color-success, #15803d);
+  background: var(--color-success-soft, #e8f2ec);
+  border-radius: var(--radius-pill, 999px);
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  white-space: nowrap;
+}
+
+.description {
+  flex: 1;
+  font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-primary, #1f2a37);
+  line-height: 1.5;
+  text-align: left;
+  margin: 0;
+}
+
+.requirement {
+  font-family: var(--font-label-m-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-m-semibold-size, 0.6875rem);
+  font-weight: var(--font-label-m-semibold-weight, 600);
+  letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
+  color: var(--color-text-secondary, #5b6b79);
+  background: var(--color-border-subtle, #eff0f2);
+  border-radius: var(--radius-pill, 999px);
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  margin: 0;
+}
+
+/* Left-aligned for "Start" (not-started), right-aligned for "Details" (completed) — matches
+   the Figma mock exactly, oddity and all. */
+.buttonRow {
+  display: flex;
+  width: 100%;
+  margin-top: var(--space-sm, 8px);
+}
+
+.buttonRowEnd {
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .column:not(:last-child) {
+    border-right: none;
+  }
+}

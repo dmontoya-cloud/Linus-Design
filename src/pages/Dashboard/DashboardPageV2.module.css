@@ -1,0 +1,71 @@
+/* The gradient lives on the page background, not the full-check-in card (which is plain
+   white) — a soft radial wash from secondary-subtle to a light blue, at 10% opacity, on
+   request. */
+.page {
+  min-height: 100svh;
+  background:
+    radial-gradient(ellipse at 48% 49%, rgba(188, 224, 164, 0.1), rgba(145, 213, 233, 0.1)),
+    var(--color-background, #faf9f7);
+}
+
+.content {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: var(--space-xxl, 48px) var(--space-lg, 24px);
+}
+
+.welcome {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0 0 var(--space-lg, 24px);
+}
+
+/* Same headline-5-semibold size/weight/color as .welcome now — Figma sizes both parts of
+   the greeting identically, on request. */
+.welcomeSubtext {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.copy {
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  color: var(--color-text-primary, #1f2a37);
+  margin: 0 0 var(--space-sm, 8px);
+}
+
+/* "Learn more about brain health" reuses .copy's type style but, unlike "Explore one area", isn't
+   followed by a subtext line — it goes straight into resources-card, so it needs the larger
+   between-sections gap instead of .copy's own tight heading-to-subtext spacing. Equal top and
+   bottom margin, on request — it used to only have a bottom margin, which (since the card above
+   it has no bottom margin of its own) left it sitting flush against that card while the gap
+   below it, before the resources card, was twice as large. */
+.copyNoSubtext {
+  margin: var(--space-lg, 24px) 0;
+}
+
+/* Cascades everything below the nav bar in on mount — same fade-rise-staggered-by-
+   cascadeDelay rhythm as Terms of Use / Privacy Policy / Registration — see
+   src/pages/cascade.ts. */
+.reveal {
+  opacity: 0;
+  animation: fade-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

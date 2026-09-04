@@ -13,6 +13,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [consent, setConsent] = useState<ConsentRecord | null>(null)
   const [completedActivityIds, setCompletedActivityIds] = useState<string[]>([])
+  const [hasBuiltReport, setHasBuiltReport] = useState(false)
 
   const value = useMemo<AuthState>(
     () => ({
@@ -21,6 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       profile,
       consent,
       completedActivityIds,
+      hasBuiltReport,
       login: () => setIsAuthenticated(true),
       logout: () => {
         setIsAuthenticated(false)
@@ -28,14 +30,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setProfile(null)
         setConsent(null)
         setCompletedActivityIds([])
+        setHasBuiltReport(false)
       },
       setPreferredName: (name: string) => setPreferredName(name),
       saveProfile: (nextProfile: Profile) => setProfile(nextProfile),
       giveConsent: () => setConsent({ acceptedAt: new Date().toISOString() }),
-      completeActivity: (id: string) =>
-        setCompletedActivityIds((ids) => (ids.includes(id) ? ids : [...ids, id])),
+      completeActivity: (id: string) => {
+        if (completedActivityIds.includes(id)) return
+        setCompletedActivityIds((ids) => [...ids, id])
+        setHasBuiltReport(false)
+      },
+      markReportBuilt: () => setHasBuiltReport(true),
     }),
-    [isAuthenticated, preferredName, profile, consent, completedActivityIds],
+    [isAuthenticated, preferredName, profile, consent, completedActivityIds, hasBuiltReport],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

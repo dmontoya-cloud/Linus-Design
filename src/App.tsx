@@ -18,6 +18,8 @@ import { SettingUpPage } from '@/pages/SettingUp/SettingUpPage'
 import { ThanksPage } from '@/pages/Thanks/ThanksPage'
 import { LoadingPage } from '@/pages/Loading/LoadingPage'
 import { DashboardPage } from '@/pages/Dashboard/DashboardPage'
+import { DashboardPageV2 } from '@/pages/Dashboard/DashboardPageV2'
+import { ACTIVE_DASHBOARD_VARIANT } from '@/pages/Dashboard/dashboardVariant'
 import { ProfilePage } from '@/pages/Profile/ProfilePage'
 import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
 import { MemoryThinkingTaskPage } from '@/pages/Assessment/MemoryThinkingTask/MemoryThinkingTaskPage'
@@ -346,7 +348,10 @@ export default function App() {
                 path="/dashboard"
                 element={
                   <RequireAuth>
-                    <DashboardPage />
+                    {/* Which version renders is picked by ACTIVE_DASHBOARD_VARIANT
+                        (dashboardVariant.ts), not by anything in the UI — flip that constant to
+                        switch. */}
+                    {ACTIVE_DASHBOARD_VARIANT === 'v2' ? <DashboardPageV2 /> : <DashboardPage />}
                   </RequireAuth>
                 }
               />
