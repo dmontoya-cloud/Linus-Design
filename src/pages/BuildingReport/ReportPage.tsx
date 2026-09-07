@@ -40,7 +40,7 @@ const DOWNLOAD_DELAY_MS = 4000
  * be re-clicked mid-"download"; "Go to Dashboard" stays enabled throughout since it's a real,
  * immediate exit rather than part of the download flow. Clicking Download also calls
  * `useAuth().markReportBuilt`, on request — Dashboard's `FullCheckInCard` reads this to stop
- * offering "Build my report" once one has actually been downloaded, only offering it again once
+ * offering "Create my report" once one has actually been downloaded, only offering it again once
  * a newly completed activity makes `hasBuiltReport` stale (see that flag's own doc comment).
  * Once the download "finishes", on request, it hands off to Dashboard with
  * `location.state.showSurvey`, so `DashboardPage` can show `PostReportSurvey` — a short feedback

@@ -47,7 +47,7 @@ export function ResourcesCard() {
         rel="noopener noreferrer"
         className={`${buttonClassName('secondary', 'lg')} ${styles.link}`}
       >
-        Open on linushealth.com
+        <span className={styles.label}>Open on linushealth.com</span>
         <ExternalLinkIcon />
       </a>
     </div>

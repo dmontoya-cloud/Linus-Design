@@ -43,9 +43,9 @@ const CATEGORIES = [
  * what's finished. The main CTA relabels to "Start Next Activity" once anything's done, on
  * request, rather than staying "Start Activity" forever regardless of progress, and hands off to
  * whichever category is actually next (`nextActivity`) rather than always Memory & Thinking's
- * own `startPath` — once all three are done, on request, it relabels again to "Build my report"
+ * own `startPath` — once all three are done, on request, it relabels again to "Create my report"
  * and points at `/report/building` instead, since there's no more "next activity" to start but
- * generating the combined report is still the primary action. A secondary "Build my report"
+ * generating the combined report is still the primary action. A secondary "Create my report"
  * button (same label as the main CTA once it takes over that role, on request — previously
  * "Generate report") appears beside it while at least one activity is done and at least one
  * still isn't — a report can be generated the moment the first activity is complete, not only
@@ -59,7 +59,7 @@ const CATEGORIES = [
  * relevant next step.
  *
  * Once a report has actually been built and downloaded (`useAuth().hasBuiltReport`, set by
- * `ReportPage`'s Download button), on request, neither "Build my report" CTA re-offers building
+ * `ReportPage`'s Download button), on request, neither "Create my report" CTA re-offers building
  * the same report again: the secondary button disappears entirely (matching the "at least one
  * activity is done and at least one still isn't" condition it already required), and once all
  * three are done, the main CTA relabels to "View report" and points straight at `/report`
@@ -151,7 +151,7 @@ export function FullCheckInCard() {
           </Link>
         ) : (
           <Link to="/report/building" className={styles.startButton}>
-            Build my report
+            Create my report
           </Link>
         )}
         {completedCount > 0 && nextActivity && !hasBuiltReport ? (
@@ -159,7 +159,7 @@ export function FullCheckInCard() {
             to="/report/building"
             className={`${buttonClassName('secondary', 'lg')} ${styles.downloadButton}`}
           >
-            Build my report
+            Create my report
           </Link>
         ) : null}
       </div>

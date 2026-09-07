@@ -33,9 +33,22 @@
   }
 }
 
+/* Hug-width, left-aligned below 480px, on request — Figma's Phone frame shows Continue
+   sitting at the left, not mirroring Tablet/Desktop's right-aligned pill. Explicit
+   `flex-start` (not just leaving `align-self` unset), since `.form`'s flex column defaults
+   its children to `stretch`, which would make the button full width rather than hug its own
+   label — `align-self: flex-end` only kicks in at 480px+ below, alongside the same
+   breakpoint `.nameRow`/`.dobRow` already use to switch from stacked to side-by-side fields,
+   since Figma's Tablet and Desktop frames both keep the original right-aligned button. */
 .submit {
-  align-self: flex-end;
+  align-self: flex-start;
   margin-top: var(--space-sm, 8px);
+}
+
+@media (min-width: 480px) {
+  .submit {
+    align-self: flex-end;
+  }
 }
 
 /* Reserves enough height for First/Last name plus their own "Please enter a ___." error, so

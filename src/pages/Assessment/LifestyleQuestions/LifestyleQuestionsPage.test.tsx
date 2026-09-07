@@ -111,7 +111,7 @@ describe('LifestyleQuestionsPage', () => {
     expect(screen.getByRole('radio', { name: 'No' })).toBeChecked()
   })
 
-  it('hands off to Building your report, marking Lifestyle as the just-completed activity, after the last question', async () => {
+  it('hands off to Creating your report, marking Lifestyle as the just-completed activity, after the last question', async () => {
     const user = userEvent.setup()
     renderPage()
 

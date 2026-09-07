@@ -80,7 +80,7 @@ const FUNNEL_STEPS = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/assessment', label: 'Assessment Intro' },
   { path: '/report/ready', label: 'Report Ready' },
-  { path: '/report/building', label: 'Building your report' },
+  { path: '/report/building', label: 'Creating your report' },
   { path: '/report', label: 'In-App Report' },
 ] as const
 
@@ -431,7 +431,7 @@ export default function App() {
               {/* The confirmation screen every activity's "Finish"/"I'm ready" hands off to, or
                   any route's own "Skip to report" corner link — see
                   REPORT_SKIP_ACTIVITY_BY_ROUTE above. Shows how many activities are done and,
-                  from there, either "Go to Dashboard" or "Build my report" (which continues on
+                  from there, either "Go to Dashboard" or "Create my report" (which continues on
                   to /report/building below). */}
               <Route
                 path="/report/ready"
@@ -441,7 +441,7 @@ export default function App() {
                   </RequireAuth>
                 }
               />
-              {/* The loading interstitial `ReportReadyPage`'s "Build my report" (above) or
+              {/* The loading interstitial `ReportReadyPage`'s "Create my report" (above) or
                   Dashboard's own identically-labeled CTA (`FullCheckInCard`, once all three
                   activities are done) hand off to. Hands off to /report after a brief
                   non-interactive beat, same pattern as Loading/Setting Up/Thanks. */}

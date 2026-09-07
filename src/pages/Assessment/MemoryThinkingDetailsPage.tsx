@@ -68,13 +68,15 @@ export function MemoryThinkingDetailsPage() {
                 {formatRedoDate(REDO_COOLDOWN_MONTHS)} before taking it again.
               </p>
             )}
-            <div className={styles.header}>
-              <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
+            <div className={[styles.header, styles.headerTabletRow].join(' ')}>
+              <div className={styles.titleGroup}>
+                <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
+                <p className={styles.duration}>About 7–10 minutes</p>
+              </div>
               <Link to="/assessment" className={buttonClassName('primary', 'lg')}>
                 I&rsquo;m ready
               </Link>
             </div>
-            <p className={styles.duration}>About 7–10 minutes</p>
             <hr className={styles.divider} />
           </div>
           <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>

@@ -98,7 +98,7 @@
 /* 24px gap to the buttons/next-activities below, on request — wider than the 16px `.title`
    uses above the subtitle in the "building" state, so it gets its own override here rather than
    changing the shared `.title` margin. Same font size/family/weight as `.title` now, on request
-   — this, "Building your report…", and `ReportPage`'s "Your report is ready" are meant to read
+   — this, "Creating your report…", and `ReportPage`'s "Your report is ready" are meant to read
    as the same headline treatment across all three screens in this sequence; this used to render
    one step smaller (headline-4-regular, 28px) than the other two before that request. */
 .title.titleReady {

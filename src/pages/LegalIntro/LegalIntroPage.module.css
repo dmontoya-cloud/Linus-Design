@@ -1,4 +1,5 @@
-/* Same ~200px sizing as Device Setup's SpeakerCompanion/MicrophoneCompanion. 24px gap to
+/* Square now — matches the illustration's own 160x160 viewBox (a white circle badge behind
+   the artwork, on request), not the wider 160x128 box the placeholder blob used. 24px gap to
    the title below, on request — `LegalLayout`'s shared `.content` already contributes 16px
    via its own flex `gap`, so only the remaining 8px is added here, on the illustration
    itself (pushing the title/subtitle/button down) rather than raising that shared gap for
@@ -6,7 +7,7 @@
 .companion {
   display: block;
   width: 160px;
-  height: 128px;
+  height: 160px;
   margin: 0 auto 8px;
 }
 

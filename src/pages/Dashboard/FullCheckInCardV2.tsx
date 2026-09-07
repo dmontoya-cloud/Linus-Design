@@ -25,13 +25,13 @@ function titleLinesFor(completedCount: number): [string] | [string, string] {
  * merged white card holding both the header (title, duration/progress line, and the main CTA)
  * and, directly inside the same card below a divider, the three-activity row (`ActivityCardV2`)
  * — replacing Dashboard 1's separate progress-bar tracker and its own standalone activity-card
- * grid below the hero. The secondary "Build my report" button Dashboard 1's `FullCheckInCard`
+ * grid below the hero. The secondary "Create my report" button Dashboard 1's `FullCheckInCard`
  * shows beside its main CTA is dropped here on request — the mock shows only one button in this
  * card at any state, since that role now belongs to the new `ReportCTACard` section instead.
  *
  * The main CTA keeps `FullCheckInCard`'s exact same progress logic: "Start Activity" with
  * nothing done, "Start Next Activity" pointing at whichever activity is next once something
- * is, "Build my report" once all three are done and nothing's been built yet, and "View report"
+ * is, "Create my report" once all three are done and nothing's been built yet, and "View report"
  * once it has (`useAuth().hasBuiltReport`) — see that component's own doc comment for the full
  * reasoning. The header title now also carries over `FullCheckInCard`'s own 3-state title copy
  * (`titleLinesFor`) that changes with progress, on request — the duration line stays static
@@ -73,7 +73,7 @@ export function FullCheckInCardV2() {
             </Link>
           ) : (
             <Link to="/report/building" className={styles.startButton}>
-              Build my report
+              Create my report
             </Link>
           )}
         </div>
