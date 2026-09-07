@@ -212,12 +212,9 @@ export function ReportReadyPage() {
             role="status"
             aria-live="polite"
           >
-            {headlineLines[0]}
+            <span>{headlineLines[0]}</span>
             {headlineLines[1] && (
-              <>
-                <br />
-                {headlineLines[1]}
-              </>
+              <span className={styles.titleSecondLine}>{headlineLines[1]}</span>
             )}
           </h1>
           {remainingActivities.length > 0 ? (
