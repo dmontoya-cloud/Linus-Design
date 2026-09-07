@@ -213,9 +213,7 @@ export function ReportReadyPage() {
             aria-live="polite"
           >
             <span>{headlineLines[0]}</span>
-            {headlineLines[1] && (
-              <span className={styles.titleSecondLine}>{headlineLines[1]}</span>
-            )}
+            {headlineLines[1] && <span className={styles.titleSecondLine}>{headlineLines[1]}</span>}
           </h1>
           {remainingActivities.length > 0 ? (
             <div className={styles.nextActivities}>
