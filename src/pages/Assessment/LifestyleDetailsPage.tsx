@@ -39,7 +39,10 @@ export function LifestyleDetailsPage() {
               Back to dashboard
             </Link>
             <div className={styles.header}>
-              <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
+              <div className={styles.titleGroup}>
+                <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
+                <p className={styles.duration}>About 5 minutes</p>
+              </div>
               <Link
                 to="/assessment/lifestyle/questions"
                 className={buttonClassName('primary', 'lg')}
@@ -47,7 +50,6 @@ export function LifestyleDetailsPage() {
                 I&rsquo;m ready
               </Link>
             </div>
-            <p className={styles.duration}>About 5 minutes</p>
           </div>
           <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
             <p className={styles.taskIntro}>

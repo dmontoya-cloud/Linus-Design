@@ -21,7 +21,7 @@ import styles from './DashboardPageV2.module.css'
  * once complete, rather than a separate progress-bar tracker plus a standalone card grid below
  * it — see that component's own doc comment), and a new `ReportCTACard` section sits between it
  * and "Learn more about brain health", reusing the exact same visibility rule Dashboard 1's
- * `FullCheckInCard` already applies to its own secondary "Build my report" button.
+ * `FullCheckInCard` already applies to its own secondary "Create my report" button.
  */
 export function DashboardPageV2() {
   const { profile } = useAuth()
@@ -39,7 +39,8 @@ export function DashboardPageV2() {
           className={[styles.welcome, styles.reveal].join(' ')}
           style={{ animationDelay: cascadeDelay(0) }}
         >
-          Welcome, {profile?.firstName ?? 'there'}!{' '}
+          Welcome, {profile?.firstName ?? 'there'}!
+          <br className={styles.welcomeBreak} />{' '}
           <span className={styles.welcomeSubtext}>We&rsquo;re so glad you&rsquo;re here.</span>
         </h1>
         <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>

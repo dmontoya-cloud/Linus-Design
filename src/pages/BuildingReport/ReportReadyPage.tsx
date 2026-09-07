@@ -58,7 +58,7 @@ function combinationKey(ids: Iterable<string>): string {
  * Figma's reference set where an "only Lifestyle done" or "only Priorities done" state still
  * recommends Memory & Thinking alongside whichever other one is left, not just Lifestyle/
  * Priorities between themselves. An already-completed activity is dropped from this list
- * entirely rather than shown with its own "Build my report" action, so the suggestion always
+ * entirely rather than shown with its own "Create my report" action, so the suggestion always
  * points at what's actually left, not what's already done. `duration`/`description` match
  * Dashboard's own `PENDING_ACTIVITIES` copy verbatim, on request (Figma's reference frames bring
  * the description back here, having originally dropped it for a title-and-button-only row), so
@@ -130,16 +130,16 @@ function NextActivityCard({
  * animation at `/report/building`) used to be one page with an in-place "building" → "ready"
  * transition, which meant finishing an activity always sat through a 30-second fake loading
  * screen before showing what it actually finished. They're now two separate screens —
- * `BuildingReportPage` is reached only from this page's own "Build my report" button below (or
+ * `BuildingReportPage` is reached only from this page's own "Create my report" button below (or
  * Dashboard's own identically-labeled CTA once all three activities are done, via
  * `FullCheckInCard`), standing in for someone actually asking for their report rather than just
  * finishing an activity. No `DashboardNavBar` or other chrome, same as Loading/Setting Up/Thanks.
- * Both exit buttons — "Go to Dashboard" and "Build my report" — call `completeActivity` for
+ * Both exit buttons — "Go to Dashboard" and "Create my report" — call `completeActivity` for
  * whichever activity was just finished (see `completedActivityId` below) before navigating on, so
  * Dashboard's own card/tracker reflect it either way; previously only "Go to Dashboard" did
  * this, which would have left the just-finished activity unrecorded for anyone who clicked
- * straight through to "Build my report" instead. "Go to Dashboard" is always the plain `tertiary`
- * button variant; "Build my report" switches from `secondary` (an outline pill — matching Figma's
+ * straight through to "Create my report" instead. "Go to Dashboard" is always the plain `tertiary`
+ * button variant; "Create my report" switches from `secondary` (an outline pill — matching Figma's
  * reference frames for the two "activities remain" states) to `primary` (solid) once nothing's
  * left to recommend, on request — generating the report only becomes the one obvious action once
  * there's nothing else to do first. The headline, intro copy (`INTRO_COPY`), and `ALL_ACTIVITIES`
@@ -248,7 +248,7 @@ export function ReportReadyPage() {
               size="lg"
               onClick={handleBuildReport}
             >
-              Build my report
+              Create my report
             </Button>
           </div>
         </div>

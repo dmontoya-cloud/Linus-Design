@@ -32,6 +32,13 @@
   color: var(--color-text-primary, #1f2a37);
 }
 
+/* No line break by default — the greeting and subtext just wrap normally at the desktop width
+   this reads fine at. Forced onto its own line on Tablet and Phone instead (see the media query
+   below), on request, rather than leaving it to wrap wherever it happens to run out of room. */
+.welcomeBreak {
+  display: none;
+}
+
 .copy {
   font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-headline-5-semibold-size, 1.125rem);
@@ -67,5 +74,37 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Tighter side margins on phone, on request — 24px either side left less room for content
+   than it needed to on the narrowest screens; the top/bottom padding stays as-is. One step up
+   the type scale for the Welcome heading too, on request (tried at 900px/Tablet+Phone first,
+   scoped back down to phone-only) — headline-4-semibold, not the modular scale's literal
+   "next size" (paragraph-3-semibold, 19px): headline-5 is deliberately off-scale on its own
+   (see docs/design.md), and stepping into Paragraph would swap the accent Plus Jakarta Sans
+   face for the body IBM Plex Sans one — headline-4 keeps the same headline typeface, just one
+   tier up. Placed after the base rules above (not merged into an earlier block) since a media
+   query needs to out-order a same-specificity base rule to win, not just out-condition it. */
+@media (max-width: 640px) {
+  .content {
+    padding-left: var(--space-sm, 8px);
+    padding-right: var(--space-sm, 8px);
+  }
+
+  .welcome,
+  .welcomeSubtext {
+    font-size: var(--font-headline-4-semibold-size, 1.75rem);
+    line-height: var(--font-headline-4-semibold-line-height, 1.25);
+  }
+}
+
+/* Tablet and Phone both get the forced line break, on request — 900px matches Dashboard 1's
+   own grid breakpoint, reused here as the "Tablet and Phone together" cutoff (distinct from
+   the phone-only 640px block above, which stays phone-only per its own separate request).
+   Placed last so it out-orders .welcomeBreak's own unconditional display:none above. */
+@media (max-width: 900px) {
+  .welcomeBreak {
+    display: block;
   }
 }

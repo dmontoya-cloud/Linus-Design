@@ -52,7 +52,10 @@ export function PrioritiesDetailsPage() {
               Back to dashboard
             </Link>
             <div className={styles.header}>
-              <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
+              <div className={styles.titleGroup}>
+                <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
+                <p className={styles.duration}>About 7 minutes</p>
+              </div>
               <Link
                 to="/assessment/priorities/questions"
                 className={buttonClassName('primary', 'lg')}
@@ -60,7 +63,6 @@ export function PrioritiesDetailsPage() {
                 I&rsquo;m ready
               </Link>
             </div>
-            <p className={styles.duration}>About 7 minutes</p>
           </div>
           <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
             <h2 className={prioritiesStyles.subheading}>Learning what is important to you</h2>

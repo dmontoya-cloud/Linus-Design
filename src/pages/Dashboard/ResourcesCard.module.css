@@ -51,6 +51,17 @@
   align-items: center;
   flex-shrink: 0;
   gap: var(--space-sm, 8px);
+  min-width: 0;
+}
+
+/* Truncates with an ellipsis rather than wrapping to a second line, on request — at very
+   narrow widths (once `.link` goes full-width below) "Open on linushealth.com" plus the icon
+   no longer fit on one line, and a two-line pill reads as broken rather than just narrow. */
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .icon {
@@ -63,5 +74,15 @@
   .card {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  /* Full-width once stacked, on request — matches FullCheckInCardV2's own hero CTA rather than
+     staying hug-width like a card that just happened to stack (see the responsiveness report's
+     finding #4: this and ReportCTACard's button were the only stacked CTAs NOT going full-width
+     on mobile). Centered, since `.link`'s own justify-content is otherwise flex-start (fine at
+     hug-width, but reads as awkwardly left-packed once the box is full-width). */
+  .link {
+    width: 100%;
+    justify-content: center;
   }
 }

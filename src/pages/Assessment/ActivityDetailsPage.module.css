@@ -72,6 +72,16 @@
   margin: 0 0 var(--space-sm, 8px);
 }
 
+/* Groups the title with its duration line so both sit to the "I'm ready" button's left as one
+   flex item, on request — `.duration` used to be a separate paragraph after `.header` entirely,
+   which read fine at Desktop (where `.header`'s row layout still put it visually under the
+   title) but landed *below* the button once `.header` switches to a column at 900px, since the
+   button came before it in source order. Grouping them here fixes both breakpoints from the
+   same markup, without needing a breakpoint-specific reorder. */
+.titleGroup {
+  min-width: 0;
+}
+
 .title {
   font-family: var(--font-headline-3-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-headline-3-semibold-size, 2.0625rem);
@@ -81,12 +91,16 @@
   margin: 0;
 }
 
+/* No bottom margin, on request — `.duration` is always the last thing in `.titleGroup` now,
+   so its own margin used to stack with `.header`'s 24px flex `gap` (titleGroup-to-button in
+   the 900px-and-below column layout), doubling the gap above the button to 48px instead of
+   the intended 24px. `.header`'s `gap` is the single source of that spacing now. */
 .duration {
   font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-label-l-semibold-size, 0.8125rem);
   font-weight: var(--font-label-l-semibold-weight, 600);
   color: var(--color-text-secondary, #5b6b79);
-  margin: 0 0 var(--space-lg, 24px);
+  margin: 0;
 }
 
 /* Centered row of fixed-width columns, on request (180px each). One column holds what was
@@ -225,13 +239,52 @@
   }
 }
 
-@media (max-width: 640px) {
+/* Raised from 640px to 900px (Tablet, not just Phone), on request — the card's own 48px
+   horizontal padding was eating too much of the available width on both, squeezing
+   `.instructions`'s 180px columns and everything else inside. 16px horizontal (down from
+   48px), vertical stays 32px. */
+@media (max-width: 900px) {
   .card {
-    padding: var(--space-xl, 32px) var(--space-lg, 24px);
+    padding: var(--space-xl, 32px) var(--space-md, 16px);
   }
 
   .header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  /* Icon-beside-text, left-aligned, one per row, on request — Tablet/Phone only; Desktop
+     keeps the 4-up icon-on-top/centered grid above. */
+  .instructions {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    row-gap: var(--space-lg, 24px);
+  }
+
+  .instructionItem {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .instructionTitle {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* `MemoryThinkingDetailsPage` only, on request (an extra class that page's own `.header` opts
+   into — Lifestyle/Priorities Details don't add it, so they keep the plain `.header` rule's
+   ≤900px stacking above, unchanged). Row layout, matching Desktop, on Tablet specifically
+   (641–900px) — only true Phone width stacks the title/duration group above the button.
+   Placed after the ≤900px block above so it wins the 641–900px overlap between the two same-
+   specificity single-class rules on this element. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .headerTabletRow {
+    flex-direction: row;
+    align-items: center;
   }
 }

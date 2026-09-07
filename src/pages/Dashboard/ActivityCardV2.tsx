@@ -62,12 +62,20 @@ export function ActivityCardV2({ activity }: { activity: ActivityV2 }) {
         {isComplete ? (
           <Link
             to={activity.startPath}
-            className={buttonClassName(activity.completedActionVariant, 'sm')}
+            className={[
+              buttonClassName(
+                activity.completedActionVariant,
+                activity.completedActionVariant === 'secondary' ? 'lg' : 'sm',
+              ),
+              activity.completedActionVariant === 'tertiary' ? styles.detailsButton : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
           >
             {activity.completedActionLabel}
           </Link>
         ) : (
-          <Link to={activity.startPath} className={buttonClassName('secondary', 'sm')}>
+          <Link to={activity.startPath} className={buttonClassName('secondary', 'lg')}>
             Start
           </Link>
         )}

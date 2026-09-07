@@ -96,9 +96,24 @@
 }
 
 @media (max-width: 640px) {
+  /* 16px between the progress line and the button once they're stacked, on request — was
+     inheriting the row's own 8px gap (fine as a horizontal gap on desktop, too tight once
+     everything stacks vertically on phone). */
   .headerRow {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--space-md, 16px);
+  }
+
+  /* Steps down one type-scale tier (reusing headline-4-semibold, not a one-off value) — on
+     request. headline-3-semibold (33px) is fine for a one-line title, but the all-done state's
+     two-line title ("All activities are in! / Build your full brain health report.") wraps to
+     3-4 lines at 33px on a ~340px-wide mobile column, ballooning the header before any activity
+     content shows. Applies to every state's title, not just the two-line one, since headline
+     sizes stepping down at the mobile breakpoint is the right default regardless of line count. */
+  .title {
+    font-size: var(--font-headline-4-semibold-size, 1.75rem);
+    line-height: var(--font-headline-4-semibold-line-height, 1.25);
   }
 
   .startButton {

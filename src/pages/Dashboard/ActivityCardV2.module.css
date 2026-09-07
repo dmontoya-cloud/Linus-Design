@@ -119,4 +119,45 @@
   .column:not(:last-child) {
     border-right: none;
   }
+
+  /* Bump "Details" up to the `md` button size's touch target (48px), on request — `sm` (40px)
+     falls short of the ~44-48px minimum commonly recommended for touch, and this is the one
+     breakpoint where thumb precision matters most. Start/Restart don't need this: both are `lg`
+     (56px) at every breakpoint now, already past that minimum. Scoped to `.detailsButton`
+     (an extra class ActivityCardV2.tsx only adds for the tertiary "Details" case) rather than
+     every `buttonRow a`, since Button's own sm/lg classes are module-scoped and not selectable
+     from here — matching that would otherwise shrink the new 56px Start/Restart buttons back
+     down to 48px on mobile. */
+  .buttonRow a.detailsButton {
+    height: 48px;
+    padding: var(--space-sm, 8px) var(--space-lg, 24px);
+    font-size: var(--font-button-size, 1rem);
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  /* 25% larger on mobile, on request — 56px/31px vs the base 45px/25px used at every other
+     breakpoint. The icon-in-circle is one of the few purely decorative elements that doesn't
+     scale with type, so it reads slightly small once everything around it (title, buttons) has
+     already stepped up for the phone breakpoint. */
+  .iconCircle {
+    width: 56px;
+    height: 56px;
+  }
+
+  .icon {
+    width: 31px;
+    height: 31px;
+  }
+
+  /* One step up the type scale on phone only, on request (tried at 900px/Tablet+Phone first,
+     scoped back down to phone-only). headline-4-semibold, not the modular scale's literal
+     "next size" (paragraph-3-semibold, 19px): headline-5 is deliberately off-scale on its own
+     (see docs/design.md), and stepping into Paragraph would swap the accent Plus Jakarta Sans
+     face for the body IBM Plex Sans one — headline-4 keeps the same headline typeface, just
+     one tier up. Matches DashboardPageV2's own Welcome heading, bumped the same way. */
+  .title {
+    font-size: var(--font-headline-4-semibold-size, 1.75rem);
+    line-height: var(--font-headline-4-semibold-line-height, 1.25);
+  }
 }

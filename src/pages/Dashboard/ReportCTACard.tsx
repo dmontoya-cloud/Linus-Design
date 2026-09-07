@@ -7,9 +7,9 @@ import styles from './ReportCTACard.module.css'
  * ReportCTACard — the "Ready to create your report?" section new to Dashboard 2's mock
  * (Figma node 884:2942), sitting between `FullCheckInCardV2` and the resources section. Reuses
  * the exact same visibility rule Dashboard 1's `FullCheckInCard` already applies to its own
- * secondary "Build my report" button (see that component's doc comment): shown once at least
+ * secondary "Create my report" button (see that component's doc comment): shown once at least
  * one activity is done, hidden again once every activity is done (at that point
- * `FullCheckInCardV2`'s own main CTA already relabels to "Build my report"/"View report", so
+ * `FullCheckInCardV2`'s own main CTA already relabels to "Create my report"/"View report", so
  * this section would just duplicate it) or once a report's already been built. Always points at
  * `/report/building`, same as every other "build the report" entry point in this app.
  */
@@ -34,7 +34,7 @@ export function ReportCTACard({ totalActivityCount }: { totalActivityCount: numb
         to="/report/building"
         className={`${buttonClassName('secondary', 'lg')} ${styles.link}`}
       >
-        Build my report
+        Create my report
       </Link>
     </div>
   )

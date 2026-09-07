@@ -48,4 +48,12 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  /* Full-width once stacked, on request — matches FullCheckInCardV2's own hero CTA rather than
+     staying hug-width like a card that just happened to stack (responsiveness report finding
+     #4: this and ResourcesCard's button were the only stacked CTAs NOT going full-width on
+     mobile). buttonClassName's own justify-content:center already centers the label. */
+  .link {
+    width: 100%;
+  }
 }

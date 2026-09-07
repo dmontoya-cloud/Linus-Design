@@ -49,9 +49,9 @@ const TIPS = [
 ]
 
 /**
- * Building your report — the loading interstitial shown once a visitor actually asks for their
+ * Creating your report — the loading interstitial shown once a visitor actually asks for their
  * report, reached only from `ReportReadyPage`'s "Generate report" button or Dashboard's own
- * "Build my report" once all three activities are done (via `FullCheckInCard`) — never reached
+ * "Create my report" once all three activities are done (via `FullCheckInCard`) — never reached
  * directly from finishing an activity any more, on request: this page and `ReportReadyPage` used
  * to be one page with an in-place "building" → "ready" transition, which meant finishing an
  * activity always sat through this 30-second loading screen before showing what it actually
@@ -93,7 +93,7 @@ export function BuildingReportPage() {
             className={`${styles.icon} ${styles.iconLg}`}
           />
           <h1 className={styles.title} role="status" aria-live="polite">
-            Building your report…
+            Creating your report…
           </h1>
           <p className={styles.subtitle}>
             This could take up to 5 minutes.
