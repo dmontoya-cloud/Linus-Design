@@ -6,7 +6,8 @@
 /* Fixed 64px, matching DashboardNavBar's own `.navBar` height, on request — this header used
    to just be padding-driven (24px top/bottom around the 36px logo, ~84px total), which put it
    out of step with every screen reached from Dashboard. Height fixed + `align-items: center`
-   centers the same 36px `Logo` (shared, unchanged) the same way DashboardNavBar does. */
+   was meant to center the same 36px `Logo` (shared, unchanged) the same way DashboardNavBar
+   does — but never actually did, on its own (see `.logo` below). */
 .header {
   display: flex;
   align-items: center;
@@ -18,8 +19,16 @@
   border-bottom: 1px solid var(--color-border-subtle, #eff0f2);
 }
 
+/* `align-self: center` overrides `Logo`'s own `align-self: flex-start` (a safety default
+   against a stretch-y parent distorting it — irrelevant here, but it also wins over `.header`'s
+   `align-items: center` since that only sets the *default* alignment, on request/bug fix: the
+   logo was sitting flush against the header's top edge instead of centered, because nothing
+   here countermanded that default before now. DashboardNavBar never hits this — its own Logo
+   sits inside an inner flex wrapper already sized to the logo's own height, so there's no
+   leftover vertical space for the misalignment to show. */
 .logo {
   display: block;
+  align-self: center;
 }
 
 .progressSection {

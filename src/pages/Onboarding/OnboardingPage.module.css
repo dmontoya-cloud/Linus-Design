@@ -10,16 +10,20 @@
   color: var(--color-text-primary, #1f2a37);
 }
 
+/* Gap dropped from --space-lg (24px) to --space-md (16px), on request — combined with each
+   field slot's own reserved error-message space below it (`.nameFieldSlot`/`.monthFieldSlot`/
+   etc.'s `min-height`, unchanged — that's a deliberate anti-layout-shift reservation, not
+   spacing to trim), the fields read as too far apart at the old value. */
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg, 24px);
+  gap: var(--space-md, 16px);
 }
 
 .nameRow {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg, 24px);
+  gap: var(--space-md, 16px);
 }
 
 @media (min-width: 480px) {
@@ -90,7 +94,7 @@
 .dobRow {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg, 24px);
+  gap: var(--space-md, 16px);
 }
 
 /* Reserves enough height for the Month select plus its own "Please select a month." error —

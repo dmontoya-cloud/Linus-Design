@@ -1,16 +1,36 @@
+/* The gray track itself, on request/bug fix — this used to have no background of its own at
+   all, just the sliding `.thumb` floating on whatever page background sat behind it, so it
+   never actually read as a toggle "track" the way Figma's reference does. `padding` (not a
+   border) creates the inset gap around `.thumb`: `.thumb`'s own `inset: 0` resolves against
+   this element's *padding* box (the CSS spec's containing block for an absolutely positioned
+   descendant of a `position: relative` ancestor), so it automatically sits inset by exactly
+   this padding on every side, no separate offset value to keep in sync. */
 .group {
   position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
+  padding: var(--space-xs, 4px);
+  background: var(--color-border-subtle, #eff0f2);
+  border-radius: var(--radius-pill, 999px);
 }
 
+/* White, not gray, on request/bug fix — Figma's reference shows the active option lifted on a
+   white pill *above* the gray track, not a same-color patch sitting flush with it (the swapped
+   colors made the active option nearly invisible against its own track). `--shadow-card` (the
+   same soft two-layer lift every other elevated surface in this system already uses, not an
+   invented shadow) gives it that lifted read. */
 .thumb {
   position: absolute;
   inset: 0;
   width: 50%;
-  background: var(--color-border-subtle, #eff0f2);
+  background: var(--color-surface, #fff);
   border-radius: var(--radius-pill, 999px);
+  box-shadow: var(
+    --shadow-card,
+    0 2px 8px rgba(32, 37, 42, 0.06),
+    0 1px 2px rgba(32, 37, 42, 0.04)
+  );
   transition: transform var(--motion-duration-base, 150ms)
     var(--motion-easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
 }

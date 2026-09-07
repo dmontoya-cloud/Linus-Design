@@ -52,6 +52,18 @@
   padding: var(--space-xl, 32px);
 }
 
+/* Narrower horizontal padding on phone only, on request, matching Figma — the card's own 32px
+   left/right was eating too much of the already-narrow phone width; vertical stays 32px. Tablet
+   keeps the full 32px on both axes, same as Desktop. Shared by `BuildingReportPage`,
+   `ReportReadyPage`, and `ReportPage` (all three import this file), so fixing it once here
+   fixes "Creating your report", "Report ready", and "Download Report" together. */
+@media (max-width: 640px) {
+  .content {
+    padding-left: var(--space-md, 16px);
+    padding-right: var(--space-md, 16px);
+  }
+}
+
 /* No `color` here (unlike the hand-drawn icon this replaced) — `DotLottieReact` renders onto a
    `<canvas>`, not recolorable via `currentColor`, and the provided animation carries its own
    fixed skeleton-loading gray fills anyway. */
@@ -95,13 +107,35 @@
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 }
 
+/* `ReportReadyPage`'s one-/two-complete states only, on request — the second headline line
+   ("Your report is taking shape." / "...has more details about you!") steps down to
+   headline-5-regular (18px — tried at headline-4/28px first, on request), well below `.title`'s
+   own headline-3-regular (33px), so it reads as a subordinate line rather than matching weight
+   with the count itself. The all-complete state never renders a second line, so `.title` alone
+   still applies there. */
+.titleSecondLine {
+  display: inline-block;
+  font-family: var(--font-headline-5-regular-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-regular-size, 1.125rem);
+  font-weight: var(--font-headline-5-regular-weight, 400);
+  line-height: var(--font-headline-5-regular-line-height, 1.3);
+}
+
 /* 24px gap to the buttons/next-activities below, on request — wider than the 16px `.title`
    uses above the subtitle in the "building" state, so it gets its own override here rather than
    changing the shared `.title` margin. Same font size/family/weight as `.title` now, on request
    — this, "Creating your report…", and `ReportPage`'s "Your report is ready" are meant to read
    as the same headline treatment across all three screens in this sequence; this used to render
    one step smaller (headline-4-regular, 28px) than the other two before that request. */
+/* Flex column + 8px gap, on request — the two headline lines are now two separate elements
+   (see `ReportReadyPage`'s own two `<span>`s) rather than one text node split by a `<br/>`, so
+   the gap between them is a real, explicit 8px rather than whatever the line-height of the
+   smaller second line happened to leave. Only one child renders for the all-complete state
+   (no second line), where this is a no-op — `gap` has nothing to apply between. */
 .title.titleReady {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm, 8px);
   margin-bottom: var(--space-lg, 24px);
 }
 
@@ -170,6 +204,21 @@
   gap: var(--space-md, 16px);
   opacity: 0;
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+}
+
+/* Full-width, stacked buttons on phone, on request — `flex-wrap` alone already stacked these
+   (they don't fit side by side at this width), but left each one hug-width/centered rather
+   than filling the card. Placed after `.readyActions`'s own base rule above (not the earlier
+   640px block near the top of this file) so this same-specificity override actually wins. */
+@media (max-width: 640px) {
+  .readyActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .readyActions button {
+    width: 100%;
+  }
 }
 
 /* The "start something else" nudge shown once ready, on request — `text-align: left` overrides
