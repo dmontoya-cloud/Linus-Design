@@ -33,15 +33,15 @@ const DEFAULT_COMPLETED_ACTIVITY_ID = 'memory-recall'
  * that would never resolve to a "here's what's next" sentence anyway. */
 const INTRO_COPY: Record<string, string> = {
   'memory-recall':
-    'Completing the Memory & Thinking exercise helps inform one view of your brain health. Add Lifestyle and Priorities to make your report even more personalized to you.',
+    'Completing the Memory & Thinking exercise helps inform one view of your brain health. Add Lifestyle & Health and Personal Priorities to make your report even more personalized to you.',
   'speech-pattern':
     "You've added information about your lifestyle and health habits. Add another activity to make your report more detailed and personalized.",
   'visual-attention':
     "You've added what matters most to you. Add another activity to make your report more detailed and personalized.",
   'memory-recall,speech-pattern':
-    "You've added information about your brain function and lifestyle. Add Priorities to include what matters most to you in daily life.",
+    "You've added information about your brain function and lifestyle. Add Personal Priorities to include what matters most to you in daily life.",
   'memory-recall,visual-attention':
-    "You've added information about your brain function and what matters most to you. Add Lifestyle to include more about your health and everyday habits.",
+    "You've added information about your brain function and what matters most to you. Add Lifestyle & Health to include more about your health and everyday habits.",
   'speech-pattern,visual-attention':
     "You've added information about your lifestyle and what matters most to you. Add Memory & Thinking to include how your brain abilities are working.",
 }
@@ -74,17 +74,17 @@ const ALL_ACTIVITIES = [
   },
   {
     id: 'speech-pattern',
-    title: 'Lifestyle',
+    title: 'Lifestyle & Health',
     duration: 'About 5 minutes',
     description: 'Tell us about your lifestyle, health, and everyday habits.',
-    startPath: '/assessment/lifestyle',
+    startPath: '/assessment/lifestyle/questions',
   },
   {
     id: 'visual-attention',
-    title: 'Priorities',
+    title: 'Personal Priorities',
     duration: 'About 7 minutes',
     description: 'Share what matters most to you and what you want to keep doing in daily life.',
-    startPath: '/assessment/priorities',
+    startPath: '/assessment/priorities/questions',
   },
 ]
 

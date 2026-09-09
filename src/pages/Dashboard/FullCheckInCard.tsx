@@ -17,15 +17,15 @@ const CATEGORIES = [
   },
   {
     id: 'speech-pattern',
-    label: 'Lifestyle',
+    label: 'Lifestyle & Health',
     Icon: PersonSimpleRunIcon,
-    startPath: '/assessment/lifestyle',
+    startPath: '/assessment/lifestyle/questions',
   },
   {
     id: 'visual-attention',
-    label: 'Priorities',
+    label: 'Personal Priorities',
     Icon: ListNumbersIcon,
-    startPath: '/assessment/priorities',
+    startPath: '/assessment/priorities/questions',
   },
 ]
 
@@ -71,15 +71,25 @@ const CATEGORIES = [
 /** The title's own copy per `completedCount`, on request — one and two done are each a single
  * line; all three done keeps the two-line "status, then what's next" treatment
  * `ReportReadyPage`'s own `headlineLines` uses, since "All activities are in!" reads as its own
- * short beat before the instruction that follows it. */
-function titleLinesFor(completedCount: number): [string] | [string, string] {
+ * short beat before the instruction that follows it. Once the report has actually been built
+ * (`hasBuiltReport`, set by `ReportPage`'s Download button), on request, this overrides that
+ * all-three-done copy with a single "Your report is ready!" line — the "Create your full brain
+ * health report" instruction no longer applies once that's already happened, matching the main
+ * CTA's own switch to "View report" for the same condition. */
+function titleLinesFor(
+  completedCount: number,
+  hasBuiltReport: boolean,
+): [string] | [string, string] {
+  if (completedCount === 3 && hasBuiltReport) {
+    return ['Your report is ready!']
+  }
   switch (completedCount) {
     case 1:
       return ['Your report is taking shape']
     case 2:
       return ['Your report has more detail']
     case 3:
-      return ['All activities are in!', 'Build your full brain health report.']
+      return ['All activities are in!', 'Create your full brain health report.']
     default:
       return ['Complete your full brain health report']
   }
@@ -95,7 +105,7 @@ export function FullCheckInCard() {
   // Only meaningful once something's actually been completed, on request — with nothing done
   // yet there's no real "next" to point at, just the same starting line for all three.
   const nextBadgeId = completedCount > 0 ? nextActivity?.id : undefined
-  const [titleLine1, titleLine2] = titleLinesFor(completedCount)
+  const [titleLine1, titleLine2] = titleLinesFor(completedCount, hasBuiltReport)
 
   return (
     <div className={styles.card}>

@@ -1,0 +1,239 @@
+.widget {
+  position: fixed;
+  right: var(--space-lg, 24px);
+  /* Taller than the plain --space-lg gutter every other fixed corner element uses, so the
+     launcher clears the small "Back to start"/"Skip to report" link `BackToStart` renders in
+     the same corner (see App.tsx) instead of covering it. */
+  bottom: var(--space-xxl, 48px);
+  /* Below PostReportSurvey's card (z-index: 20, same corner) on request — that survey sits in
+     front of the launcher whenever both are visible (Dashboard, right after downloading a
+     report), rather than the launcher's circle floating over the survey card. Still above the
+     plain `.back-to-start` corner link (z-index: 10). */
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-sm, 8px);
+}
+
+.teaser {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-xl, 24px);
+  border-bottom-right-radius: var(--radius-sm, 8px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(32, 37, 42, 0.06));
+  padding: var(--space-sm, 8px) var(--space-md, 16px);
+  max-width: 260px;
+}
+
+.teaserDismiss {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-circle, 50%);
+  background: transparent;
+  color: var(--color-text-tertiary, #94a3ad);
+  cursor: pointer;
+}
+.teaserDismiss:hover,
+.teaserDismiss:focus-visible {
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+.teaserDismissIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.teaserText {
+  margin: 0;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-1-regular-size, 0.8125rem);
+  font-weight: var(--font-paragraph-1-regular-weight, 400);
+  line-height: var(--font-paragraph-1-regular-line-height, 1.5);
+  color: var(--color-text-primary, #1f2a37);
+  white-space: nowrap;
+}
+
+.launcherButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: var(--radius-circle, 50%);
+  background: var(--color-accent, #007679);
+  color: var(--color-on-accent, #fff);
+  box-shadow: var(--shadow-modal, 0 16px 40px rgba(32, 37, 42, 0.14));
+  cursor: pointer;
+}
+.launcherButton:hover,
+.launcherButton:focus-visible {
+  background: var(--color-primary-strong, #032c3d);
+}
+
+.launcherIcon {
+  width: 26px;
+  height: 26px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - var(--space-xl, 32px)));
+  height: min(560px, calc(100vh - var(--space-xl, 32px)));
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: var(--shadow-modal, 0 16px 40px rgba(32, 37, 42, 0.14));
+  overflow: hidden;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 8px);
+  padding: var(--space-md, 16px) var(--space-lg, 24px);
+  background: var(--color-accent, #007679);
+  color: var(--color-on-accent, #fff);
+}
+
+.headerIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.headerTitle {
+  margin: 0;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-3-semibold-size, 1.1875rem);
+  font-weight: var(--font-paragraph-3-semibold-weight, 600);
+  line-height: var(--font-paragraph-3-semibold-line-height, 1.5);
+  color: var(--color-on-accent, #fff);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md, 16px) var(--space-lg, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 16px);
+}
+
+.sessionTime {
+  margin: 0;
+  align-self: center;
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-l-regular-size, 0.8125rem);
+  color: var(--color-text-tertiary, #94a3ad);
+}
+
+.messageList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 16px);
+}
+
+.messageRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm, 8px);
+}
+
+.messageRow.fromVisitor {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-circle, 50%);
+  background: var(--color-border-subtle, #eff0f2);
+  color: var(--color-text-tertiary, #94a3ad);
+}
+
+.avatarIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs, 4px);
+  max-width: 240px;
+}
+
+.fromVisitor .messageContent {
+  align-items: flex-end;
+}
+
+.messageAuthor {
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-m-regular-size, 0.6875rem);
+  color: var(--color-text-tertiary, #94a3ad);
+}
+
+.messageBubble {
+  margin: 0;
+  padding: var(--space-sm, 8px) var(--space-md, 16px);
+  background: var(--color-border-subtle, #eff0f2);
+  border-radius: var(--radius-md, 12px);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  line-height: var(--font-paragraph-2-regular-line-height, 1.5);
+  color: var(--color-text-primary, #1f2a37);
+}
+
+.fromVisitor .messageBubble {
+  background: var(--color-accent-soft, #e6f5f6);
+}
+
+.messageTimestamp {
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-label-m-regular-size, 0.6875rem);
+  color: var(--color-text-tertiary, #94a3ad);
+}
+
+.inputBar {
+  flex-shrink: 0;
+  padding: var(--space-md, 16px) var(--space-lg, 24px) var(--space-lg, 24px);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-sm, 8px) var(--space-md, 16px);
+  border-radius: var(--radius-pill, 999px);
+  border: 1.5px solid var(--color-accent, #007679);
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-2-regular-size, 1rem);
+  color: var(--color-text-primary, #1f2a37);
+  background: var(--color-surface, #fff);
+}
+.input::placeholder {
+  color: var(--color-text-tertiary, #94a3ad);
+}
+.input:focus-visible {
+  outline: 2px solid var(--color-focus-ring, #087dae);
+  outline-offset: 2px;
+}

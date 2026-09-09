@@ -30,8 +30,8 @@ function renderDashboard({ withProfile = true } = {}) {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/assessment/start" element={<p>Assessment start stub</p>} />
         <Route path="/assessment" element={<p>Assessment stub</p>} />
-        <Route path="/assessment/lifestyle" element={<p>Lifestyle stub</p>} />
-        <Route path="/assessment/priorities" element={<p>Priorities stub</p>} />
+        <Route path="/assessment/lifestyle/questions" element={<p>Lifestyle stub</p>} />
+        <Route path="/assessment/priorities/questions" element={<p>Priorities stub</p>} />
         <Route path="/history" element={<p>History stub</p>} />
         <Route path="/settings" element={<p>Settings stub</p>} />
       </Routes>
@@ -64,8 +64,8 @@ describe('DashboardPage', () => {
       ),
     ).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Memory & Thinking' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Lifestyle' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Priorities' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Lifestyle & Health' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Personal Priorities' })).toBeInTheDocument()
     expect(screen.getAllByText('Not started')).toHaveLength(3)
     expect(screen.getByText('About 20 minutes')).toBeInTheDocument()
     expect(screen.getByText('About 7–10 minutes')).toBeInTheDocument()
@@ -73,12 +73,12 @@ describe('DashboardPage', () => {
     expect(screen.getByText('About 7 minutes')).toBeInTheDocument()
     expect(screen.getByText('Needs quiet room')).toBeInTheDocument()
     // Only Memory & Thinking's Start reaches the real Assessment Intro screen (with its
-    // instructions voice-over) — Lifestyle/Priorities route to their own not-yet-built stubs.
+    // instructions voice-over) — Lifestyle/Priorities route straight to their own question flows.
     const startLinks = screen.getAllByRole('link', { name: 'Start' })
     expect(startLinks).toHaveLength(3)
     expect(startLinks[0]).toHaveAttribute('href', '/assessment/start')
-    expect(startLinks[1]).toHaveAttribute('href', '/assessment/lifestyle')
-    expect(startLinks[2]).toHaveAttribute('href', '/assessment/priorities')
+    expect(startLinks[1]).toHaveAttribute('href', '/assessment/lifestyle/questions')
+    expect(startLinks[2]).toHaveAttribute('href', '/assessment/priorities/questions')
   })
 
   it('shows the resources card with a real external link to the Linus Health website', () => {

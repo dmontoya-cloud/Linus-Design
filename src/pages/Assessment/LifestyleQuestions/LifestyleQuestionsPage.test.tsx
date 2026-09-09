@@ -22,7 +22,7 @@ function renderPage() {
       <MemoryRouter initialEntries={['/assessment/lifestyle/questions']}>
         <Routes>
           <Route path="/assessment/lifestyle/questions" element={<LifestyleQuestionsPage />} />
-          <Route path="/assessment/lifestyle" element={<p>Lifestyle Details stub</p>} />
+          <Route path="/dashboard" element={<p>Dashboard stub</p>} />
           <Route path="/report/ready" element={<ReportReadyStub />} />
         </Routes>
       </MemoryRouter>
@@ -92,11 +92,11 @@ describe('LifestyleQuestionsPage', () => {
     expect(screen.getByRole('checkbox', { name: 'None of the above' })).not.toBeChecked()
   })
 
-  it('Back on the first question exits to the Lifestyle details screen', async () => {
+  it('Back on the first question exits to the Dashboard', async () => {
     const user = userEvent.setup()
     renderPage()
     await user.click(screen.getByRole('button', { name: /Back/ }))
-    expect(screen.getByText('Lifestyle Details stub')).toBeInTheDocument()
+    expect(screen.getByText('Dashboard stub')).toBeInTheDocument()
   })
 
   it('Back after advancing returns to the previous question with its answer preserved', async () => {

@@ -107,7 +107,7 @@
 
   /* Steps down one type-scale tier (reusing headline-4-semibold, not a one-off value) — on
      request. headline-3-semibold (33px) is fine for a one-line title, but the all-done state's
-     two-line title ("All activities are in! / Build your full brain health report.") wraps to
+     two-line title ("All activities are in! / Create your full brain health report.") wraps to
      3-4 lines at 33px on a ~340px-wide mobile column, ballooning the header before any activity
      content shows. Applies to every state's title, not just the two-line one, since headline
      sizes stepping down at the mobile breakpoint is the right default regardless of line count. */

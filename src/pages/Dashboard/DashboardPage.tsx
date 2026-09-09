@@ -26,19 +26,19 @@ const PENDING_ACTIVITIES: Activity[] = [
   },
   {
     id: 'speech-pattern',
-    title: 'Lifestyle',
+    title: 'Lifestyle & Health',
     status: 'not-started',
     duration: 'About 5 minutes',
     description: 'Tell us about your lifestyle, health, and everyday habits.',
-    startPath: '/assessment/lifestyle',
+    startPath: '/assessment/lifestyle/questions',
   },
   {
     id: 'visual-attention',
-    title: 'Priorities',
+    title: 'Personal Priorities',
     status: 'not-started',
     duration: 'About 7 minutes',
     description: 'Share what matters most to you and what you want to keep doing in daily life.',
-    startPath: '/assessment/priorities',
+    startPath: '/assessment/priorities/questions',
   },
 ]
 

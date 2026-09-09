@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/tokens'
 import { AuthProvider, useAuth } from '@/auth'
 import { LanguageProvider } from '@/language'
 import { buttonClassName } from '@/components/atoms/Button/buttonClassName'
+import { ChatWidget } from '@/components/ChatWidget'
 import { DesignSystemPage } from '@/design-system/DesignSystemPage'
 import { LoginPage } from '@/pages/Login/LoginPage'
 import { VerifyEmailPage } from '@/pages/VerifyEmail/VerifyEmailPage'
@@ -23,13 +24,12 @@ import { ACTIVE_DASHBOARD_VARIANT } from '@/pages/Dashboard/dashboardVariant'
 import { ProfilePage } from '@/pages/Profile/ProfilePage'
 import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
 import { MemoryThinkingTaskPage } from '@/pages/Assessment/MemoryThinkingTask/MemoryThinkingTaskPage'
-import { LifestyleDetailsPage } from '@/pages/Assessment/LifestyleDetailsPage'
 import { LifestyleQuestionsPage } from '@/pages/Assessment/LifestyleQuestions/LifestyleQuestionsPage'
-import { PrioritiesDetailsPage } from '@/pages/Assessment/PrioritiesDetailsPage'
 import { PrioritiesQuestionsPage } from '@/pages/Assessment/PrioritiesQuestions/PrioritiesQuestionsPage'
 import { BuildingReportPage } from '@/pages/BuildingReport/BuildingReportPage'
 import { ReportReadyPage } from '@/pages/BuildingReport/ReportReadyPage'
 import { ReportPage } from '@/pages/BuildingReport/ReportPage'
+import { LandingPage } from '@/pages/Landing/LandingPage'
 import './App.css'
 
 /**
@@ -105,6 +105,12 @@ const REAL_STEP_PATHS = [
 
 const STUB_STEPS = FUNNEL_STEPS.filter((step) => !REAL_STEP_PATHS.includes(step.path))
 
+/** The three activity ids `completeActivity` expects — matches `DashboardPage`'s own
+ * `PENDING_ACTIVITIES` ids and `FullCheckInCard`'s own `CATEGORIES` ids, the one shared key
+ * this prototype's mock completion state is keyed by. Used only by the index's own "Survey"
+ * shortcut below, to mark all three done in one click. */
+const ALL_ACTIVITY_IDS = ['memory-recall', 'speech-pattern', 'visual-attention']
+
 /** Every real step except Login/Verify Email themselves — those two are the pre-auth part of
  * the funnel and should still show as-is from the index. Everything else is gated by
  * `RequireAuth`, so jumping to it directly from the prototype index needs a mock sign-in first
@@ -138,13 +144,15 @@ function RequireAuth({ children }: { children: ReactNode }) {
  * `DashboardNavBar`) — the global corner link would be a pure duplicate here, so it's hidden
  * rather than given a destination of its own (Dashboard *is* the menu; a "Back to menu" link
  * pointing at itself would be pointless). */
-const ROUTES_WITH_OWN_NAV = ['/dashboard']
+const ROUTES_WITH_OWN_NAV = ['/dashboard', '/landing']
 
 /** Every screen in the device-setup/assessment flow reached from Dashboard, for all three
- * activities now, on request — Lifestyle and Priorities' own Details/question-flow routes join
- * Memory & Thinking's here. Each already has its own way back to Dashboard (`DashboardNavBar`'s
- * `exitTo`, or the Details pages' own in-card "Back to dashboard" button), plus the same logo
- * Link to "/" every `DashboardNavBar` screen has. The corner link becomes a "Skip to report"
+ * activities now, on request — Lifestyle and Priorities' own question-flow routes join Memory &
+ * Thinking's here (Lifestyle/Priorities no longer have a Details screen of their own — Dashboard's
+ * "Start" hands off straight to the questions, on request). Each already has its own way back to
+ * Dashboard (`DashboardNavBar`'s `exitTo`, or Memory & Thinking's Details page's own in-card "Back
+ * to dashboard" button), plus the same logo Link to "/" every `DashboardNavBar` screen has. The
+ * corner link becomes a "Skip to report"
  * shortcut on these instead — a way to jump straight past whichever activity's flow (none of
  * which is the point of a walkthrough) to Report Ready (`ReportReadyPage`), the same page every
  * activity's real "Finish"/"I'm ready" hands off to, so this shortcut lands in the same place
@@ -157,9 +165,7 @@ const ROUTES_WITH_OWN_NAV = ['/dashboard']
 const REPORT_SKIP_ACTIVITY_BY_ROUTE: Record<string, string> = {
   '/assessment': 'memory-recall',
   '/assessment/start': 'memory-recall',
-  '/assessment/lifestyle': 'speech-pattern',
   '/assessment/lifestyle/questions': 'speech-pattern',
-  '/assessment/priorities': 'visual-attention',
   '/assessment/priorities/questions': 'visual-attention',
 }
 
@@ -193,6 +199,17 @@ function BackToStart() {
   )
 }
 
+/** The Help Assistant launcher shows on every screen except the assessment task flow itself
+ * (Memory & Thinking's task screens plus Lifestyle/Priorities' question flows, all nested under
+ * `/assessment`) — on request, so it never floats over an in-progress cognitive task. */
+function ChatWidgetGate() {
+  const location = useLocation()
+  if (location.pathname.startsWith('/assessment')) {
+    return null
+  }
+  return <ChatWidget />
+}
+
 /** React Router's client-side navigation doesn't reset scroll position the way a real page
  * load does — without this, landing on a new step while scrolled down (e.g. Terms of Use's
  * scroll-gated text) carries that same scroll position into the next step. */
@@ -219,7 +236,19 @@ function LoginRoute() {
  * mock-signs-in first (same as actually completing Login) for any step that needs it.
  */
 function Home() {
-  const { login } = useAuth()
+  const { login, completeActivity, markReportBuilt } = useAuth()
+
+  /** Jumps straight to Dashboard in the one state `PostReportSurvey` actually shows in: signed
+   * in, all three activities done, and a report already built — the same three calls
+   * `ReportPage`'s Download button and the three activities' own "Finish" would make across a
+   * full real run-through, just fired at once here as a preview shortcut. `state.showSurvey`
+   * is the same flag `ReportPage` hands off with, so Dashboard shows the survey after its usual
+   * `SURVEY_DELAY_MS` beat rather than needing yet another click. */
+  function previewSurveyState() {
+    login()
+    ALL_ACTIVITY_IDS.forEach((id) => completeActivity(id))
+    markReportBuilt()
+  }
 
   return (
     <main className="screen-placeholder">
@@ -230,6 +259,15 @@ function Home() {
       </p>
       <nav aria-label="Phase 1 funnel">
         <ul>
+          <li>
+            {/* Marketing landing page — the app's real public front door (see LandingPage's
+                own doc comment). Listed first, ahead of the funnel steps proper, since it's
+                the actual entry point a real visitor would land on before Login; it isn't
+                gated by RequireAuth and isn't itself a FUNNEL_STEPS entry. */}
+            <Link to="/landing" className={buttonClassName('primary')}>
+              Landing Page
+            </Link>
+          </li>
           {FUNNEL_STEPS.map((step) => (
             <li key={step.path}>
               <Link
@@ -241,6 +279,20 @@ function Home() {
               </Link>
             </li>
           ))}
+          <li>
+            {/* Not a FUNNEL_STEPS entry — there's no single route for "all activities done,
+                report downloaded", just Dashboard in a particular state, so this jumps there
+                directly via `previewSurveyState` rather than making a visitor click through
+                three activities and a real download first. */}
+            <Link
+              to="/dashboard"
+              state={{ showSurvey: true }}
+              className={buttonClassName('primary')}
+              onClick={previewSurveyState}
+            >
+              Survey
+            </Link>
+          </li>
         </ul>
       </nav>
       <p>
@@ -266,8 +318,10 @@ export default function App() {
           <AuthProvider>
             <ScrollToTop />
             <BackToStart />
+            <ChatWidgetGate />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/landing" element={<LandingPage />} />
               <Route path="/design-system" element={<DesignSystemPage />} />
               <Route path="/login" element={<LoginRoute />} />
               <Route path="/verify-email" element={<VerifyEmailPage />} />
@@ -394,29 +448,13 @@ export default function App() {
                 }
               />
               {/* Only Memory & Thinking's Start (and the full check-in button) reach the real
-                  Assessment Intro screen above; Lifestyle and Priorities each have their own
-                  details screen below instead, same pattern as Memory & Thinking's. */}
-              <Route
-                path="/assessment/lifestyle"
-                element={
-                  <RequireAuth>
-                    <LifestyleDetailsPage />
-                  </RequireAuth>
-                }
-              />
+                  Assessment Intro screen above; Lifestyle and Priorities skip straight to their
+                  own question flow below instead, on request — no details screen of their own. */}
               <Route
                 path="/assessment/lifestyle/questions"
                 element={
                   <RequireAuth>
                     <LifestyleQuestionsPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/assessment/priorities"
-                element={
-                  <RequireAuth>
-                    <PrioritiesDetailsPage />
                   </RequireAuth>
                 }
               />

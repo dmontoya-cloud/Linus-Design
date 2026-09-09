@@ -21,7 +21,7 @@ function renderPage() {
       <MemoryRouter initialEntries={['/assessment/priorities/questions']}>
         <Routes>
           <Route path="/assessment/priorities/questions" element={<PrioritiesQuestionsPage />} />
-          <Route path="/assessment/priorities" element={<p>Priorities Details stub</p>} />
+          <Route path="/dashboard" element={<p>Dashboard stub</p>} />
           <Route path="/report/ready" element={<ReportReadyStub />} />
         </Routes>
       </MemoryRouter>
@@ -70,11 +70,11 @@ describe('PrioritiesQuestionsPage', () => {
     expect(screen.getByLabelText('Answer 2:')).toBeInTheDocument()
   })
 
-  it('Back on the very first screen exits to the Priorities details screen', async () => {
+  it('Back on the very first screen exits to the Dashboard', async () => {
     const user = userEvent.setup()
     renderPage()
     await user.click(screen.getByRole('button', { name: /Back/ }))
-    expect(screen.getByText('Priorities Details stub')).toBeInTheDocument()
+    expect(screen.getByText('Dashboard stub')).toBeInTheDocument()
   })
 
   it('"Other" is optional — Next stays enabled with no answer written', async () => {
