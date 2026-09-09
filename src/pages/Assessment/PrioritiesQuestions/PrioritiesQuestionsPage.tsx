@@ -95,8 +95,9 @@ function stepLabelFor(screen: Screen): string {
 }
 
 /**
- * Priorities Questions — the real, interactive 13-step flow `PrioritiesDetailsPage`'s "Start
- * Activity" hands off to, on request: Figma's "Priorities" section (node 599:6497) rebuilt
+ * Priorities Questions — the real, interactive 13-step flow Dashboard's "Start" now hands off to
+ * directly, on request (there's no Priorities Details screen between them any more): Figma's
+ * "Priorities" section (node 599:6497) rebuilt
  * with this app's own design-system tokens/components, in the same shared layout
  * `LifestyleQuestionsPage` uses (`QuestionFlowPage.module.css` — one nav bar, one progress
  * stepper, one white question-card holding everything), on request, so the two questionnaires
@@ -117,8 +118,7 @@ function stepLabelFor(screen: Screen): string {
  * that screen to build the closing question, not a real second ending: the relabeled button
  * (now "Finish", on request, matching `LifestyleQuestionsPage`'s own closing button — previously
  * "Done") only appears on the actual last screen here. "Back" on the very first screen exits to
- * `PrioritiesDetailsPage`
- * instead of decrementing below it; "Next" is disabled until the current screen has whatever it
+ * `/dashboard` instead of decrementing below it; "Next" is disabled until the current screen has whatever it
  * needs (a non-empty answer, an exact five picks, a rating, a yes/no) — "Other" and every
  * instructions-only screen have nothing to require, so they're always enabled. Nothing here is
  * persisted beyond this component's own state, the same as `LifestyleQuestionsPage`, and on the
@@ -205,7 +205,7 @@ export function PrioritiesQuestionsPage() {
 
   function handleBack() {
     if (screenIndex === 0) {
-      navigate('/assessment/priorities')
+      navigate('/dashboard')
       return
     }
     setScreenIndex((index) => index - 1)
@@ -373,7 +373,7 @@ export function PrioritiesQuestionsPage() {
 
   return (
     <div className={flowStyles.page}>
-      <DashboardNavBar title="Priorities" exitTo="/dashboard" exitVariant="outline" />
+      <DashboardNavBar title="Personal Priorities" exitTo="/dashboard" exitVariant="outline" />
       <main className={flowStyles.content}>
         <div className={flowStyles.card}>
           <div className={flowStyles.progressSection}>

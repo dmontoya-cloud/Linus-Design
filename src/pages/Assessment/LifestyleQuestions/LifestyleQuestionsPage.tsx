@@ -15,16 +15,17 @@ import styles from '../QuestionFlowPage.module.css'
 const NONE_OF_THE_ABOVE = 'None of the above'
 
 /**
- * Lifestyle Questions — the real, interactive 15-question flow `LifestyleDetailsPage`'s "Start
- * Activity" hands off to, on request: Figma's "Lifestyle" section (node 575:5665, LHQ Segment
- * Screens 16-30) rebuilt with this app's own design-system tokens/components rather than
- * pixel-cloned, per that request. Two question shapes, both driven by the same
- * `LIFESTYLE_QUESTIONS` data (`./lifestyleQuestions`): `single` renders centered, glyph-less
- * `AnswerOption`s (Figma's Yes/No treatment — "medication" reuses it for a third, non-yes/no
- * option) as a real radio group; `multi` renders left-aligned checkbox `AnswerOption`s letting
- * more than one be picked. One question is shown at a time, swapped in place (not a route per
- * question — 15 routes for one linear flow would be its own kind of over-engineering); "Back"
- * on the very first question exits to `LifestyleDetailsPage` instead of decrementing below it.
+ * Lifestyle Questions — the real, interactive 15-question flow Dashboard's "Start" now hands off
+ * to directly, on request (there's no Lifestyle Details screen between them any more): Figma's
+ * "Lifestyle" section (node 575:5665, LHQ Segment Screens 16-30) rebuilt with this app's own
+ * design-system tokens/components rather than pixel-cloned, per that request. Two question
+ * shapes, both driven by the same `LIFESTYLE_QUESTIONS` data (`./lifestyleQuestions`): `single`
+ * renders centered, glyph-less `AnswerOption`s (Figma's Yes/No treatment — "medication" reuses
+ * it for a third, non-yes/no option) as a real radio group; `multi` renders left-aligned
+ * checkbox `AnswerOption`s letting more than one be picked. One question is shown at a time,
+ * swapped in place (not a route per question — 15 routes for one linear flow would be its own
+ * kind of over-engineering); "Back" on the very first question exits to `/dashboard` instead of
+ * decrementing below it.
  * "Next" is disabled until the current question has at least one answer, and relabels to
  * "Finish" on the last question, on request, matching `PrioritiesQuestionsPage`'s own closing
  * button. Answering it there hands off to `ReportReadyPage` (`/report/ready`) with
@@ -80,7 +81,7 @@ export function LifestyleQuestionsPage() {
 
   function handleBack() {
     if (currentIndex === 0) {
-      navigate('/assessment/lifestyle')
+      navigate('/dashboard')
       return
     }
     setCurrentIndex((index) => index - 1)
@@ -96,7 +97,7 @@ export function LifestyleQuestionsPage() {
 
   return (
     <div className={styles.page}>
-      <DashboardNavBar title="Lifestyle" exitTo="/dashboard" exitVariant="outline" />
+      <DashboardNavBar title="Lifestyle & Health" exitTo="/dashboard" exitVariant="outline" />
       <main className={styles.content}>
         <div className={styles.card}>
           <div className={styles.progressSection}>

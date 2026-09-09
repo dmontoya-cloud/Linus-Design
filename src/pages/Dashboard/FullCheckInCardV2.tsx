@@ -6,15 +6,25 @@ import styles from './FullCheckInCardV2.module.css'
 
 /** The title's own copy per `completedCount` — ported over from Dashboard 1's `FullCheckInCard`
  * (see that component's own doc comment for the full reasoning) rather than the single static
- * title the Figma mock's one given state showed, on request. */
-function titleLinesFor(completedCount: number): [string] | [string, string] {
+ * title the Figma mock's one given state showed, on request. Once the report has actually been
+ * built (`hasBuiltReport`, set by `ReportPage`'s Download button), on request, this overrides the
+ * all-three-done copy with a single "Your report is ready!" line — the "Create your full brain
+ * health report" instruction no longer applies once that's already happened, matching the main
+ * CTA's own switch to "View report" for the same condition. */
+function titleLinesFor(
+  completedCount: number,
+  hasBuiltReport: boolean,
+): [string] | [string, string] {
+  if (completedCount === 3 && hasBuiltReport) {
+    return ['Your report is ready!']
+  }
   switch (completedCount) {
     case 1:
       return ['Your report is taking shape']
     case 2:
       return ['Your report has more detail']
     case 3:
-      return ['All activities are in!', 'Build your full brain health report.']
+      return ['All activities are in!', 'Create your full brain health report.']
     default:
       return ['Complete your full brain health report']
   }
@@ -43,7 +53,7 @@ export function FullCheckInCardV2() {
     completedActivityIds.includes(id),
   ).length
   const nextActivity = ACTIVITIES_META.find(({ id }) => !completedActivityIds.includes(id)) ?? null
-  const [titleLine1, titleLine2] = titleLinesFor(completedCount)
+  const [titleLine1, titleLine2] = titleLinesFor(completedCount, hasBuiltReport)
 
   return (
     <div className={styles.card}>

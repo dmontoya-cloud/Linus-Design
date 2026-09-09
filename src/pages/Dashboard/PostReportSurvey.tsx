@@ -1,6 +1,5 @@
 import { useId, useRef, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
-import { Checkbox } from '@/components/atoms/Checkbox'
 import { Field } from '@/components/atoms/Field'
 import styles from './PostReportSurvey.module.css'
 
@@ -15,9 +14,14 @@ type ScaleQuestion = {
 }
 type ChoiceQuestion = { id: string; kind: 'choice'; prompt: string; options: string[] }
 type TextQuestion = { id: string; kind: 'text'; prompt: string }
-type CheckboxQuestion = { id: string; kind: 'checkbox'; prompt: string; checkboxLabel: string }
 type EmailQuestion = { id: string; kind: 'email'; prompt: string }
-type Question = ScaleQuestion | ChoiceQuestion | TextQuestion | CheckboxQuestion | EmailQuestion
+type Question = ScaleQuestion | ChoiceQuestion | TextQuestion | EmailQuestion
+
+/** The `productTeam` question's two options — pulled out so `handleNext` can recognize a
+ * decline by value and jump straight to the thank-you screen instead of advancing to the
+ * `email` follow-up, on request (a "yes" still proceeds to email as normal). */
+const PRODUCT_TEAM_YES = "Yes, I'm interested."
+const PRODUCT_TEAM_NO = "No, I'm not interested."
 
 /** Every question this feedback survey asks, on request — reproduced from the reference
  * question set given for this survey. All seven are optional (the app has no real backend to
@@ -71,10 +75,10 @@ const QUESTIONS: Question[] = [
   },
   {
     id: 'productTeam',
-    kind: 'checkbox',
+    kind: 'choice',
     prompt:
       'Would you be interested in a short conversation with our product team about your experience using this tool?',
-    checkboxLabel: "Yes, I'm interested.",
+    options: [PRODUCT_TEAM_YES, PRODUCT_TEAM_NO],
   },
   {
     id: 'email',
@@ -88,7 +92,7 @@ const QUESTIONS: Question[] = [
  * so this just stands in for one, same guessed-timer pattern as the report-building flow). */
 const THANKS_AUTO_CLOSE_MS = 2500
 
-type AnswerValue = number | string | boolean
+type AnswerValue = number | string
 
 function CloseIcon() {
   return (
@@ -100,9 +104,11 @@ function CloseIcon() {
 
 /** One question's own control — a scale renders as a row of number buttons (5-wide for the
  * two 1-5 questions, 11-wide for the 0-10 recommend question), a choice renders as a list of
- * `AnswerOption`-style rows the same size, a checkbox reuses the shared `Checkbox` atom, and
- * text/email reuse `Field` (email) or a plain `<textarea>` (no dedicated Textarea atom exists
- * yet in this system, so this one stays local rather than introducing one for a single use). */
+ * `AnswerOption`-style rows the same size (including `productTeam`'s yes/no pair, on request —
+ * a plain two-option choice rather than a single checkbox, so declining is itself a selectable
+ * answer `handleNext` can branch on), and text/email reuse `Field` (email) or a plain
+ * `<textarea>` (no dedicated Textarea atom exists yet in this system, so this one stays local
+ * rather than introducing one for a single use). */
 function QuestionControl({
   question,
   value,
@@ -180,14 +186,6 @@ function QuestionControl({
           rows={3}
         />
       )
-    case 'checkbox':
-      return (
-        <Checkbox
-          label={question.checkboxLabel}
-          checked={value === true}
-          onChange={(event) => onChange(event.target.checked)}
-        />
-      )
     case 'email':
       return (
         <Field
@@ -209,7 +207,10 @@ function QuestionControl({
  * question at a time (matching the reference question set's own one-per-screen presentation),
  * Back/Next between them, and "Submit" on the last one — no progress bar or "Question X of N"
  * readout, on request, so the card doesn't telegraph how many questions are left. All seven
- * questions are optional, so navigation is never blocked on an answer. The
+ * questions are optional, so navigation is never blocked on an answer. Answering "No, I'm not
+ * interested." on the `productTeam` question skips the trailing `email` question entirely and
+ * jumps straight to the thank-you state, on request — there's no reason to ask for an email to
+ * follow up on a conversation the visitor just declined. The
  * close (×) button dismisses at any point without submitting anything — this prototype has no
  * real endpoint to send answers to regardless, so "Submit" just shows a brief thank-you state
  * that closes itself after `THANKS_AUTO_CLOSE_MS`. That thank-you state keeps the last
@@ -228,7 +229,9 @@ export function PostReportSurvey({ onClose }: { onClose: () => void }) {
   const isLastStep = step === QUESTIONS.length - 1
 
   function handleNext() {
-    if (isLastStep) {
+    const declinedProductTeam =
+      question.id === 'productTeam' && answers[question.id] === PRODUCT_TEAM_NO
+    if (isLastStep || declinedProductTeam) {
       setFrozenBodyHeight(bodyRef.current?.getBoundingClientRect().height ?? null)
       setSubmitted(true)
       window.setTimeout(onClose, THANKS_AUTO_CLOSE_MS)

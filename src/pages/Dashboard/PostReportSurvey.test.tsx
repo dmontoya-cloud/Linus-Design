@@ -51,8 +51,8 @@ describe('PostReportSurvey', () => {
     await clickPrimary(user) // -> Q5 (text)
     await user.type(screen.getByPlaceholderText('Type your answer here…'), 'Nothing in particular')
 
-    await clickPrimary(user) // -> Q6 (checkbox)
-    await user.click(screen.getByRole('checkbox', { name: "Yes, I'm interested." }))
+    await clickPrimary(user) // -> Q6 (product-team yes/no choice)
+    await user.click(screen.getByRole('radio', { name: "Yes, I'm interested." }))
 
     await clickPrimary(user) // -> Q7 (email)
     expect(
@@ -81,6 +81,28 @@ describe('PostReportSurvey', () => {
     vi.advanceTimersByTime(2500)
     expect(onClose).toHaveBeenCalledTimes(1)
     vi.useRealTimers()
+  })
+
+  it('skips the trailing email question and jumps to the thank-you state when productTeam is declined', async () => {
+    const user = userEvent.setup()
+    render(<PostReportSurvey onClose={vi.fn()} />)
+
+    for (let i = 0; i < 5; i++) {
+      await clickPrimary(user) // Q1 -> Q6 (product-team yes/no choice)
+    }
+    expect(
+      screen.getByText(
+        'Would you be interested in a short conversation with our product team about your experience using this tool?',
+      ),
+    ).toBeInTheDocument()
+
+    await user.click(screen.getByRole('radio', { name: "No, I'm not interested." }))
+    await clickPrimary(user)
+
+    expect(screen.getByText('Thanks for your feedback!')).toBeInTheDocument()
+    expect(
+      screen.queryByText("Please share your email address if you'd like us to follow up."),
+    ).not.toBeInTheDocument()
   })
 
   it('calls onClose immediately when the close (×) button is clicked, without submitting', async () => {
