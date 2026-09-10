@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { Logo } from '@/components/atoms/Logo'
@@ -97,7 +97,7 @@ export function DashboardNavBar({
     navigate('/login')
   }
 
-  function handleExitClick(event: MouseEvent) {
+  function handleExitClick(event: ReactMouseEvent) {
     if (!confirmExit) return
     event.preventDefault()
     setExitConfirmOpen(true)
