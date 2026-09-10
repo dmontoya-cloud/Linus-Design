@@ -373,7 +373,12 @@ export function PrioritiesQuestionsPage() {
 
   return (
     <div className={flowStyles.page}>
-      <DashboardNavBar title="Personal Priorities" exitTo="/dashboard" exitVariant="outline" />
+      <DashboardNavBar
+        title="Personal Priorities"
+        exitTo="/dashboard"
+        exitVariant="outline"
+        confirmExit
+      />
       <main className={flowStyles.content}>
         <div className={flowStyles.card}>
           <div className={flowStyles.progressSection}>

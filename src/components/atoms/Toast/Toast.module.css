@@ -31,7 +31,7 @@
   --toast-bg: var(--color-info-soft, #e9effd);
 }
 
-.error {
+.danger {
   --toast-accent: var(--color-border-danger, #dc2626);
   --toast-bg: var(--color-danger-soft, #fce9e9);
 }
@@ -78,6 +78,14 @@
   font-weight: var(--font-paragraph-2-regular-weight, 400);
   line-height: var(--font-paragraph-2-regular-line-height, 1.5);
   color: var(--color-text-secondary, #5b6b79);
+}
+
+/* When there's no title (on request), the message is the only line — promoted to
+   `text-primary` (matching `.title`'s own color) and no top margin, since there's no title
+   above it to space away from. Still regular weight/`paragraph-2` — only the color changes. */
+.messageOnly {
+  margin-top: 0;
+  color: var(--color-text-primary, #1f2a37);
 }
 
 .closeButton {

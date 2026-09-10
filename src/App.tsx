@@ -204,7 +204,13 @@ function BackToStart() {
  * `/assessment`) — on request, so it never floats over an in-progress cognitive task. */
 function ChatWidgetGate() {
   const location = useLocation()
-  if (location.pathname.startsWith('/assessment')) {
+  const isAssessmentRoute = location.pathname.startsWith('/assessment')
+  // Memory & Thinking's own Details screen (`/assessment/start`) is a "reception" before the
+  // activity, not the activity itself, on request — it keeps the launcher while every other
+  // `/assessment*` route (the real task screens, Lifestyle/Priorities' question flows) still
+  // hides it.
+  const isMemoryThinkingReception = location.pathname === '/assessment/start'
+  if (isAssessmentRoute && !isMemoryThinkingReception) {
     return null
   }
   return <ChatWidget />
@@ -260,13 +266,19 @@ function Home() {
       <nav aria-label="Phase 1 funnel">
         <ul>
           <li>
-            {/* Marketing landing page — the app's real public front door (see LandingPage's
-                own doc comment). Listed first, ahead of the funnel steps proper, since it's
-                the actual entry point a real visitor would land on before Login; it isn't
-                gated by RequireAuth and isn't itself a FUNNEL_STEPS entry. */}
-            <Link to="/landing" className={buttonClassName('primary')}>
+            {/* Points at the real deployed marketing site, on request, rather than this repo's
+                own internal `/landing` route (`LandingPage` — still built and reachable
+                directly, just no longer the index's own link target). A real external
+                destination, not a router Link, so it opens in a new tab rather than navigating
+                this SPA away from itself. */}
+            <a
+              href="https://linus-consumer-experience.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClassName('primary')}
+            >
               Landing Page
-            </Link>
+            </a>
           </li>
           {FUNNEL_STEPS.map((step) => (
             <li key={step.path}>

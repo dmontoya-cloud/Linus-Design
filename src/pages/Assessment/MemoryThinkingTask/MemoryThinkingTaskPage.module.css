@@ -117,10 +117,13 @@
 
 /* The info callout under a live recall/recording step ("Press done when you are finished",
    "Keep going...") — same info-soft treatment `ActivityDetailsPage.module.css`'s own
-   `.redoNotice` uses for its own inline hint. */
+   `.redoNotice` uses for its own inline hint. `align-items: center` (not the original
+   `flex-start` + a fudge-factor `margin-top` on the icon), on request, so the icon sits
+   centered on the message rather than nudged toward its top — holds up for a wrapped
+   multi-line message too, not just tuned for a single line. */
 .hintBox {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-sm, 8px);
   margin: var(--space-lg, 24px) 0 0;
   padding: var(--space-md, 16px);
@@ -136,18 +139,20 @@
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
 /* Backward Digit Span's practice-result screen ("If you said... You are correct!") reuses
    `.exampleBox` for the quoted result, then two ordinary paragraphs below it, then a two-button
    Retry/Start row instead of the usual Back/Next pair — `.resultActions` gives that row the same
-   spacing `flowStyles.actions` gives every other screen's own action row without also taking on
-   that class's `justify-content: space-between` (Retry/Start reads better start-aligned here,
-   since there's no "go back to the previous screen" meaning attached to Retry). */
+   spacing `flowStyles.actions` gives every other screen's own action row, now also matching that
+   class's `justify-content: space-between` and `width: 100%`, on request — this row previously
+   start-aligned Retry/Start together instead, which read as inconsistent with every other step's
+   own Back/Next row pushing its primary action to the far right. */
 .resultActions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   gap: var(--space-md, 16px);
   margin-top: var(--space-xl, 32px);
 }

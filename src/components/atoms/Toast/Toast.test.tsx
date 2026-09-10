@@ -11,13 +11,19 @@ describe('Toast', () => {
     expect(screen.getByText('Success message')).toBeInTheDocument()
   })
 
+  it('omits the title element entirely when no title is given', () => {
+    const { container } = render(<Toast variant="success" message="Saved." />)
+    expect(screen.getByText('Saved.')).toBeInTheDocument()
+    expect(container.querySelectorAll('p')).toHaveLength(1) // just the message, no title <p>
+  })
+
   it('defaults to the neutral variant with no icon', () => {
     const { container } = render(<Toast title="Custom message" message="Custom message" />)
-    // Neutral is the one variant with no icon — success/warning/info/error each render one.
+    // Neutral is the one variant with no icon — success/warning/info/danger each render one.
     expect(container.querySelectorAll('svg')).toHaveLength(1) // just the close (×) icon
   })
 
-  it('renders an icon for success, warning, info, and error', () => {
+  it('renders an icon for success, warning, info, and danger', () => {
     const { container: success } = render(
       <Toast variant="success" title="Success" message="Success message" />,
     )
@@ -27,17 +33,17 @@ describe('Toast', () => {
     const { container: info } = render(
       <Toast variant="info" title="Information" message="Information message" />,
     )
-    const { container: error } = render(
-      <Toast variant="error" title="Error" message="Error message" />,
+    const { container: danger } = render(
+      <Toast variant="danger" title="Danger" message="Danger message" />,
     )
     expect(success.querySelectorAll('svg')).toHaveLength(2) // icon + close
     expect(warning.querySelectorAll('svg')).toHaveLength(2)
     expect(info.querySelectorAll('svg')).toHaveLength(2)
-    expect(error.querySelectorAll('svg')).toHaveLength(2)
+    expect(danger.querySelectorAll('svg')).toHaveLength(2)
   })
 
-  it('uses role="alert" for error and role="status" for every other variant', () => {
-    const { rerender } = render(<Toast variant="error" title="Error" message="Error message" />)
+  it('uses role="alert" for danger and role="status" for every other variant', () => {
+    const { rerender } = render(<Toast variant="danger" title="Danger" message="Danger message" />)
     expect(screen.getByRole('alert')).toBeInTheDocument()
 
     rerender(<Toast variant="success" title="Success" message="Success message" />)

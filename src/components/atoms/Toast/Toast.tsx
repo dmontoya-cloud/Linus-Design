@@ -1,11 +1,14 @@
 import type { ReactNode } from 'react'
 import styles from './Toast.module.css'
 
-export type ToastVariant = 'success' | 'warning' | 'info' | 'error' | 'neutral'
+export type ToastVariant = 'success' | 'warning' | 'info' | 'danger' | 'neutral'
 
 export interface ToastProps {
   variant?: ToastVariant
-  title: string
+  /** Optional, on request — a title-less toast shows just `message`, promoted to the title's
+   * own `text-primary` color (still regular weight, still `paragraph-2`) since it's now the
+   * only line rather than a supporting one under a title. */
+  title?: string
   message: string
   /** Optional so Toast still renders standalone (e.g. in a design-system reference page)
    * without real dismiss state wired up — the close (×) button always renders regardless. */
@@ -58,32 +61,36 @@ const VARIANT_ICONS: Partial<Record<ToastVariant, () => ReactNode>> = {
   success: CheckCircleIcon,
   warning: WarningIcon,
   info: InfoIcon,
-  error: WarningCircleIcon,
+  danger: WarningCircleIcon,
 }
 
 /**
- * Atom/Toast — five variants (success/warning/info/error/neutral), a solid left accent bar
+ * Atom/Toast — five variants (success/warning/info/danger/neutral), a solid left accent bar
  * plus a soft-tinted background, both driven entirely by this system's existing semantic
  * color tokens (never a raw hex or primitive): success uses `border-success`/`success-soft`,
  * warning uses `content-warning`/`warning-soft` (no dedicated `border-warning` token exists
- * yet), info uses `border-info`/`info-soft`, error uses `border-danger`/`danger-soft`.
- * Neutral has no matching pair in the token set either (no "neutral-soft" background token
- * exists), so it composes two already-established tokens instead: `border-subtle` for the
- * background and `text-secondary` for the bar — and it's also the one variant with no icon,
- * matching the reference. Title and message always use the plain `text-primary`/
- * `text-secondary` tokens regardless of variant — only the icon, bar, and close button pick
- * up the accent color, so the tint never bleeds into the copy itself. `error` renders with
- * `role="alert"` (assertive) since it's the one variant representing something going wrong;
- * every other variant is `role="status"` (polite). The close (×) button always renders —
- * `onClose` is optional so Toast still renders standalone (e.g. a design-system reference
- * page showing all five variants at once) without real dismiss state wired up.
+ * yet), info uses `border-info`/`info-soft`, danger uses `border-danger`/`danger-soft` —
+ * named `danger` (not `error`) to match this system's own semantic-token and `Button`-variant
+ * naming everywhere else. Neutral has no matching pair in the token set either (no
+ * "neutral-soft" background token exists), so it composes two already-established tokens
+ * instead: `border-subtle` for the background and `text-secondary` for the bar — and it's
+ * also the one variant with no icon, matching the reference. Title and message always use the
+ * plain `text-primary`/`text-secondary` tokens regardless of variant — only the icon, bar, and
+ * close button pick up the accent color, so the tint never bleeds into the copy itself.
+ * `danger` renders with `role="alert"` (assertive) since it's the one variant representing
+ * something going wrong; every other variant is `role="status"` (polite). The close (×)
+ * button always renders — `onClose` is optional so Toast still renders standalone (e.g. a
+ * design-system reference page showing all five variants at once) without real dismiss state
+ * wired up. `title` is optional too, on request — a title-less toast shows just `message`,
+ * promoted to `text-primary` (see `ToastProps.title`'s own doc comment) since it's the only
+ * line rather than a supporting one underneath a title.
  */
 export function Toast({ variant = 'neutral', title, message, onClose }: ToastProps) {
   const Icon = VARIANT_ICONS[variant]
   return (
     <div
       className={[styles.toast, styles[variant]].join(' ')}
-      role={variant === 'error' ? 'alert' : 'status'}
+      role={variant === 'danger' ? 'alert' : 'status'}
     >
       {Icon ? (
         <span className={styles.icon}>
@@ -91,8 +98,12 @@ export function Toast({ variant = 'neutral', title, message, onClose }: ToastPro
         </span>
       ) : null}
       <div className={styles.content}>
-        <p className={styles.title}>{title}</p>
-        <p className={styles.message}>{message}</p>
+        {title ? <p className={styles.title}>{title}</p> : null}
+        <p
+          className={[styles.message, title ? null : styles.messageOnly].filter(Boolean).join(' ')}
+        >
+          {message}
+        </p>
       </div>
       <button
         type="button"

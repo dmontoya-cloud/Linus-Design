@@ -1812,6 +1812,98 @@
         flex-wrap: wrap;
       }
 
+      /* Toast — five variants, a solid left accent bar plus a soft-tinted background, both
+         composed from existing semantic tokens (see the Components section prose below for the
+         per-variant token pairing). Mirrors src/components/atoms/Toast exactly. */
+      .toast2 {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-md);
+        padding: var(--space-md) var(--space-lg);
+        border-radius: var(--radius-lg);
+        border-left: 4px solid var(--toast-accent, var(--color-text-secondary));
+        background: var(--toast-bg, var(--color-surface));
+        box-shadow: var(--shadow-card);
+        box-sizing: border-box;
+        max-width: 480px;
+        margin-bottom: var(--space-md);
+      }
+      .toast2.success {
+        --toast-accent: var(--color-border-success);
+        --toast-bg: var(--color-success-soft);
+      }
+      .toast2.warning {
+        --toast-accent: var(--color-content-warning);
+        --toast-bg: var(--color-warning-soft);
+      }
+      .toast2.info {
+        --toast-accent: var(--color-border-info);
+        --toast-bg: var(--color-info-soft);
+      }
+      .toast2.danger {
+        --toast-accent: var(--color-border-danger);
+        --toast-bg: var(--color-danger-soft);
+      }
+      .toast2.neutral {
+        --toast-accent: var(--color-text-secondary);
+        --toast-bg: var(--color-border-subtle);
+      }
+      .toast2 .toast2-icon {
+        flex-shrink: 0;
+        display: inline-flex;
+        width: 24px;
+        height: 24px;
+        color: var(--toast-accent);
+      }
+      .toast2 .toast2-icon svg {
+        width: 100%;
+        height: 100%;
+      }
+      .toast2 .toast2-content {
+        flex: 1;
+        min-width: 0;
+      }
+      .toast2 .toast2-title {
+        margin: 0;
+        font-size: var(--paragraph-2-size);
+        font-weight: var(--weight-semibold);
+        line-height: var(--paragraph-2-line);
+        color: var(--color-text-primary);
+      }
+      .toast2 .toast2-message {
+        margin: var(--space-xs) 0 0;
+        font-size: var(--paragraph-2-size);
+        line-height: var(--paragraph-2-line);
+        color: var(--color-text-secondary);
+      }
+      /* Title is optional (see the Toast component's own prose above) — when it's left out,
+         the message is promoted to text-primary and loses the top margin it used to need to
+         clear the title above it. Mirrors .messageOnly in Toast.module.css exactly. */
+      .toast2 .toast2-message.toast2-message-only {
+        margin-top: 0;
+        color: var(--color-text-primary);
+      }
+      .toast2 .toast2-close {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--toast-accent);
+        cursor: pointer;
+      }
+      .toast2 .toast2-close svg {
+        width: 100%;
+        height: 100%;
+      }
+      .toast2 .toast2-close:hover {
+        opacity: 0.75;
+      }
+
       /* Primitive scales */
       .primitive-family {
         margin-bottom: var(--space-xl);
@@ -2040,6 +2132,7 @@
         <a href="#badges" class="nav-link" data-page="badges">Badges</a>
         <a href="#tags" class="nav-link" data-page="tags">Tags &amp; Chips</a>
         <a href="#modal" class="nav-link" data-page="modal">Modal</a>
+        <a href="#toast" class="nav-link" data-page="toast">Toast</a>
       </nav>
 
       <div class="content">
@@ -8337,6 +8430,11 @@
               <span class="title">Modal</span>
               <span class="desc">Finally uses shadow-modal &mdash; new.</span>
             </a>
+            <a class="quick-link" href="#toast" data-page="toast">
+              <span class="eyebrow">Feedback</span>
+              <span class="title">Toast</span>
+              <span class="desc">Success/warning/info/danger/neutral &mdash; new.</span>
+            </a>
           </div>
         </section>
 
@@ -9775,6 +9873,226 @@
             used above for the save-progress dialog), <code>modal-size-lg</code> (640px, for
             content-heavier dialogs not demoed here).
           </p>
+        </section>
+
+        <section class="page-panel" id="page-toast" hidden>
+          <h2 class="page-title">Toast</h2>
+          <p class="section-sub">
+            <strong>New</strong> &mdash; five variants (success/warning/info/danger/neutral), a
+            solid left accent bar plus a soft-tinted background, both composed entirely from
+            existing semantic tokens: success uses
+            <code>border-success</code>/<code>success-soft</code>, warning uses
+            <code>content-warning</code>/<code>warning-soft</code> (no dedicated
+            <code>border-warning</code> token exists yet), info uses
+            <code>border-info</code>/<code>info-soft</code>, danger uses
+            <code>border-danger</code>/<code>danger-soft</code> &mdash; named <code>danger</code>,
+            not <code>error</code>, to match <code>Button</code>'s own variant naming. Neutral has
+            no matching token pair either, so it composes two already-established tokens instead
+            (<code>border-subtle</code> for the background, <code>text-secondary</code> for the bar)
+            and is the one variant with no leading icon. <code>danger</code> renders with the
+            assertive <code>role="alert"</code>; every other variant is the polite
+            <code>role="status"</code>. Mirrors <code>src/components/atoms/Toast</code> exactly
+            &mdash; a built, tested atom with no real screen consumer yet.
+          </p>
+
+          <h3 class="group-title">Variants</h3>
+          <div class="toast2 success" role="status">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-title">Success</p>
+              <p class="toast2-message">Your changes have been saved.</p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 warning" role="status">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-title">Warning</p>
+              <p class="toast2-message">This action can't be undone once confirmed.</p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 info" role="status">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-title">Information</p>
+              <p class="toast2-message">A new version of your report is available.</p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 danger" role="alert">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-title">Danger</p>
+              <p class="toast2-message">This assessment could not be submitted.</p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 neutral" role="status">
+            <span class="toast2-content">
+              <p class="toast2-title">Custom message</p>
+              <p class="toast2-message">The one variant with no leading icon.</p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <h3 class="group-title">Without title</h3>
+          <p class="section-sub">
+            <code>title</code> is optional &mdash; every variant supports dropping it, not just
+            neutral. The message takes over as the only line, promoted to
+            <code>text-primary</code> (<code>.toast2-message-only</code> above) rather than staying
+            in its usual muted <code>text-secondary</code>.
+          </p>
+          <div class="toast2 success" role="status">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-message toast2-message-only">Your changes have been saved.</p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 warning" role="status">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-message toast2-message-only">
+                This action can't be undone once confirmed.
+              </p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 info" role="status">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-message toast2-message-only">
+                A new version of your report is available.
+              </p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 danger" role="alert">
+            <span class="toast2-icon">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="toast2-content">
+              <p class="toast2-message toast2-message-only">
+                This assessment could not be submitted.
+              </p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="toast2 neutral" role="status">
+            <span class="toast2-content">
+              <p class="toast2-message toast2-message-only">
+                The one variant with no leading icon.
+              </p>
+            </span>
+            <button type="button" class="toast2-close" aria-label="Dismiss notification">
+              <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </section>
 
         <footer

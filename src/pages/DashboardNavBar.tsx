@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth'
 import { Logo } from '@/components/atoms/Logo'
+import { Button } from '@/components/atoms/Button'
 import { buttonClassName, type ButtonVariant } from '@/components/atoms/Button/buttonClassName'
+import { Modal } from '@/components/atoms/Modal'
 import { SignOutIcon, UserIcon } from '@/components/atoms/Icon'
 import styles from './DashboardNavBar.module.css'
 
@@ -28,6 +30,12 @@ export interface DashboardNavBarProps {
   /** The Exit link's label. Defaults to "Exit"; Profile uses "Back to Dashboard" instead, on
    * request, since it's a settings-style screen rather than a step in a flow. */
   exitLabel?: string
+  /** When true, clicking the Exit link opens an "Exit activity?" confirmation modal instead of
+   * navigating straight to `exitTo` — on request, for the three in-progress activity screens
+   * (`MemoryThinkingTaskPage`, `LifestyleQuestionsPage`, `PrioritiesQuestionsPage`) where
+   * leaving loses unsaved answers. Profile's own "Back to Dashboard" link has nothing to lose,
+   * so it leaves this off and keeps the old direct-navigation behavior. */
+  confirmExit?: boolean
   /** When true, renders neither the signed-in user info nor an `exitTo` link — just the logo and
    * `title` — for screens (like the activity Details pages) that put their own way back
    * elsewhere on the page instead of in this header, on request. */
@@ -49,12 +57,14 @@ export function DashboardNavBar({
   exitTo,
   exitVariant = 'tertiary',
   exitLabel = 'Exit',
+  confirmExit = false,
   hideAccountMenu = false,
 }: DashboardNavBarProps = {}) {
   const { profile, logout } = useAuth()
   const navigate = useNavigate()
   const fullName = profile ? `${profile.firstName} ${profile.lastName}` : 'Account'
   const [menuOpen, setMenuOpen] = useState(false)
+  const [exitConfirmOpen, setExitConfirmOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Closes on an outside click/tap or Escape — a menu with no way to dismiss it other than
@@ -87,46 +97,86 @@ export function DashboardNavBar({
     navigate('/login')
   }
 
+  function handleExitClick(event: ReactMouseEvent) {
+    if (!confirmExit) return
+    event.preventDefault()
+    setExitConfirmOpen(true)
+  }
+
+  function handleConfirmedExit() {
+    setExitConfirmOpen(false)
+    if (exitTo) navigate(exitTo)
+  }
+
   return (
-    <header className={styles.navBar}>
-      <Link to="/" className={styles.logoLink} aria-label="Back to start">
-        <Logo />
-      </Link>
-      {title ? <span className={styles.navTitle}>{title}</span> : null}
-      {exitTo ? (
-        <Link to={exitTo} className={`${buttonClassName(exitVariant, 'sm')} ${styles.exitLink}`}>
-          {exitVariant === 'outline' ? <SignOutIcon className={styles.exitIcon} /> : null}
-          {exitLabel}
+    <>
+      <header className={styles.navBar}>
+        <Link to="/" className={styles.logoLink} aria-label="Back to start">
+          <Logo />
         </Link>
-      ) : hideAccountMenu ? null : (
-        <div className={styles.userMenu} ref={menuRef}>
-          <button
-            type="button"
-            className={styles.userInfo}
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-controls="account-menu"
+        {title ? <span className={styles.navTitle}>{title}</span> : null}
+        {exitTo ? (
+          <Link
+            to={exitTo}
+            onClick={handleExitClick}
+            className={`${buttonClassName(exitVariant, 'sm')} ${styles.exitLink}`}
           >
-            <span className={styles.avatar} aria-hidden="true">
-              {profile ? initialsFor(profile.firstName, profile.lastName) : '?'}
-            </span>
-            <span className={styles.userName}>{fullName}</span>
-          </button>
-          {menuOpen ? (
-            <div className={styles.menu} id="account-menu">
-              <Link to="/profile" className={styles.menuItem} onClick={() => setMenuOpen(false)}>
-                <UserIcon className={styles.menuItemIcon} />
-                Profile
-              </Link>
-              <hr className={styles.menuDivider} />
-              <button type="button" className={styles.menuItem} onClick={handleSignOut}>
-                <SignOutIcon className={styles.menuItemIcon} />
-                Sign out
-              </button>
-            </div>
-          ) : null}
-        </div>
-      )}
-    </header>
+            {exitVariant === 'outline' ? <SignOutIcon className={styles.exitIcon} /> : null}
+            {exitLabel}
+          </Link>
+        ) : hideAccountMenu ? null : (
+          <div className={styles.userMenu} ref={menuRef}>
+            <button
+              type="button"
+              className={styles.userInfo}
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-expanded={menuOpen}
+              aria-controls="account-menu"
+            >
+              <span className={styles.avatar} aria-hidden="true">
+                {profile ? initialsFor(profile.firstName, profile.lastName) : '?'}
+              </span>
+              <span className={styles.userName}>{fullName}</span>
+            </button>
+            {menuOpen ? (
+              <div className={styles.menu} id="account-menu">
+                <Link to="/profile" className={styles.menuItem} onClick={() => setMenuOpen(false)}>
+                  <UserIcon className={styles.menuItemIcon} />
+                  Profile
+                </Link>
+                <hr className={styles.menuDivider} />
+                <button type="button" className={styles.menuItem} onClick={handleSignOut}>
+                  <SignOutIcon className={styles.menuItemIcon} />
+                  Sign out
+                </button>
+              </div>
+            ) : null}
+          </div>
+        )}
+      </header>
+      {confirmExit && exitTo ? (
+        <Modal
+          open={exitConfirmOpen}
+          onClose={() => setExitConfirmOpen(false)}
+          title="Are you sure you want to exit?"
+          size="sm"
+          footer={
+            <>
+              <Button type="button" variant="secondary" onClick={handleConfirmedExit}>
+                Exit without saving
+              </Button>
+              <Button type="button" variant="primary" onClick={() => setExitConfirmOpen(false)}>
+                Keep going
+              </Button>
+            </>
+          }
+        >
+          <p>
+            Your answers will not be saved. Because of how this activity is scored, starting again
+            later means repeating it from the beginning.
+          </p>
+        </Modal>
+      ) : null}
+    </>
   )
 }
