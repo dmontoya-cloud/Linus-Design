@@ -10,6 +10,9 @@ export interface ModalProps {
   title: string
   size?: ModalSize
   children: ReactNode
+  /** Overrides the default single "Dismiss" footer button — for a confirm/cancel pair (e.g.
+   * "Exit activity?"), pass the two `Button`s here instead. */
+  footer?: ReactNode
 }
 
 /**
@@ -19,7 +22,7 @@ export interface ModalProps {
  * backdrop (a click landing on the dialog element itself, not its content)
  * also closes it, same as the close (×) button.
  */
-export function Modal({ open, onClose, title, size = 'md', children }: ModalProps) {
+export function Modal({ open, onClose, title, size = 'md', children, footer }: ModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const titleId = useId()
 
@@ -59,9 +62,11 @@ export function Modal({ open, onClose, title, size = 'md', children }: ModalProp
       </div>
       <div className={styles.body}>{children}</div>
       <div className={styles.footer}>
-        <Button type="button" variant="outline" onClick={onClose}>
-          Dismiss
-        </Button>
+        {footer ?? (
+          <Button type="button" variant="outline" onClick={onClose}>
+            Dismiss
+          </Button>
+        )}
       </div>
     </dialog>
   )

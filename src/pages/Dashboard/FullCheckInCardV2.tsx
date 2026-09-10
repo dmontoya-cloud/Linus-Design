@@ -26,7 +26,7 @@ function titleLinesFor(
     case 3:
       return ['All activities are in!', 'Create your full brain health report.']
     default:
-      return ['Complete your full brain health report']
+      return ['Choose an activity to explore your brain health']
   }
 }
 
@@ -39,8 +39,9 @@ function titleLinesFor(
  * shows beside its main CTA is dropped here on request — the mock shows only one button in this
  * card at any state, since that role now belongs to the new `ReportCTACard` section instead.
  *
- * The main CTA keeps `FullCheckInCard`'s exact same progress logic: "Start Activity" with
- * nothing done, "Start Next Activity" pointing at whichever activity is next once something
+ * The main CTA keeps `FullCheckInCard`'s same progress logic, on request now reading "Start First
+ * Activity" with nothing done rather than the plain "Start Activity" `FullCheckInCard` still
+ * uses, "Start Next Activity" pointing at whichever activity is next once something
  * is, "Create my report" once all three are done and nothing's been built yet, and "View report"
  * once it has (`useAuth().hasBuiltReport`) — see that component's own doc comment for the full
  * reasoning. The header title now also carries over `FullCheckInCard`'s own 3-state title copy
@@ -75,7 +76,7 @@ export function FullCheckInCardV2() {
           </div>
           {nextActivity ? (
             <Link to={nextActivity.startPath} className={styles.startButton}>
-              {completedCount > 0 ? 'Start Next Activity' : 'Start Activity'}
+              {completedCount > 0 ? 'Start Next Activity' : 'Start First Activity'}
             </Link>
           ) : hasBuiltReport ? (
             <Link to="/report" className={styles.startButton}>

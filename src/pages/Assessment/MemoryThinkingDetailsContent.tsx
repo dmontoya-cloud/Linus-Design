@@ -2,6 +2,7 @@ import {
   CalendarIcon,
   HouseIcon,
   InfoIcon,
+  MicrophoneIcon,
   PencilSlashIcon,
   SpeakerHighIcon,
 } from '@/components/atoms/Icon'
@@ -16,6 +17,10 @@ const INSTRUCTIONS = [
   {
     Icon: SpeakerHighIcon,
     title: 'Turn up your volume or use headphones.',
+  },
+  {
+    Icon: MicrophoneIcon,
+    title: 'Use a device with a working microphone',
   },
   {
     Icon: PencilSlashIcon,

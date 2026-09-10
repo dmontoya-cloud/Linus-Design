@@ -108,3 +108,22 @@
     display: block;
   }
 }
+
+/* Tablet-only (641-900px), on request — the forced break above reads fine on Phone at its own
+   bumped headline-4-semibold size (the 640px block), but on Tablet it was still splitting
+   headline-5-semibold-sized text into two short, oddly-broken lines. One step up the type scale
+   here too (headline-4-semibold, same size Phone already uses) rather than a Tablet-specific
+   size, and the break undone — Tablet's own width comfortably fits the whole greeting on one
+   line at that size, unlike Phone's narrower column. Placed last so it out-orders both the
+   max-width:900px block's display:block above and the base .welcome/.welcomeSubtext rules. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .welcome,
+  .welcomeSubtext {
+    font-size: var(--font-headline-4-semibold-size, 1.75rem);
+    line-height: var(--font-headline-4-semibold-line-height, 1.25);
+  }
+
+  .welcomeBreak {
+    display: none;
+  }
+}

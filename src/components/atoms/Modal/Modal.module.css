@@ -14,8 +14,9 @@
   overflow-y: auto;
   box-sizing: border-box;
 }
+/* 15% wider than the original 400px, on request. */
 .panel.sm {
-  max-width: 400px;
+  max-width: 460px;
 }
 .panel.lg {
   max-width: 640px;
@@ -32,11 +33,14 @@
   margin-bottom: var(--space-md, 16px);
 }
 
+/* Stepped down one size, on request, from headline-4-semibold (28px) to headline-5-semibold
+   (18px) — the next size down in the headline family (see docs/design.md's Typography section
+   on why headline-5 sits below paragraph-4 rather than continuing the modular scale). */
 .title {
-  font-family: var(--font-headline-4-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-4-semibold-size, 1.75rem);
-  font-weight: var(--font-headline-4-semibold-weight, 600);
-  line-height: var(--font-headline-4-semibold-line-height, 1.25);
+  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-5-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-5-semibold-weight, 600);
+  line-height: var(--font-headline-5-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0;
 }
@@ -87,5 +91,6 @@
 .footer {
   display: flex;
   justify-content: flex-end;
+  gap: var(--space-sm, 8px);
   margin-top: var(--space-lg, 24px);
 }

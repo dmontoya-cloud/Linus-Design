@@ -525,7 +525,12 @@ export function MemoryThinkingTaskPage() {
 
   return (
     <div className={flowStyles.page}>
-      <DashboardNavBar title={ACTIVITY_NAME} exitTo="/dashboard" exitVariant="outline" />
+      <DashboardNavBar
+        title={ACTIVITY_NAME}
+        exitTo="/dashboard"
+        exitVariant="outline"
+        confirmExit
+      />
       <main className={flowStyles.content}>
         <div className={flowStyles.card}>
           <div className={flowStyles.progressSection}>

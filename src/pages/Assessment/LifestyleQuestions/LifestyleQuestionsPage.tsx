@@ -97,7 +97,12 @@ export function LifestyleQuestionsPage() {
 
   return (
     <div className={styles.page}>
-      <DashboardNavBar title="Lifestyle & Health" exitTo="/dashboard" exitVariant="outline" />
+      <DashboardNavBar
+        title="Lifestyle & Health"
+        exitTo="/dashboard"
+        exitVariant="outline"
+        confirmExit
+      />
       <main className={styles.content}>
         <div className={styles.card}>
           <div className={styles.progressSection}>

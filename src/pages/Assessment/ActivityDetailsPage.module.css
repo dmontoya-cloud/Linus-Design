@@ -103,12 +103,19 @@
   margin: 0;
 }
 
-/* Centered row of fixed-width columns, on request (180px each). One column holds what was
-   a separate orange warning box, folded into the same icon-title-content pattern as the
-   others. `flex-wrap` (plus `row-gap`, since `gap` alone collapses to a single value once
-   items wrap onto more than one line) lets the row reflow to 2-up, then 1-up, as the card
-   narrows — without it, four non-shrinking 180px columns simply overflowed the card at
-   widths between the desktop 4-up layout and the old 640px mobile breakpoint. */
+/* Centered row of columns, on request. One column holds what was a separate orange warning
+   box, folded into the same icon-title-content pattern as the others. `flex-wrap` (plus
+   `row-gap`, since `gap` alone collapses to a single value once items wrap onto more than one
+   line) lets the row reflow to fewer per line as the card narrows. Five columns now (the
+   microphone rule added on request, matching the Figma reference), on a 140px shrinkable basis
+   rather than the original four columns' fixed 180px — at the card's max content width (900px
+   card minus its 48px×2 padding = 804px), five 140px columns plus four 24px gaps come to 796px,
+   just fitting on one row; a fixed 180px basis (bumped up here from 4 columns' own math) would
+   never fit five in one row even at that widest point (996px needed), always forcing an
+   uneven 4-up-then-1 wrap instead. `flex-shrink` (not fixed `width`) lets the columns keep
+   narrowing gracefully as the viewport shrinks further, same as the original four-column
+   version, down to the 900px breakpoint below where `.instructionItem`'s Tablet/Phone rule
+   takes over with an entirely different icon-beside-text row layout. */
 .instructions {
   display: flex;
   flex-wrap: wrap;
@@ -124,8 +131,8 @@
   align-items: center;
   text-align: center;
   gap: var(--space-sm, 8px);
-  flex: 0 0 180px;
-  width: 180px;
+  flex: 0 1 140px;
+  min-width: 120px;
 }
 
 .instructionIcon {
@@ -135,15 +142,15 @@
   color: var(--color-text-primary, #1f2a37);
 }
 
-/* Bumped up one step from label-l-semibold (13px) to paragraph-2-semibold (16px), on
-   request — still well below a headline treatment, just less compact than the smallest
-   option in the type scale. Plain block text (not a flex row) so the info icon flows
-   inline and wraps onto the last line with the title's own text, on request — right at
-   the end of the sentence rather than pinned beside the whole (possibly multi-line) block. */
+/* Stepped back down one size, on request, from paragraph-2-semibold (16px) to label-l-semibold
+   (13px) — the size this was at originally, before that bump (see git history). Plain block
+   text (not a flex row) so the info icon flows inline and wraps onto the last line with the
+   title's own text, on request — right at the end of the sentence rather than pinned beside the
+   whole (possibly multi-line) block. */
 .instructionTitle {
-  font-family: var(--font-paragraph-2-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-paragraph-2-semibold-size, 1rem);
-  font-weight: var(--font-paragraph-2-semibold-weight, 600);
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
   line-height: 1.4;
   margin: 0;
@@ -254,7 +261,7 @@
   }
 
   /* Icon-beside-text, left-aligned, one per row, on request — Tablet/Phone only; Desktop
-     keeps the 4-up icon-on-top/centered grid above. */
+     keeps the icon-on-top/centered grid above (5-up at full width). */
   .instructions {
     flex-direction: column;
     flex-wrap: nowrap;
