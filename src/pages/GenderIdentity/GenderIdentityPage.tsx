@@ -26,25 +26,25 @@ interface PriorState {
 
 /**
  * Gender & Identity — step 3 of the onboarding flow, reached from Education, the last
- * form before Loading hands off to Dashboard. Ordered last rather than second, on request
- * — sex assigned at birth is the more sensitive of the two mid-funnel questions, so it now
- * sits at the end instead of in the middle. A subtitle right below the title explains why
- * sex assigned at birth is asked for at all, before the two field groups, each with its
- * own section title matching Registration's pattern: "How do you identify?" (a gender
- * select) and "What sex were you assigned at birth?" (female, male, or intersex — a
- * distinct question from gender, not a duplicate of it). Choosing Male or Female for
- * gender auto-fills the matching value below (still editable) and shows a note explaining
- * why — Non-binary and Prefer not to say have no corresponding sex-assigned-at-birth
- * value, so neither auto-fills anything nor shows the note. Gender itself is optional (its
- * placeholder says so — "Choose one - Optional") and never gates Continue or shows an
- * error; sex assigned at birth is still required, since it's the value results are
+ * form before Loading hands off to Dashboard. Sex now leads (on request, flipping the
+ * previous Gender-then-Sex order) since it's the required, results-determining field —
+ * just a single labeled `Select` ("Select your sex", no separate section title above it,
+ * matching the reference), followed by the optional "How do you identify?" section (a
+ * "- Optional" suffix on that heading itself now, on request, in addition to the
+ * placeholder already saying so) holding the Gender select. The two fields no longer
+ * interact at all, on request — selecting a gender used to auto-fill the matching sex
+ * value and show a note explaining why; that auto-fill is gone, and the note's own
+ * explanation lives on as a plain static line under the "How do you identify?" heading
+ * instead of a conditional callout, since the two questions can genuinely have different
+ * answers and that's worth saying regardless of what's selected. Gender stays optional
+ * and never gates Continue; sex is still required, since it's the value results are
  * actually compared against. This is the page that actually calls `saveProfile`,
  * combining these answers with everything Registration and Education passed along in
- * router state. The form has `noValidate`, and the sex-assigned dropdown uses `Select`'s
- * own documented `field-error` variant (border-danger border, red helper text) if
- * Continue is clicked while it's still on "Choose one" — rather than the browser's native
- * "Please select an item in the list." bubble. It sits in its own `min-height` slot so
- * that message doesn't push the rest of the form down when it appears.
+ * router state. The form has `noValidate`, and the sex dropdown uses `Select`'s own
+ * documented `field-error` variant (border-danger border, red helper text) if Continue is
+ * clicked while it's still on "Choose one" — rather than the browser's native "Please
+ * select an item in the list." bubble. It sits in its own `min-height` slot so that
+ * message doesn't push the rest of the form down when it appears.
  */
 export function GenderIdentityPage() {
   const { saveProfile } = useAuth()
@@ -56,18 +56,6 @@ export function GenderIdentityPage() {
   const [showValidation, setShowValidation] = useState(false)
 
   const sexInvalid = showValidation && !sexAssignedAtBirth
-
-  /** Only Male and Female have a directly corresponding sex-assigned-at-birth value —
-   * Non-binary and Prefer not to say don't imply one, so they leave the field as the
-   * visitor's own separate choice instead of guessing at it. */
-  function handleGenderChange(value: Gender) {
-    setGender(value)
-    if (value === 'male' || value === 'female') {
-      setSexAssignedAtBirth(value)
-    }
-  }
-
-  const prefilledSex = gender === 'male' || gender === 'female' ? gender : null
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -87,32 +75,13 @@ export function GenderIdentityPage() {
     >
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.reveal} style={{ animationDelay: cascadeDelay(0) }}>
-          <h2 className={styles.sectionTitle}>How do you identify?</h2>
-          <Select
-            label="Gender"
-            value={gender}
-            onChange={(e) => handleGenderChange(e.target.value as Gender)}
-          >
-            <option value="" hidden>
-              Choose one - Optional
-            </option>
-            {GENDER_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
-        </div>
-
-        <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
-          <h2 className={styles.sectionTitle}>What sex were you assigned at birth?</h2>
           <div className={styles.selectSlot}>
             <Select
-              label="Sex assigned at birth"
+              label="Select your sex"
               required
               hideRequiredMark
               error={sexInvalid}
-              helperText={sexInvalid ? 'Please select a sex assigned at birth.' : undefined}
+              helperText={sexInvalid ? 'Please select a sex.' : undefined}
               value={sexAssignedAtBirth}
               onChange={(e) => setSexAssignedAtBirth(e.target.value as SexAssignedAtBirth)}
             >
@@ -124,17 +93,29 @@ export function GenderIdentityPage() {
               <option value="intersex">Intersex</option>
             </Select>
           </div>
-          {prefilledSex ? (
-            <div className={styles.prefillNote}>
-              <p className={styles.prefillNoteTitle}>
-                We filled this in based on your last answer.
-              </p>
-              <p className={styles.prefillNoteBody}>
-                We selected {prefilledSex === 'male' ? 'Male' : 'Female'} based on your gender
-                response. Please change it if that isn&rsquo;t right.
-              </p>
-            </div>
-          ) : null}
+        </div>
+
+        <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
+          <h2 className={styles.sectionTitle}>
+            How do you identify? <span className={styles.sectionTitleOptional}>- Optional</span>
+          </h2>
+          <p className={styles.identityNote}>
+            We ask this separately from sex, since the two can be different.
+          </p>
+          <Select
+            label="Gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value as Gender)}
+          >
+            <option value="" hidden>
+              Choose one - Optional
+            </option>
+            {GENDER_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
         </div>
 
         <Button

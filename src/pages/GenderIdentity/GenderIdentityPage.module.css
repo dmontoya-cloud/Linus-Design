@@ -29,24 +29,22 @@
   color: var(--color-text-primary, #1f2a37);
 }
 
-/* Explains why "Sex assigned at birth" arrives pre-filled rather than blank like every other
-   field on this form, and invites a correction. No background — reads as plain secondary text
-   under the field rather than a colored callout card. */
-.prefillNote {
-  margin-top: var(--space-sm, 8px);
-  padding: var(--space-md, 16px);
-  border-radius: var(--radius-md, 12px);
-}
-
-.prefillNoteTitle {
-  margin: 0 0 var(--space-xs, 4px);
-  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-weight: var(--font-label-l-semibold-weight, 600);
+/* The "- Optional" suffix on the "How do you identify?" heading itself, on request — plain
+   text weight/color (not the heading's own semibold/text-primary), same idea as the "Optional"
+   the Gender select's own placeholder already carries, just also stated up at the heading. */
+.sectionTitleOptional {
+  font-family: var(--font-family, system-ui, sans-serif);
+  font-size: var(--font-paragraph-1-regular-size, 0.8125rem);
+  font-weight: var(--font-paragraph-1-regular-weight, 400);
   color: var(--color-text-secondary, #5b6b79);
 }
 
-.prefillNoteBody {
-  margin: 0;
+/* Explains why gender and sex are asked as two separate questions — a plain static line, on
+   request, replacing what used to be a conditional callout shown only after auto-filling sex
+   from a Male/Female gender answer (that auto-fill is gone; this line's explanation still
+   holds regardless of what's selected, so it's no longer conditional on anything). */
+.identityNote {
+  margin: 0 0 var(--space-sm, 8px);
   font-family: var(--font-family, system-ui, sans-serif);
   font-size: var(--font-paragraph-2-regular-size, 1rem);
   line-height: 1.5;
