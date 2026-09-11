@@ -22,7 +22,7 @@ function renderPage() {
       <MemoryRouter initialEntries={['/assessment']}>
         <Routes>
           <Route path="/assessment" element={<MemoryThinkingTaskPage />} />
-          <Route path="/assessment/start" element={<p>Memory &amp; Thinking Details stub</p>} />
+          <Route path="/assessment/device-setup" element={<p>Device Setup stub</p>} />
           <Route path="/report/ready" element={<ReportReadyStub />} />
           <Route path="/dashboard" element={<p>Dashboard stub</p>} />
         </Routes>
@@ -45,11 +45,11 @@ describe('MemoryThinkingTaskPage', () => {
     expect(screen.getByRole('heading', { name: 'Immediate Recall' })).toBeInTheDocument()
   })
 
-  it('Back on the very first screen exits to Memory & Thinking Details', async () => {
+  it('Back on the very first screen exits to Device Setup', async () => {
     const user = userEvent.setup()
     renderPage()
     await user.click(screen.getByRole('button', { name: /Back/ }))
-    expect(screen.getByText('Memory & Thinking Details stub')).toBeInTheDocument()
+    expect(screen.getByText('Device Setup stub')).toBeInTheDocument()
   })
 
   it('Start advances from instructions to the Please listen step', async () => {

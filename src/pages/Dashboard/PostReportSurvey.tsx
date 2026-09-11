@@ -31,7 +31,7 @@ const QUESTIONS: Question[] = [
   {
     id: 'satisfaction',
     kind: 'scale',
-    prompt: 'Overall, how satisfied were you with your assessment experience today?',
+    prompt: 'Overall, how satisfied were you with your experience today?',
     min: 1,
     max: 5,
   },

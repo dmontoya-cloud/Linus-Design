@@ -14,7 +14,7 @@ describe('PostReportSurvey', () => {
   it('shows the first question with a 1-5 scale and no Back button yet, with no progress readout', () => {
     render(<PostReportSurvey onClose={vi.fn()} />)
     expect(
-      screen.getByText('Overall, how satisfied were you with your assessment experience today?'),
+      screen.getByText('Overall, how satisfied were you with your experience today?'),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '1' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '5' })).toBeInTheDocument()
@@ -35,7 +35,7 @@ describe('PostReportSurvey', () => {
 
     await user.click(screen.getByRole('button', { name: 'Back' }))
     expect(
-      screen.getByText('Overall, how satisfied were you with your assessment experience today?'),
+      screen.getByText('Overall, how satisfied were you with your experience today?'),
     ).toBeInTheDocument()
 
     await clickPrimary(user) // -> Q2

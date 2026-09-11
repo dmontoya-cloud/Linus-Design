@@ -4,13 +4,7 @@ import { Button } from '@/components/atoms/Button'
 import { Field } from '@/components/atoms/Field'
 import { AnswerOption } from '@/components/atoms/AnswerOption'
 import { ProgressStepper } from '@/components/atoms/ProgressStepper'
-import {
-  ArrowLeftBoldIcon,
-  ArrowRightBoldIcon,
-  PlusCircleIcon,
-  StarFillIcon,
-  StarIcon,
-} from '@/components/atoms/Icon'
+import { PlusCircleIcon, StarFillIcon, StarIcon } from '@/components/atoms/Icon'
 import { DashboardNavBar } from '../../DashboardNavBar'
 import {
   NAMED_TOPICS,
@@ -394,12 +388,10 @@ export function PrioritiesQuestionsPage() {
           {renderScreenContent()}
           <div className={flowStyles.actions}>
             <Button variant="outline" size="lg" onClick={handleBack}>
-              <ArrowLeftBoldIcon className={flowStyles.backIcon} />
               Back
             </Button>
             <Button variant="primary" size="lg" disabled={!isAnswered()} onClick={handleNext}>
               {isFinalScreen ? 'Finish' : 'Next'}
-              <ArrowRightBoldIcon className={flowStyles.nextIcon} />
             </Button>
           </div>
         </div>

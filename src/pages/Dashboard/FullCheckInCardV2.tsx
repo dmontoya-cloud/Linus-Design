@@ -26,7 +26,7 @@ function titleLinesFor(
     case 3:
       return ['All activities are in!', 'Create your full brain health report.']
     default:
-      return ['Choose an activity to explore your brain health']
+      return ['Start exploring your brain health']
   }
 }
 
