@@ -96,18 +96,6 @@
   margin-top: var(--space-xl, 32px);
 }
 
-.backIcon {
-  width: 16px;
-  height: 16px;
-  margin-right: var(--space-sm, 8px);
-}
-
-.nextIcon {
-  width: 16px;
-  height: 16px;
-  margin-left: var(--space-sm, 8px);
-}
-
 @media (max-width: 640px) {
   .card {
     padding: var(--space-xl, 32px) var(--space-lg, 24px);

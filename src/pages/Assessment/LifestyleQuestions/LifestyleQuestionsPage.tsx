@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { AnswerOption } from '@/components/atoms/AnswerOption'
-import { ProgressStepper } from '@/components/atoms/ProgressStepper'
-import { ArrowLeftBoldIcon, ArrowRightBoldIcon } from '@/components/atoms/Icon'
 import { DashboardNavBar } from '../../DashboardNavBar'
 import { LIFESTYLE_QUESTIONS } from './lifestyleQuestions'
 import styles from '../QuestionFlowPage.module.css'
@@ -39,14 +37,16 @@ const NONE_OF_THE_ABOVE = 'None of the above'
  * `DashboardNavBar`'s chrome (logo, Exit link)
  * outside the question itself — the same `exitVariant="outline"` pattern the rest of the
  * assessment-task flow uses — but everything belonging to the question proper (the
- * `ProgressStepper`/"Question N of 15" label, the question text, its options, and the
- * Back/Next buttons) lives inside one `.card` white box, on request, for every question this
- * page renders — not just the progress bar and options, with Back/Next left to float in the
- * page's own background below it. The `<legend>` stays the `<fieldset>`'s first child (browsers
- * only associate a legend correctly when it's the very first child) — the progress bar reads
- * as sitting above the question visually, but structurally it's a sibling section before the
- * fieldset, not inside it, so the fieldset's own accessible name is still just the question
- * text, not the progress label too.
+ * "Question N of 15" label, the question text, its options, and the Back/Next buttons) lives
+ * inside one `.card` white box, on request, for every question this page renders — not just the
+ * label and options, with Back/Next left to float in the page's own background below it. The
+ * `<legend>` stays the `<fieldset>`'s first child (browsers only associate a legend correctly
+ * when it's the very first child) — the progress label reads as sitting above the question
+ * visually, but structurally it's a sibling section before the fieldset, not inside it, so the
+ * fieldset's own accessible name is still just the question text, not the progress label too.
+ * The visual progress bar itself (`ProgressStepper`) is gone on request — this page keeps just
+ * the text label; `PrioritiesQuestionsPage` keeps its own bar, on request, so the two flows are
+ * no longer identical here.
  */
 export function LifestyleQuestionsPage() {
   const navigate = useNavigate()
@@ -109,11 +109,6 @@ export function LifestyleQuestionsPage() {
             <p className={styles.progressLabel}>
               Question {currentIndex + 1} of {total}
             </p>
-            <ProgressStepper
-              value={currentIndex + 1}
-              max={total}
-              label={`Question ${currentIndex + 1} of ${total}`}
-            />
           </div>
           <fieldset className={styles.fieldset}>
             <legend className={styles.question}>{question.text}</legend>
@@ -145,12 +140,10 @@ export function LifestyleQuestionsPage() {
           </fieldset>
           <div className={styles.actions}>
             <Button variant="outline" size="lg" onClick={handleBack}>
-              <ArrowLeftBoldIcon className={styles.backIcon} />
               Back
             </Button>
             <Button variant="primary" size="lg" disabled={!isAnswered} onClick={handleNext}>
               {currentIndex === total - 1 ? 'Finish' : 'Next'}
-              <ArrowRightBoldIcon className={styles.nextIcon} />
             </Button>
           </div>
         </div>

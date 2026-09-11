@@ -33,10 +33,12 @@ function formatRedoDate(months: number): string {
  * activity, and now renders as plain text with no leading `ClockIcon`, matching Figma's
  * reference frame for this page (node 688:10322). "I'm ready" in the header (previously "Start
  * Activity", with a trailing arrow that grew in after a delay — both dropped, matching that same
- * reference) is the only way forward on this screen; it continues into the real intro flow at
- * `/assessment` unchanged, whether or not the redo notice below is showing — on request, the
- * card on Dashboard always lets you click through to here regardless of the cooldown, so this
- * page is where that choice is actually surfaced, not blocked. A dedicated "Back to dashboard"
+ * reference) is the only way forward on this screen; it continues into `DeviceSetupPage`
+ * (`/assessment/device-setup`) — a mic-permission step reinstated ahead of the task screens, on
+ * request — rather than straight into `MemoryThinkingTaskPage`, whether or not the redo notice
+ * below is showing — on request, the card on Dashboard always lets you click through to here
+ * regardless of the cooldown, so this page is where that choice is actually surfaced, not
+ * blocked. A dedicated "Back to dashboard"
  * button (`.backButton`, outline/sm) now sits above the title, on request, matching Figma —
  * `DashboardNavBar`'s own "Exit" link is dropped in favor of it, so the nav bar here shows just
  * the logo and title. `.redoNotice` (see `REDO_COOLDOWN_MONTHS`'s own doc comment for why the
@@ -73,7 +75,7 @@ export function MemoryThinkingDetailsPage() {
                 <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
                 <p className={styles.duration}>About 7–10 minutes</p>
               </div>
-              <Link to="/assessment" className={buttonClassName('primary', 'lg')}>
+              <Link to="/assessment/device-setup" className={buttonClassName('primary', 'lg')}>
                 I&rsquo;m ready
               </Link>
             </div>

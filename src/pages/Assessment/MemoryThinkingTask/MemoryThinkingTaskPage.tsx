@@ -2,15 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { AnswerOption } from '@/components/atoms/AnswerOption'
-import { ProgressStepper } from '@/components/atoms/ProgressStepper'
-import {
-  ArrowLeftBoldIcon,
-  ArrowRightBoldIcon,
-  SpeakerHighIcon,
-  MicrophoneIcon,
-  CheckCircleIcon,
-  InfoIcon,
-} from '@/components/atoms/Icon'
+import { SpeakerHighIcon, MicrophoneIcon, CheckCircleIcon, InfoIcon } from '@/components/atoms/Icon'
 import { DashboardNavBar } from '../../DashboardNavBar'
 import {
   IMMEDIATE_RECALL_TRIAL_COUNT,
@@ -85,9 +77,11 @@ const SCREENS: Screen[] = [
   ...DELAYED_RECOGNITION_TRIALS.map((_, trial): Screen => ({ kind: 'drec-question', trial })),
 ]
 
-/** The five real tasks this flow walks through, in order — drives the header's own
- * `ProgressStepper` ("Backward Digit Span (3 of 5)"), same "task N of 5" framing
- * `LifestyleQuestionsPage`/`PrioritiesQuestionsPage` give their own questions/screens. */
+/** The five real tasks this flow walks through, in order — drives the header's own text label
+ * ("Backward Digit Span (3 of 5)"), same "task N of 5" framing `LifestyleQuestionsPage`/
+ * `PrioritiesQuestionsPage` give their own questions/screens. No visual progress bar here
+ * (`ProgressStepper`) any more, on request — just the label — unlike `PrioritiesQuestionsPage`,
+ * which keeps its own bar. */
 const TASK_LABELS = [
   'Immediate Recall',
   'Category Fluency',
@@ -165,7 +159,8 @@ function HintBox({ children }: { children: string }) {
 /**
  * Memory & Thinking — a click-through-only recreation of the real Memory & Thinking assessment
  * task screens (Immediate Recall, Category Fluency, Backward Digit Span, Delayed Recall,
- * Delayed Recognition), reached from `MemoryThinkingDetailsPage`'s "I'm ready" at `/assessment`:
+ * Delayed Recognition), reached from `DeviceSetupPage`'s last screen at `/assessment` (itself
+ * reached from `MemoryThinkingDetailsPage`'s "I'm ready"):
  * Figma's "Memory and Thinking" section (node 756:11410, file `uajF7CIU6kCyd2epbvlNNl`) rebuilt
  * with this app's own design-system tokens/components, in the same shared
  * `QuestionFlowPage.module.css` layout `LifestyleQuestionsPage`/`PrioritiesQuestionsPage` already
@@ -192,9 +187,10 @@ function HintBox({ children }: { children: string }) {
  * after it are a free-recall prompt, not a word-choice one — so this page writes that one
  * screen's copy fresh (`DELAYED_RECALL_INSTRUCTIONS`) to match what it actually asks for,
  * rather than reproducing the mismatched copy verbatim. "Back" on the very first screen exits to
- * `/assessment/start` (`MemoryThinkingDetailsPage`), the same "first question exits to the
- * Details screen" pattern `LifestyleQuestionsPage`/`PrioritiesQuestionsPage` use for their own
- * first question. Delayed Recognition's last question relabels to "Finish" (see
+ * `/assessment/device-setup` (`DeviceSetupPage`, the screen immediately before this one now),
+ * the same "first question exits to the previous screen" pattern
+ * `LifestyleQuestionsPage`/`PrioritiesQuestionsPage` use for their own first question. Delayed
+ * Recognition's last question relabels to "Finish" (see
  * `primaryLabel`) and hands off to `ReportReadyPage` with `state: { completedActivityId:
  * 'memory-recall' }` (see `handleFinish`) instead of advancing to one more screen of its own —
  * on request, the exact same "Finish" pattern `LifestyleQuestionsPage`/`PrioritiesQuestionsPage`
@@ -225,7 +221,7 @@ export function MemoryThinkingTaskPage() {
 
   function handleBack() {
     if (screenIndex === 0) {
-      navigate('/assessment/start')
+      navigate('/assessment/device-setup')
       return
     }
     setScreenIndex((index) => index - 1)
@@ -537,11 +533,6 @@ export function MemoryThinkingTaskPage() {
             <p className={flowStyles.progressLabel}>
               {taskLabel} ({taskIndex + 1} of {TASK_LABELS.length})
             </p>
-            <ProgressStepper
-              value={taskIndex + 1}
-              max={TASK_LABELS.length}
-              label={`${taskLabel}, task ${taskIndex + 1} of ${TASK_LABELS.length}`}
-            />
           </div>
           {renderScreenContent()}
           {screen.kind === 'bds-practice-result' ? (
@@ -551,13 +542,11 @@ export function MemoryThinkingTaskPage() {
               </Button>
               <Button variant="primary" size="lg" onClick={handleNext}>
                 Start
-                <ArrowRightBoldIcon className={flowStyles.nextIcon} />
               </Button>
             </div>
           ) : (
             <div className={flowStyles.actions}>
               <Button variant="outline" size="lg" onClick={handleBack}>
-                <ArrowLeftBoldIcon className={flowStyles.backIcon} />
                 Back
               </Button>
               <Button
@@ -567,7 +556,6 @@ export function MemoryThinkingTaskPage() {
                 onClick={isLastScreen ? handleFinish : handleNext}
               >
                 {primaryLabel()}
-                <ArrowRightBoldIcon className={flowStyles.nextIcon} />
               </Button>
             </div>
           )}

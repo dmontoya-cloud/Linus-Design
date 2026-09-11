@@ -1,0 +1,100 @@
+/* Centered heading/paragraph for the sound- and mic-test screens' short status copy — same
+   "short lines read better centered, longer instructions stay left" split
+   `MemoryThinkingTaskPage.module.css`'s own `.centerTitle`/`.centerParagraph` use. */
+.centerTitle {
+  text-align: center;
+}
+
+.centerParagraph {
+  text-align: center;
+}
+
+/* Figma's own closing instruction line on the sound-test screen ("Can you hear a sound playing
+   right now?") — bolded to set it apart from the plain lead-in paragraph above it, the same
+   treatment `MemoryThinkingTaskPage.module.css`'s own `.paragraphStrong` gives Category
+   Fluency's closing line. */
+.paragraphStrong {
+  font-weight: 600;
+}
+
+/* The italic asides Figma gives this whole flow ("Please make sure you have Silent Mode turned
+   off...", "Your microphone will turn off when testing is complete.") — quieter than the regular
+   instruction paragraphs around them. */
+.note {
+  font-style: italic;
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+/* The plain speaker/microphone circle Figma shows above the sound-test screen and beside the
+   mic-test screen's own waveform — green-outlined from the start on both of this flow's
+   screens (unlike `MemoryThinkingTaskPage`'s own idle-gray/active-green split), since neither
+   screen here has an idle state to distinguish from. */
+.iconCircle {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-lg, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid var(--color-secondary, #86c65a);
+}
+
+.iconGlyph {
+  width: 28px;
+  height: 28px;
+  color: var(--color-text-secondary, #5b6b79);
+}
+
+/* Mic-test screen's own icon-circle-plus-waveform row — the circle keeps `.iconCircle`'s size
+   and loses its own bottom margin since the row itself carries the spacing instead. */
+.micRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 16px);
+  margin: 0 0 var(--space-sm, 8px);
+}
+
+.micRow .iconCircle {
+  margin: 0;
+}
+
+/* The dashed audio-level track beside the mic icon — idle only, on request: Figma shows this
+   same track filled with solid bars once sound is "detected", but this page has no real audio
+   signal to detect (see this page's own doc comment), so it never claims one by showing that
+   state. */
+.waveformTrack {
+  flex: 1;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-md, 16px);
+  border: 2px solid var(--color-secondary, #86c65a);
+  border-radius: var(--radius-md, 12px);
+}
+
+.waveformLine {
+  width: 100%;
+  border-top: 2px dashed var(--color-secondary, #86c65a);
+}
+
+/* The closing screen's success badge — a bigger, filled version of
+   `MemoryThinkingTaskPage.module.css`'s own small `.doneBadge` checkmark overlay, standalone
+   here rather than overlapping another icon. */
+.doneBadge {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-lg, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-secondary, #86c65a);
+}
+
+.doneGlyph {
+  width: 40px;
+  height: 40px;
+  color: var(--color-surface, #fff);
+}

@@ -23,6 +23,7 @@ import { DashboardPageV2 } from '@/pages/Dashboard/DashboardPageV2'
 import { ACTIVE_DASHBOARD_VARIANT } from '@/pages/Dashboard/dashboardVariant'
 import { ProfilePage } from '@/pages/Profile/ProfilePage'
 import { MemoryThinkingDetailsPage } from '@/pages/Assessment/MemoryThinkingDetailsPage'
+import { DeviceSetupPage } from '@/pages/Assessment/DeviceSetup/DeviceSetupPage'
 import { MemoryThinkingTaskPage } from '@/pages/Assessment/MemoryThinkingTask/MemoryThinkingTaskPage'
 import { LifestyleQuestionsPage } from '@/pages/Assessment/LifestyleQuestions/LifestyleQuestionsPage'
 import { PrioritiesQuestionsPage } from '@/pages/Assessment/PrioritiesQuestions/PrioritiesQuestionsPage'
@@ -54,14 +55,18 @@ import './App.css'
  * more sensitive of the two mid-funnel questions — then hands off to
  * Loading, a last spinner beat before Dashboard appears. Assessment Intro
  * (reached from Memory & Thinking's own Details screen, `MemoryThinkingDetailsPage`'s "I'm
- * ready") is real too — a click-through recreation of the real assessment task screens
- * (Immediate Recall, Category Fluency, Backward Digit Span, Delayed Recall, Delayed
- * Recognition), on request: no real microphone/audio recording, no voice grading, no real
- * timers, just Next/Continue advancing — see `MemoryThinkingTaskPage`'s own doc comment. An
- * earlier version of this same activity spoke its instructions aloud via the browser's own
- * speech synthesis and ran a real live microphone check before it; that whole flow has been
- * archived (see `archive/memory-thinking-device-setup-voiceover` in git) and replaced by this
- * one, on request, rather than kept alongside it. Report is still a PoD-4 stub, as are
+ * ready") is real too — a Device Setup mic-permission step (`DeviceSetupPage`, reinstated on
+ * request after having been archived) followed by a click-through recreation of the real
+ * assessment task screens (Immediate Recall, Category Fluency, Backward Digit Span, Delayed
+ * Recall, Delayed Recognition), on request: no real microphone/audio recording, no voice
+ * grading, no real timers, just Next/Continue advancing — see `MemoryThinkingTaskPage`'s own doc
+ * comment. An earlier version of this same activity spoke its instructions aloud via the
+ * browser's own speech synthesis and ran a real live microphone check before it; that whole flow
+ * was archived (see `archive/memory-thinking-device-setup-voiceover` in git) and replaced by
+ * this leaner pair of screens, on request, rather than kept alongside it — `DeviceSetupPage`
+ * itself is the one exception that's genuinely real: it calls the browser's actual microphone
+ * permission API (see its own doc comment) rather than recreating that prompt as a mockup.
+ * Report is still a PoD-4 stub, as are
  * History/Settings (reachable only from Dashboard's own nav, not listed in this funnel).
  * There's no paywall or subscription in this product, so no stub for one is listed here either.
  */
@@ -442,6 +447,20 @@ export default function App() {
                   </RequireAuth>
                 }
               />
+              {/* Device Setup — the mic-permission step, reinstated on request between
+                  MemoryThinkingDetailsPage's "I'm ready" and MemoryThinkingTaskPage's first
+                  screen (see `DeviceSetupPage`'s own doc comment). Click-through only except for
+                  its "Allow Access" button, which calls the browser's real
+                  `navigator.mediaDevices.getUserMedia` so the actual native permission prompt
+                  appears — the one genuinely real piece of this whole assessment flow. */}
+              <Route
+                path="/assessment/device-setup"
+                element={
+                  <RequireAuth>
+                    <DeviceSetupPage />
+                  </RequireAuth>
+                }
+              />
               {/* Memory & Thinking's real assessment task screens (Immediate Recall, Category
                   Fluency, Backward Digit Span, Delayed Recall, Delayed Recognition) — a
                   click-through recreation, on request: no real microphone/audio recording, no
@@ -450,7 +469,8 @@ export default function App() {
                   spoke its instructions aloud via the browser's own speech synthesis and ran a
                   real live microphone check first — that flow has been archived (git branch
                   `archive/memory-thinking-device-setup-voiceover`) rather than kept alongside
-                  this one, on request. */}
+                  this one, on request; `DeviceSetupPage` above reinstates just the
+                  mic-permission piece of it. */}
               <Route
                 path="/assessment"
                 element={
