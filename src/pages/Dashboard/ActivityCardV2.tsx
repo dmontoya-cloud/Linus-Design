@@ -54,11 +54,7 @@ export function ActivityCardV2({ activity }: { activity: ActivityV2 }) {
       {activity.requirement ? (
         <span className={styles.requirement}>{activity.requirement}</span>
       ) : null}
-      <div
-        className={[styles.buttonRow, isComplete ? styles.buttonRowEnd : '']
-          .filter(Boolean)
-          .join(' ')}
-      >
+      <div className={styles.buttonRow}>
         {isComplete ? (
           <Link
             to={activity.startPath}

@@ -103,16 +103,13 @@
   margin: 0;
 }
 
-/* Left-aligned for "Start" (not-started), right-aligned for "Details" (completed) — matches
-   the Figma mock exactly, oddity and all. */
+/* Left-aligned for every state — "Start" (not-started), "Details" (completed, tertiary), and
+   "Restart" (completed, secondary) all sit flush left, on request. Figma's own reference right-
+   aligned the completed-state CTAs; that oddity was dropped here rather than kept. */
 .buttonRow {
   display: flex;
   width: 100%;
   margin-top: var(--space-sm, 8px);
-}
-
-.buttonRowEnd {
-  justify-content: flex-end;
 }
 
 @media (max-width: 640px) {
