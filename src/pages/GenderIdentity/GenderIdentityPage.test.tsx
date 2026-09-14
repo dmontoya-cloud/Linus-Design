@@ -47,13 +47,11 @@ function renderGenderIdentityPage() {
 }
 
 describe('GenderIdentityPage', () => {
-  it('renders the sex select with no section title of its own, and the "How do you identify?" section with its "- Optional" suffix', () => {
+  it('renders the sex select and the Gender select with no section title or note above it', () => {
     renderGenderIdentityPage()
-    expect(
-      screen.getByRole('heading', { name: 'How do you identify? - Optional' }),
-    ).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /How do you identify/ })).not.toBeInTheDocument()
     expect(screen.getByLabelText('Select your sex')).toBeInTheDocument()
-    expect(screen.getByLabelText('Gender')).toBeInTheDocument()
+    expect(screen.getByLabelText('Gender (Optional)')).toBeInTheDocument()
   })
 
   it('renders the biology-norms subtitle below the title', () => {
@@ -65,13 +63,6 @@ describe('GenderIdentityPage', () => {
     ).toBeInTheDocument()
   })
 
-  it('always shows the static note explaining sex and gender are asked separately', () => {
-    renderGenderIdentityPage()
-    expect(
-      screen.getByText('We ask this separately from sex, since the two can be different.'),
-    ).toBeInTheDocument()
-  })
-
   it('offers Female, Male, and Intersex for sex, and different options for gender', () => {
     renderGenderIdentityPage()
     const sexSelect = screen.getByLabelText('Select your sex') as HTMLSelectElement
@@ -80,43 +71,43 @@ describe('GenderIdentityPage', () => {
       .filter((text) => text !== 'Choose one')
     expect(sexOptionLabels).toEqual(['Female', 'Male', 'Intersex'])
 
-    const genderSelect = screen.getByLabelText('Gender') as HTMLSelectElement
+    const genderSelect = screen.getByLabelText('Gender (Optional)') as HTMLSelectElement
     const genderOptionLabels = Array.from(genderSelect.options)
       .map((option) => option.textContent)
-      .filter((text) => text !== 'Choose one - Optional')
+      .filter((text) => text !== 'Choose one')
     expect(genderOptionLabels).toEqual(['Female', 'Male', 'Non-binary', 'Prefer not to say'])
   })
 
-  it('marks the Gender placeholder as optional and leaves the select enabled without an error', () => {
+  it('leaves the Gender placeholder as plain "Choose one" and the select enabled without an error', () => {
     renderGenderIdentityPage()
-    const genderSelect = screen.getByLabelText('Gender') as HTMLSelectElement
-    expect(genderSelect.options.item(0)?.textContent).toBe('Choose one - Optional')
+    const genderSelect = screen.getByLabelText('Gender (Optional)') as HTMLSelectElement
+    expect(genderSelect.options.item(0)?.textContent).toBe('Choose one')
     expect(genderSelect).not.toHaveAttribute('required')
   })
 
   it('no longer auto-fills sex when gender is Male or Female — the two fields are independent', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'male')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'male')
     expect(screen.getByLabelText('Select your sex')).toHaveValue('')
 
-    await user.selectOptions(screen.getByLabelText('Gender'), 'female')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'female')
     expect(screen.getByLabelText('Select your sex')).toHaveValue('')
   })
 
   it('lets sex and gender be set independently to different values', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'male')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'male')
     await user.selectOptions(screen.getByLabelText('Select your sex'), 'intersex')
     expect(screen.getByLabelText('Select your sex')).toHaveValue('intersex')
-    expect(screen.getByLabelText('Gender')).toHaveValue('male')
+    expect(screen.getByLabelText('Gender (Optional)')).toHaveValue('male')
   })
 
   it('saves the combined profile (prior state + gender + sex) and navigates to /loading', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'non-binary')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'non-binary')
     await user.selectOptions(screen.getByLabelText('Select your sex'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
@@ -127,7 +118,7 @@ describe('GenderIdentityPage', () => {
   it('saves Intersex as sex', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'non-binary')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'non-binary')
     await user.selectOptions(screen.getByLabelText('Select your sex'), 'intersex')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(
@@ -138,12 +129,12 @@ describe('GenderIdentityPage', () => {
   it('does not navigate when sex is left unselected, even though gender is optional', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'non-binary')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'non-binary')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
     expect(screen.getByLabelText('Select your sex')).toHaveValue('')
   })
 
-  it('saves with an empty gender when left on "Choose one - Optional", as long as sex is answered', async () => {
+  it('saves with an empty gender when left on "Choose one", as long as sex is answered', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
     await user.selectOptions(screen.getByLabelText('Select your sex'), 'female')
@@ -156,7 +147,7 @@ describe('GenderIdentityPage', () => {
   it('shows an error on sex when Continue is clicked unanswered, using the field-error variant rather than a native validation bubble, and never shows one for the optional Gender', async () => {
     const user = userEvent.setup()
     renderGenderIdentityPage()
-    const genderSelect = screen.getByLabelText('Gender')
+    const genderSelect = screen.getByLabelText('Gender (Optional)')
     const sexSelect = screen.getByLabelText('Select your sex')
     expect(screen.queryByText('Please select a sex.')).not.toBeInTheDocument()
 

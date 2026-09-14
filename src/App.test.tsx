@@ -152,7 +152,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(screen.getByRole('heading', { name: 'A few more details' })).toBeInTheDocument()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'female')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'female')
     await user.selectOptions(screen.getByLabelText('Select your sex'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
