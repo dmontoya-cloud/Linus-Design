@@ -63,14 +63,18 @@ describe('App', () => {
     const user = userEvent.setup()
     render(<App />)
     await user.click(screen.getByRole('link', { name: 'Login' }))
-    expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Welcome, let’s\u00A0get\u00A0started!' }),
+    ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Send code' })).toBeInTheDocument()
   })
 
   it('redirects /onboarding to /login when not authenticated', () => {
     window.history.pushState({}, '', '/web/onboarding')
     render(<App />)
-    expect(screen.getByRole('heading', { name: 'Welcome' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Welcome, let’s\u00A0get\u00A0started!' }),
+    ).toBeInTheDocument()
   })
 
   it('jumps straight to Dashboard from the prototype index, without the login flow', async () => {
@@ -148,7 +152,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 
     expect(screen.getByRole('heading', { name: 'A few more details' })).toBeInTheDocument()
-    await user.selectOptions(screen.getByLabelText('Gender'), 'female')
+    await user.selectOptions(screen.getByLabelText('Gender (Optional)'), 'female')
     await user.selectOptions(screen.getByLabelText('Select your sex'), 'female')
     await user.click(screen.getByRole('button', { name: 'Continue' }))
 

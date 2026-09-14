@@ -29,15 +29,13 @@ interface PriorState {
  * form before Loading hands off to Dashboard. Sex now leads (on request, flipping the
  * previous Gender-then-Sex order) since it's the required, results-determining field —
  * just a single labeled `Select` ("Select your sex", no separate section title above it,
- * matching the reference), followed by the optional "How do you identify?" section (a
- * "- Optional" suffix on that heading itself now, on request, in addition to the
- * placeholder already saying so) holding the Gender select. The two fields no longer
- * interact at all, on request — selecting a gender used to auto-fill the matching sex
- * value and show a note explaining why; that auto-fill is gone, and the note's own
- * explanation lives on as a plain static line under the "How do you identify?" heading
- * instead of a conditional callout, since the two questions can genuinely have different
- * answers and that's worth saying regardless of what's selected. Gender stays optional
- * and never gates Continue; sex is still required, since it's the value results are
+ * matching the reference), followed by the Gender select — no section heading or
+ * explanatory note above it either, on request, just the `Select`'s own "Gender" label and
+ * plain "Choose one" placeholder. The two fields no longer interact at all, on request —
+ * selecting a gender used to auto-fill the matching sex value and show a note explaining
+ * why; that auto-fill is gone, and the note itself was later removed too, on request, once
+ * dropping the section heading and note left only the plain `Select` behind. Gender stays
+ * optional and never gates Continue; sex is still required, since it's the value results are
  * actually compared against. This is the page that actually calls `saveProfile`,
  * combining these answers with everything Registration and Education passed along in
  * router state. The form has `noValidate`, and the sex dropdown uses `Select`'s own
@@ -96,19 +94,13 @@ export function GenderIdentityPage() {
         </div>
 
         <div className={styles.reveal} style={{ animationDelay: cascadeDelay(1) }}>
-          <h2 className={styles.sectionTitle}>
-            How do you identify? <span className={styles.sectionTitleOptional}>- Optional</span>
-          </h2>
-          <p className={styles.identityNote}>
-            We ask this separately from sex, since the two can be different.
-          </p>
           <Select
-            label="Gender"
+            label="Gender (Optional)"
             value={gender}
             onChange={(e) => setGender(e.target.value as Gender)}
           >
             <option value="" hidden>
-              Choose one - Optional
+              Choose one
             </option>
             {GENDER_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>

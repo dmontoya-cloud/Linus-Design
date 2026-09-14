@@ -93,12 +93,12 @@ export function LoginPage() {
         <div className={styles.panel}>
           <Logo className={styles.logo} />
           <div className={styles.formContent}>
-            <h1 className={styles.title}>Welcome</h1>
+            <h1 className={styles.title}>Welcome, let&rsquo;s&nbsp;get&nbsp;started!</h1>
 
             <div className={styles.magicLink}>
               <p className={styles.magicLinkCopy}>
-                Get started by entering your email. We&rsquo;ll send you a one-time code to sign in
-                or create your account.
+                Enter your email address. We&rsquo;ll send you a one-time code to sign in or create
+                your account.
               </p>
               <form className={styles.magicLinkForm} onSubmit={handleMagicLink} noValidate>
                 <div
