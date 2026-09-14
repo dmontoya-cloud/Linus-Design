@@ -13,7 +13,7 @@ export const ACTIVITIES_META: ReadonlyArray<Omit<ActivityV2, 'status'>> = [
     id: 'memory-recall',
     title: 'Memory & Thinking',
     Icon: BrainIcon,
-    duration: 'About 7–10 minutes',
+    duration: 'About 7 minutes',
     requirement: 'Needs quiet room',
     description:
       'Tasks that look at your brain abilities: memory, attention, language and thinking.',
@@ -35,7 +35,7 @@ export const ACTIVITIES_META: ReadonlyArray<Omit<ActivityV2, 'status'>> = [
     id: 'visual-attention',
     title: 'Personal Priorities',
     Icon: ListNumbersIcon,
-    duration: 'About 7 minutes',
+    duration: 'About 8 minutes',
     description: 'Share what matters most to you and what you want to keep doing in daily life.',
     startPath: '/assessment/priorities/questions',
     completedActionLabel: 'Restart',

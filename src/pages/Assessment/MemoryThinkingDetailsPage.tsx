@@ -27,7 +27,7 @@ function formatRedoDate(months: number): string {
 /**
  * Memory & Thinking Details — the new step between Dashboard's "Start Activity"/"Start" and
  * the real task screens (`MemoryThinkingTaskPage`, at `/assessment`), on request: what to expect
- * before committing, not the "get ready" moment itself. Duration matches the "About 7–10
+ * before committing, not the "get ready" moment itself. Duration matches the "About 7
  * minutes" estimate shown everywhere else this activity appears (Dashboard's `ActivityCard`,
  * `PENDING_ACTIVITIES`), so this prototype never shows two different estimates for the same
  * activity, and now renders as plain text with no leading `ClockIcon`, matching Figma's
@@ -73,7 +73,7 @@ export function MemoryThinkingDetailsPage() {
             <div className={[styles.header, styles.headerTabletRow].join(' ')}>
               <div className={styles.titleGroup}>
                 <h1 className={styles.title}>{ACTIVITY_NAME}</h1>
-                <p className={styles.duration}>About 7–10 minutes</p>
+                <p className={styles.duration}>About 7 minutes</p>
               </div>
               <Link to="/assessment/device-setup" className={buttonClassName('primary', 'lg')}>
                 I&rsquo;m ready

@@ -18,7 +18,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     id: 'memory-recall',
     title: 'Memory & Thinking',
     status: 'not-started',
-    duration: 'About 7–10 minutes',
+    duration: 'About 7 minutes',
     requirement: 'Needs quiet room',
     description:
       'Tasks that look at your brain abilities: memory, attention, language and thinking.',
@@ -36,7 +36,7 @@ const PENDING_ACTIVITIES: Activity[] = [
     id: 'visual-attention',
     title: 'Personal Priorities',
     status: 'not-started',
-    duration: 'About 7 minutes',
+    duration: 'About 8 minutes',
     description: 'Share what matters most to you and what you want to keep doing in daily life.',
     startPath: '/assessment/priorities/questions',
   },

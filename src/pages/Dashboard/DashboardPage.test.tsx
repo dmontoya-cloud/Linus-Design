@@ -68,9 +68,9 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('heading', { name: 'Personal Priorities' })).toBeInTheDocument()
     expect(screen.getAllByText('Not started')).toHaveLength(3)
     expect(screen.getByText('About 20 minutes')).toBeInTheDocument()
-    expect(screen.getByText('About 7–10 minutes')).toBeInTheDocument()
-    expect(screen.getByText('About 5 minutes')).toBeInTheDocument()
     expect(screen.getByText('About 7 minutes')).toBeInTheDocument()
+    expect(screen.getByText('About 5 minutes')).toBeInTheDocument()
+    expect(screen.getByText('About 8 minutes')).toBeInTheDocument()
     expect(screen.getByText('Needs quiet room')).toBeInTheDocument()
     // Only Memory & Thinking's Start reaches the real Assessment Intro screen (with its
     // instructions voice-over) — Lifestyle/Priorities route straight to their own question flows.
