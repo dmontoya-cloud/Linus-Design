@@ -40,7 +40,7 @@
   /* No "neutral-soft" background token exists either — composed from two already-
      established tokens instead: a subtle border tint reused as a background, and the
      secondary text color reused as the accent (see the component docstring). */
-  --toast-accent: var(--color-text-secondary, #5b6b79);
+  --toast-accent: var(--color-text-secondary, #505e6a);
   --toast-bg: var(--color-border-subtle, #eff0f2);
 }
 
@@ -77,7 +77,7 @@
   font-size: var(--font-paragraph-2-regular-size, 1rem);
   font-weight: var(--font-paragraph-2-regular-weight, 400);
   line-height: var(--font-paragraph-2-regular-line-height, 1.5);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 /* When there's no title (on request), the message is the only line — promoted to

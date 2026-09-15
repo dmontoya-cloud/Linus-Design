@@ -59,7 +59,7 @@
   font-size: var(--font-label-m-semibold-size, 0.6875rem);
   font-weight: var(--font-label-m-semibold-weight, 600);
   letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   background: var(--color-border-subtle, #eff0f2);
   border-radius: var(--radius-pill, 999px);
   padding: var(--space-xs, 4px) var(--space-sm, 8px);
@@ -82,7 +82,7 @@
   font-size: var(--font-label-m-semibold-size, 0.6875rem);
   font-weight: var(--font-label-m-semibold-weight, 600);
   letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   margin: -8px 0 0;
 }
 
@@ -101,7 +101,7 @@
   font-size: var(--font-label-m-semibold-size, 0.6875rem);
   font-weight: var(--font-label-m-semibold-weight, 600);
   letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   background: var(--color-border-subtle, #eff0f2);
   border-radius: var(--radius-pill, 999px);
   padding: var(--space-xs, 4px) var(--space-sm, 8px);

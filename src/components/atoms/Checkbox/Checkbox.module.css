@@ -24,7 +24,7 @@
 }
 
 .item input[type='checkbox']:hover {
-  border-color: var(--color-text-secondary, #5b6b79);
+  border-color: var(--color-text-secondary, #505e6a);
 }
 
 .item input[type='checkbox']:checked,

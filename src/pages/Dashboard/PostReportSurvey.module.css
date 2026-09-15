@@ -56,7 +56,7 @@
   font-weight: var(--font-label-l-semibold-weight, 600);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 .closeButton {
@@ -69,7 +69,7 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   cursor: pointer;
 }
 
@@ -148,7 +148,7 @@
   margin-top: var(--space-xs, 4px);
   font-family: var(--font-label-m-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-label-m-regular-size, 0.6875rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 /* Choice (single-select) — same checked-row treatment (border + primary-soft fill) as

@@ -22,7 +22,7 @@
    instruction paragraphs around them. */
 .note {
   font-style: italic;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 /* The plain speaker/microphone circle Figma shows above the sound-test screen and beside the
@@ -44,7 +44,7 @@
 .iconGlyph {
   width: 28px;
   height: 28px;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 /* Mic-test screen's own icon-circle-plus-waveform row — the circle keeps `.iconCircle`'s size

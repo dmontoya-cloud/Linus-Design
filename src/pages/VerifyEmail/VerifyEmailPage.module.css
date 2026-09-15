@@ -58,7 +58,7 @@
 .copy {
   font-family: var(--font-family, system-ui, sans-serif);
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   line-height: 1.5;
   margin: 0;
 }
@@ -121,7 +121,7 @@
     box-shadow 0.12s ease;
 }
 .codeBox:hover {
-  border-color: var(--color-text-secondary, #5b6b79);
+  border-color: var(--color-text-secondary, #505e6a);
 }
 .codeBox:focus-visible {
   border-color: var(--color-primary, #087dae);
@@ -159,13 +159,13 @@
   margin: 0;
   font-family: var(--font-family, system-ui, sans-serif);
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 .textLink {
   font-family: var(--font-family, system-ui, sans-serif);
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   background: none;
   border: none;
   padding: 0;

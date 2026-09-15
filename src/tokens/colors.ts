@@ -74,6 +74,12 @@ export const colorPrimitives = {
     300: '#A5AEB5',
     400: '#81909C',
     500: '#5B6B79',
+    /* Interpolated between gray-500 and gray-700, on request — not independently confirmed
+       against a Figma source the way the rest of this ramp is (see this file's own doc
+       comment). Added specifically to move text-secondary/content-secondary one step darker
+       without jumping all the way to gray-700; every other family (and gray itself, until now)
+       deliberately skips 600 — see docs/design.md's Colors section. */
+    600: '#505E6A',
     700: '#44505B',
     800: '#323B43',
     900: '#20252A',
@@ -194,7 +200,7 @@ export const defaultColors: ColorTokens = {
   borderSuccess: colorPrimitives.success[500],
   borderInfo: colorPrimitives.info[500],
   textPrimary: '#1F2A37',
-  textSecondary: colorPrimitives.gray[500],
+  textSecondary: colorPrimitives.gray[600],
   textTertiary: '#94A3AD',
   textOnPrimary: '#FFFFFF',
   success: colorPrimitives.success[500],
@@ -212,7 +218,7 @@ export const defaultColors: ColorTokens = {
   contentPrimary: colorPrimitives.gray[900],
   contentPrimaryDisabled: colorPrimitives.gray[300],
   contentPrimaryInverted: '#FFFFFF',
-  contentSecondary: colorPrimitives.gray[500],
+  contentSecondary: colorPrimitives.gray[600],
   contentSecondaryDisabled: colorPrimitives.gray[200],
   contentSecondaryInverted: colorPrimitives.gray[100],
   contentDanger: colorPrimitives.danger[500],

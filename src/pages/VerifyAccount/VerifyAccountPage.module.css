@@ -46,7 +46,7 @@
   font-size: var(--font-paragraph-3-regular-size, 1.1875rem);
   font-weight: var(--font-paragraph-3-regular-weight, 400);
   line-height: var(--font-paragraph-3-regular-line-height, 1.5);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   margin: 0;
   opacity: 0;
   animation: fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
