@@ -45,7 +45,7 @@
 }
 .teaserDismiss:hover,
 .teaserDismiss:focus-visible {
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 .teaserDismissIcon {

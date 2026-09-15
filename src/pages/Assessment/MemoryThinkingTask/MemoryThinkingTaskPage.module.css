@@ -8,7 +8,7 @@
 
 .centerParagraph {
   text-align: center;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 /* Category Fluency's own closing instruction line ("Be sure to say them out loud.") — Figma
@@ -42,7 +42,7 @@
 .iconGlyph {
   width: 40px;
   height: 40px;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 .iconGlyphActive {

@@ -19,8 +19,8 @@
   top: 50%;
   width: 8px;
   height: 8px;
-  border-right: 2px solid var(--color-text-secondary, #5b6b79);
-  border-bottom: 2px solid var(--color-text-secondary, #5b6b79);
+  border-right: 2px solid var(--color-text-secondary, #505e6a);
+  border-bottom: 2px solid var(--color-text-secondary, #505e6a);
   transform: translateY(-65%) rotate(45deg);
   pointer-events: none;
 }

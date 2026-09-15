@@ -21,7 +21,7 @@
 }
 
 .trigger:hover {
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
 }
 
 /* Same corrected two-layer ring recipe as every other icon-only trigger in this system

@@ -37,7 +37,7 @@
   font-size: var(--font-label-m-semibold-size, 0.6875rem);
   font-weight: var(--font-label-m-semibold-weight, 600);
   letter-spacing: var(--font-label-m-semibold-letter-spacing, 0.02em);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   margin: 0 0 var(--space-md, 16px);
 }
 
@@ -132,7 +132,7 @@
 .categoriesComplete {
   font-family: var(--font-label-l-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-label-l-regular-size, 0.8125rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   margin: 0;
 }
 

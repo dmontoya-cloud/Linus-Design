@@ -34,7 +34,7 @@
   max-width: 40em;
   font-family: var(--font-paragraph-2-regular-family, var(--font-family, system-ui, sans-serif));
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   line-height: 1.5;
   margin: 0;
 }

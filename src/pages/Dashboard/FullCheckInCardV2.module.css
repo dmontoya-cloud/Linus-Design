@@ -40,10 +40,15 @@
   margin: 0;
 }
 
+/* label-l-semibold, not -regular, on request — matches the weight every other duration/time
+   estimate in the app already uses; this line leads with the same "About 20 minutes" estimate
+   ActivityCardV2's own `.duration` shows per-activity, just combined with the "N/M complete"
+   progress count. */
 .progressLine {
-  font-family: var(--font-label-l-regular-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-label-l-regular-size, 0.8125rem);
-  color: var(--color-text-secondary, #5b6b79);
+  font-family: var(--font-label-l-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-label-l-semibold-size, 0.8125rem);
+  font-weight: var(--font-label-l-semibold-weight, 600);
+  color: var(--color-text-secondary, #505e6a);
   margin: 0;
 }
 

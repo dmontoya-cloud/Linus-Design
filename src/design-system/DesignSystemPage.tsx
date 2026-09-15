@@ -242,14 +242,17 @@ export function DesignSystemPage() {
           </h2>
           <p className={styles.lede}>
             Not Figma-sourced — this is the founder-decided IBM Plex Sans scale now documented in{' '}
-            <code>docs/design.md</code> (see that file for the full 25-style scale and rationale); a
+            <code>docs/design.md</code> (see that file for the full 27-style scale and rationale); a
             Figma-confirmed type scale is still open, tracked separately in WI-0002.
           </p>
           {(
             [
               ['headline-1-semibold', 'Heading 1'],
+              ['headline-2-semibold', 'Heading 2'],
               ['headline-3-semibold', 'Heading 3'],
-              ['headline-5-semibold', 'Heading 5 (section title)'],
+              ['headline-4-semibold', 'Heading 4'],
+              ['headline-5-semibold', 'Heading 5'],
+              ['headline-6-semibold', 'Heading 6 (section title)'],
               ['paragraph-4-semibold', 'Body Large'],
               ['paragraph-2-regular', 'Body Medium'],
               ['paragraph-1-regular', 'Body Small'],

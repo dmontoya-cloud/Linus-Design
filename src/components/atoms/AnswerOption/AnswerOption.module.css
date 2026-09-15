@@ -24,7 +24,7 @@
 }
 
 .option:hover {
-  border-color: var(--color-text-secondary, #5b6b79);
+  border-color: var(--color-text-secondary, #505e6a);
 }
 
 /* Yes/No-style rows (and any other single-select option), on request — no visible dot, just

@@ -13,7 +13,12 @@ colors:
   # primitive only. gray alone also carries a 400 step (every other family
   # skips it): added so border-strong can clear the 3:1 non-text-contrast
   # minimum for component boundaries — gray-300 falls short at 2.25:1
-  # against white, and gray-500 (5.49:1) reads too dark for a border.
+  # against white, and gray-500 (5.49:1) reads too dark for a border. gray
+  # now also carries a 600 step, on request — unlike 400, it isn't
+  # independently confirmed against a Figma source, just interpolated
+  # between gray-500 and gray-700 specifically to move text-secondary/
+  # content-secondary one step darker (6.69:1 against white) without
+  # jumping all the way to gray-700.
   blue-50: '#F8FBFD'
   blue-100: '#E6F2F7'
   blue-200: '#B5D8E7'
@@ -65,6 +70,7 @@ colors:
   gray-300: '#A5AEB5'
   gray-400: '#81909C'
   gray-500: '#5B6B79'
+  gray-600: '#505E6A'
   gray-700: '#44505B'
   gray-800: '#323B43'
   gray-900: '#20252A'
@@ -145,15 +151,16 @@ colors:
   border-success: '#15803D'
   border-info: '#2563EB'
   # text-primary/-secondary/-tertiary are direct aliases of gray steps
-  # (gray-900/-500/-300) — consolidated from independently-set hex values
+  # (gray-900/-600/-300) — consolidated from independently-set hex values
   # that predated the gray primitive scale, closing a real violation of the
   # governing rule below (a standalone hex with no primitive behind it).
-  # text-primary now matches content-primary exactly and text-tertiary now
-  # matches content-primary-disabled exactly; text-secondary already was an
-  # exact match for gray-500 (the scale's anchor point) and needed no value
-  # change, just this explicit alias declaration.
+  # text-primary matches content-primary exactly and text-tertiary matches
+  # content-primary-disabled exactly. text-secondary moved from gray-500 to
+  # the new gray-600, on request — one step darker (6.69:1 against white,
+  # up from 5.49:1), kept in lockstep with content-secondary below since
+  # the two are documented as identical.
   text-primary: '#20252A'
-  text-secondary: '#5B6B79'
+  text-secondary: '#505E6A'
   text-tertiary: '#A5AEB5'
   text-on-primary: '#FFFFFF'
   success: '#15803D'
@@ -179,7 +186,7 @@ colors:
   content-primary: '#20252A'
   content-primary-disabled: '#A5AEB5'
   content-primary-inverted: '#FFFFFF'
-  content-secondary: '#5B6B79'
+  content-secondary: '#505E6A'
   content-secondary-disabled: '#CED3D7'
   content-secondary-inverted: '#EFF0F2'
   content-danger: '#DC2626'
@@ -189,15 +196,15 @@ colors:
 typography:
   # IBM Plex Sans (Plus Jakarta Sans for every Headline style), 1.200 (minor third)
   # modular scale, base = Paragraph 2 = 16px.
-  # 11 sizes x 2 weights = 22 content styles, plus a dedicated `button` style
+  # 12 sizes x 2 weights = 24 content styles, plus a dedicated `button` style
   # unrelated to the content scale. Headline, Paragraph, and Label all use
   # Semi Bold (600) as their second weight. No Display category and no Bold
   # (700) weight remain in the scale — removed at the founder's request;
   # `headline-1` (48px) is now the largest/most prominent style available.
   # Naming direction differs by category: Headline counts DOWN from largest
-  # (headline-1 = 48px biggest ... headline-5 = 18px smallest — headline-5 was
-  # added after the fact, off the modular progression, see its own note below),
-  # but Paragraph
+  # (headline-1 = 48px biggest ... headline-6 = 18px smallest — headline-5
+  # and headline-6 both sit off the modular progression, see their own note
+  # below), but Paragraph
   # counts UP from smallest (paragraph-1 = 13px smallest ... paragraph-4 =
   # 23px biggest) — paragraph-2 (16px) is the base/default reading size, with
   # one smaller step below it and two larger steps above. `paragraph-1` (13px)
@@ -248,18 +255,33 @@ typography:
     fontSize: 1.75rem
     fontWeight: 600
     lineHeight: 1.25
-  # headline-5 — new, and deliberately off the modular scale's own progression. Continuing
+  # headline-5 — new, sitting between headline-4 (28px) and headline-6 (18px) rather than
+  # continuing either scale exactly: 22px, roughly the midpoint, with a line height (1.28)
+  # likewise interpolated between headline-4's 1.25 and headline-6's 1.3. Fills the gap the
+  # note below already explains was too awkward to fill by continuing the modular formula.
+  headline-5-regular:
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+    fontSize: 1.375rem
+    fontWeight: 400
+    lineHeight: 1.28
+  headline-5-semibold:
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
+    fontSize: 1.375rem
+    fontWeight: 600
+    lineHeight: 1.28
+  # headline-6 — deliberately off the modular scale's own progression. Continuing
   # the 1.200 ratio one more step below headline-4 lands at ~1.458rem, indistinguishable
   # from paragraph-4 (1.4375rem) already sitting right next to it — tried first for
-  # Registration's field-group subheadings and found still too large. headline-5 is a
+  # Registration's field-group subheadings and found still too large. headline-6 is a
   # visibly smaller size than paragraph-4 while staying bold enough to read as a title
-  # rather than body text — the smallest tier in the headline family.
-  headline-5-regular:
+  # rather than body text — the smallest tier in the headline family. Renamed from
+  # headline-5 once the new 22px tier above took that slot — same 18px value throughout.
+  headline-6-regular:
     fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
     fontSize: 1.125rem
     fontWeight: 400
     lineHeight: 1.3
-  headline-5-semibold:
+  headline-6-semibold:
     fontFamily: "'Plus Jakarta Sans', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif"
     fontSize: 1.125rem
     fontWeight: 600
@@ -936,7 +958,7 @@ Nine hue ramps, each running `50` (lightest tint) through `950` (darkest shade),
 - **Brand** — `blue` (`primary`) and `green` (`secondary`), the two hues that actually carry Linus's brand identity.
 - **Functional** — `orange` (`warning`), plus the dedicated `success`/`danger`/`info` families. `orange` is still one of the 5 confirmed brand hues, it's just not shared with anything else; `success`/`danger`/`info` were purpose-built and back nothing but their matching semantic token.
 - **Complementary Colors** — `teal` (`accent`) and `purple` (no semantic role yet) — confirmed brand hues not claimed by a primary/secondary/functional role.
-- **Grayscale** — `gray`, the neutral scale, kept in its own section since it isn't a brand hue at all. Uniquely among the 9 families, `gray` also has a `400` step: `gray-300` (2.25:1 against white) falls short of the 3:1 non-text-contrast minimum WCAG requires for a component boundary with no other visual cue (e.g. an input outline), and `gray-500` (5.49:1) reads too dark for a border — `gray-400` (`#81909C`, 3.28:1) fills that gap and exists solely to back `border-strong`.
+- **Grayscale** — `gray`, the neutral scale, kept in its own section since it isn't a brand hue at all. Uniquely among the 9 families, `gray` carries two extra steps: `400` — `gray-300` (2.25:1 against white) falls short of the 3:1 non-text-contrast minimum WCAG requires for a component boundary with no other visual cue (e.g. an input outline), and `gray-500` (5.49:1) reads too dark for a border — `gray-400` (`#81909C`, 3.28:1) fills that gap and exists solely to back `border-strong`; and `600` (`#505E6A`, 6.69:1) — new, on request, interpolated between `gray-500` and `gray-700` rather than independently confirmed, and it exists solely to back `text-secondary`/`content-secondary` one step darker than `gray-500` used to.
 
 ### Semantic
 
@@ -948,7 +970,7 @@ Every semantic color is either a direct alias of one primitive step, or, for `wa
 
 `success`, `danger`, and `info` each get their **own dedicated primitive family** (`success-*`, `danger-*`, `info-*`) instead of reusing a brand hue: previously `success` and `info` doubled up with `secondary` (green) and `primary` (blue) respectively — the same color meaning two different things depending on context — and `danger` had no primitive at all, just an off-palette placeholder. `success` is `success-500` (`#15803D`), `danger` is `danger-500` (`#DC2626`), `info` is `info-500` (`#2563EB`) — all three pass AA as both a solid fill (with white `on-*` text) and as small foreground text/icon color directly at their `500` step, so unlike `accent`/`warning` they don't need to reach for a darker step. These 3 primitive families exist solely to back these 3 semantic tokens; they're not multi-purpose brand hues like `blue`/`green`/`teal`/`orange`/`purple`/`gray`.
 
-The neutral text tokens (`text-primary`, `text-secondary`, `text-tertiary`) were originally set independently, before the `gray` primitive existed — a real violation of this doc's own governing rule (standalone hex values with no primitive behind them), now fixed. All three are direct `gray` aliases: `text-primary` is `gray-900` (`#20252A`, previously an independent `#1F2A37` — the shift is imperceptible, and the value now exactly matches `content-primary`), `text-secondary` is `gray-500` (`#5B6B79`, unchanged — it was already an exact match, used as the scale's anchor point, just not declared as an alias until now), and `text-tertiary` is `gray-300` (`#A5AEB5`, previously an independent `#94A3AD` — now exactly matches `content-primary-disabled`). `background` is a warm off-white rather than a cool clinical gray, and `surface` is pure white for cards, so content lifts gently off the page instead of sitting in a sterile field. Text uses a soft charcoal-navy (`text-primary`) rather than true black, which keeps the whole page feeling less severe.
+The neutral text tokens (`text-primary`, `text-secondary`, `text-tertiary`) were originally set independently, before the `gray` primitive existed — a real violation of this doc's own governing rule (standalone hex values with no primitive behind them), now fixed. All three are direct `gray` aliases: `text-primary` is `gray-900` (`#20252A`, previously an independent `#1F2A37` — the shift is imperceptible, and the value now exactly matches `content-primary`), `text-secondary` is `gray-600` (`#505E6A`, 6.69:1 against white — moved one step darker from `gray-500` on request; see Grayscale above for the new step itself), and `text-tertiary` is `gray-300` (`#A5AEB5`, previously an independent `#94A3AD` — now exactly matches `content-primary-disabled`). `background` is a warm off-white rather than a cool clinical gray, and `surface` is pure white for cards, so content lifts gently off the page instead of sitting in a sterile field. Text uses a soft charcoal-navy (`text-primary`) rather than true black, which keeps the whole page feeling less severe.
 
 **Border** is a four-tier `gray` scale plus three functional variants, all direct aliases (this is a change — `border`/`border-strong` used to be independent, unaliased values; they're now fully consolidated onto the primitive). `border-subtle` (`gray-100`, `#EFF0F2`) is for decorative-only dividers and rules that carry no boundary information — section rules, seams between non-interactive regions. `border` (`gray-200`, `#CED3D7`) is the default resting-state border for cards and inputs; like `border-subtle` it sits under the 3:1 non-text-contrast minimum, so it's only appropriate where the border isn't the sole cue for a component's boundary (paired with padding, shadow, or a background difference). `border-strong` (`gray-400`, `#81909C`, 3.28:1) is the one tier that actually clears 3:1 — use it wherever a border **is** the sole indicator, such as a text input's resting-state outline sitting on the same white `surface` as its parent card, plus hover/emphasis states generally. `border-disabled` (`gray-100`, same value as `border-subtle`) mutes a disabled control's outline further — a distinct name for a distinct purpose, even though the hex coincides. `border-danger` (`danger-500`, `#DC2626`), `border-success` (`success-500`, `#15803D`), and `border-info` (`info-500`, `#2563EB`) each alias the same primitive step their matching semantic token does (all already ≥4.5:1 as foreground text, so comfortably past the 3:1 non-text minimum too) — for colored outlines on invalid/valid/informational form fields, not just a background tint.
 
@@ -958,17 +980,17 @@ The neutral text tokens (`text-primary`, `text-secondary`, `text-tertiary`) were
 
 ### Content
 
-`content-primary`/`content-secondary` are `gray-900`/`gray-500` — the text/icon-specific counterparts to the surface-level `text-primary`/`text-secondary` tokens above (not merged with them, since that consolidation wasn't asked for; `content-secondary` and `text-secondary` do happen to be identical). Each gets two variants: `-disabled` (a lighter `gray` step — `gray-300` for primary, `gray-200` for secondary — deliberately low-contrast, since WCAG doesn't require disabled content to meet AA) and `-inverted` (for text/icons placed on a dark or colored fill instead of the light `background`/`surface`). `content-primary-inverted` is plain white and safe on `primary`, `danger`, and `success` fills, but **not** on `secondary` or a raw `teal`/`orange` fill — those need a dark inverted color instead (reuse `content-primary` itself). `content-secondary-inverted` (`gray-100`) is dimmer than white to preserve hierarchy, but only passes AA on genuinely dark fills (800/900-level primitives); on a mid-tone fill like `blue-500` it's 4.04:1 — under AA — prefer full white there if the hierarchy step doesn't matter.
+`content-primary`/`content-secondary` are `gray-900`/`gray-600` — the text/icon-specific counterparts to the surface-level `text-primary`/`text-secondary` tokens above (not merged with them, since that consolidation wasn't asked for; `content-secondary` and `text-secondary` are kept in lockstep on purpose, both moved to `gray-600` together). Each gets two variants: `-disabled` (a lighter `gray` step — `gray-300` for primary, `gray-200` for secondary — deliberately low-contrast, since WCAG doesn't require disabled content to meet AA) and `-inverted` (for text/icons placed on a dark or colored fill instead of the light `background`/`surface`). `content-primary-inverted` is plain white and safe on `primary`, `danger`, and `success` fills, but **not** on `secondary` or a raw `teal`/`orange` fill — those need a dark inverted color instead (reuse `content-primary` itself). `content-secondary-inverted` (`gray-100`) is dimmer than white to preserve hierarchy, but only passes AA on genuinely dark fills (800/900-level primitives); on a mid-tone fill like `blue-500` it's 4.04:1 — under AA — prefer full white there if the hierarchy step doesn't matter.
 
 The functional content trio — `content-danger`, `content-success`, `content-warning` — reuses the `danger`/`success`/`warning` values exactly as-is rather than deriving new ones, since those are already legible as text/icon color at their `500` step (see above). There's no separate `content-caution`; caution and warning were treated as the same state.
 
 ## Typography
 
-Typography runs on two families: **IBM Plex Sans** for body/label/button text, and **Plus Jakarta Sans** as the accent face for every Headline style (`headline-1` through `headline-5`) — a deliberate accent for titles, not a wholesale typeface swap. (This accent face was IBM Plex Serif originally; replaced with Plus Jakarta Sans, pulled from Google Fonts same as the base family. Headline's accent treatment was initially scoped to just `headline-1`–`headline-3`, the three largest sizes, before being extended to all five Headline steps for a consistent title voice throughout.) Every Paragraph/Label/button style stays on IBM Plex Sans. Both families share the same fallback chain in case the webfont fails to load: `-apple-system, 'Segoe UI', Roboto, system-ui, sans-serif`.
+Typography runs on two families: **IBM Plex Sans** for body/label/button text, and **Plus Jakarta Sans** as the accent face for every Headline style (`headline-1` through `headline-6`) — a deliberate accent for titles, not a wholesale typeface swap. (This accent face was IBM Plex Serif originally; replaced with Plus Jakarta Sans, pulled from Google Fonts same as the base family. Headline's accent treatment was initially scoped to just `headline-1`–`headline-3`, the three largest sizes, before being extended to every Headline step for a consistent title voice throughout.) Every Paragraph/Label/button style stays on IBM Plex Sans. Both families share the same fallback chain in case the webfont fails to load: `-apple-system, 'Segoe UI', Roboto, system-ui, sans-serif`.
 
-The scale is a **1.200 (minor third) modular scale**, anchored on `paragraph-2` = 16px = the scale's base (exponent 0); every other step is 16px × 1.2ⁿ, rounded to a clean pixel value — with one deliberate exception, `headline-5` (see below). Twelve sizes across three categories, each with two weights (24 tokens total). There is no Display category and no Bold (700) weight anywhere in the scale — both were removed at the founder's request after the scale was first built; `headline-1` (48px, Regular/Semi Bold) is now the largest and most prominent style available:
+The scale is a **1.200 (minor third) modular scale**, anchored on `paragraph-2` = 16px = the scale's base (exponent 0); every other step is 16px × 1.2ⁿ, rounded to a clean pixel value — with two deliberate exceptions, `headline-5` and `headline-6` (see below). Thirteen sizes across three categories, each with two weights (26 tokens total). There is no Display category and no Bold (700) weight anywhere in the scale — both were removed at the founder's request after the scale was first built; `headline-1` (48px, Regular/Semi Bold) is now the largest and most prominent style available:
 
-- **Headline** (`headline-1` through `headline-5` — 48 / 40 / 33 / 28 / 18px) — Regular 400 + Semi Bold 600. Numbered **descending**: `headline-1` is the largest. Page and section headings, and now also the largest hero-style text in the system. `headline-5` is the odd one out: added later for Registration's field-group subheadings, once `headline-4` and even `paragraph-4` both read as too large in that context — rather than let the modular formula place it at ~23px (indistinguishable from `paragraph-4`, defeating the point), it's set to a visibly smaller 18px on purpose. Every other Headline step still follows the formula exactly.
+- **Headline** (`headline-1` through `headline-6` — 48 / 40 / 33 / 28 / 22 / 18px) — Regular 400 + Semi Bold 600. Numbered **descending**: `headline-1` is the largest. Page and section headings, and now also the largest hero-style text in the system. `headline-6` is the odd one out: added early on for Registration's field-group subheadings (as `headline-5`, before the rename described above), once `headline-4` and even `paragraph-4` both read as too large in that context — rather than let the modular formula place it at ~23px (indistinguishable from `paragraph-4`, defeating the point), it's set to a visibly smaller 18px on purpose. `headline-5` is newer still, and off-formula for a different reason: it exists specifically to sit between `headline-4` (28px) and `headline-6` (18px) — 22px, roughly the midpoint, rather than either scale's own next step — and took the `headline-5` name when it was added, pushing the smaller 18px style down to `headline-6`. Every other Headline step still follows the formula exactly.
 - **Paragraph** (`paragraph-1` through `paragraph-4` — 13 / 16 / 19 / 23px) — Regular 400 + Semi Bold 600. Numbered **ascending**: `paragraph-1` is the smallest — the opposite direction from Headline. `paragraph-2` (16px) is the base reading size, with one smaller step below it (`paragraph-1`) and two larger steps above (`paragraph-3`, `paragraph-4`); the larger sizes are for emphasis or larger-format reading contexts, not a strict hierarchy of importance. `paragraph-1` (13px) lands on the same rung as `label-l` (also 13px) — the two categories now overlap on the underlying scale rather than each owning an exclusive step; that's accepted, not a bug.
 - **Label** (`label-l`, `label-m`, `label-s` — 13 / 11 / 9px) — Regular 400 + Semi Bold 600. Small UI text: nav items, badges, captions. **`label-s` (9px) is genuinely small** — borderline for real legibility — and should be treated as decorative/supplementary only, never load-bearing text a user actually needs to read.
 

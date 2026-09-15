@@ -33,14 +33,14 @@
   margin-bottom: var(--space-md, 16px);
 }
 
-/* Stepped down one size, on request, from headline-4-semibold (28px) to headline-5-semibold
+/* Stepped down one size, on request, from headline-4-semibold (28px) to headline-6-semibold
    (18px) — the next size down in the headline family (see docs/design.md's Typography section
-   on why headline-5 sits below paragraph-4 rather than continuing the modular scale). */
+   on why headline-6 sits below paragraph-4 rather than continuing the modular scale). */
 .title {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
-  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
+  line-height: var(--font-headline-6-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0;
 }
@@ -55,7 +55,7 @@
   border-radius: var(--radius-pill, 999px);
   border: none;
   background: transparent;
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
@@ -74,7 +74,7 @@
 .body {
   font-family: var(--font-family, system-ui, sans-serif);
   font-size: var(--font-paragraph-2-regular-size, 1rem);
-  color: var(--color-text-secondary, #5b6b79);
+  color: var(--color-text-secondary, #505e6a);
   line-height: 1.5;
   max-height: 60vh;
   overflow-y: auto;
