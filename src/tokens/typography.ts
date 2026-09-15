@@ -36,6 +36,8 @@ export type TypeStyleName =
   | 'headline-4-semibold'
   | 'headline-5-regular'
   | 'headline-5-semibold'
+  | 'headline-6-regular'
+  | 'headline-6-semibold'
   | 'paragraph-1-regular'
   | 'paragraph-1-semibold'
   | 'paragraph-2-regular'
@@ -117,18 +119,39 @@ export const defaultTypography: TypographyTokens = {
       fontWeight: 600,
       lineHeight: 1.25,
     },
+    /* New tier, on request, filling the gap the comment below already explained: continuing
+       the 1.200 ratio one more step down from headline-4 (28px) would land at ~1.458rem,
+       indistinguishable from paragraph-4 (1.4375rem) sitting right next to it. 22px sits
+       roughly halfway between headline-4 (28px) and headline-6 (18px, formerly headline-5 —
+       see that entry's own comment for why it breaks the modular scale) rather than
+       continuing either scale exactly. Line height (1.28) is likewise interpolated between
+       headline-4's 1.25 and headline-6's 1.3, not derived from a formula. */
+    'headline-5-regular': {
+      fontFamily: FONT_FAMILY_SERIF,
+      fontSize: '1.375rem',
+      fontWeight: 400,
+      lineHeight: 1.28,
+    },
+    'headline-5-semibold': {
+      fontFamily: FONT_FAMILY_SERIF,
+      fontSize: '1.375rem',
+      fontWeight: 600,
+      lineHeight: 1.28,
+    },
     /* Below the modular scale's own progression on purpose — continuing the 1.200 ratio one
        more step down from headline-4 would land at ~1.458rem, indistinguishable from
-       paragraph-4 (1.4375rem) already sitting right next to it. headline-5 exists for a real
-       need (Registration's field-group subheadings — see OnboardingPage), a size visibly
-       smaller than paragraph-4 while still bold enough to read as a title, not body text. */
-    'headline-5-regular': {
+       paragraph-4 (1.4375rem) already sitting right next to it. Renamed from headline-5 to
+       headline-6, on request, once the new 22px tier above took the headline-5 slot — still
+       the same 18px size, same real need (Registration's field-group subheadings — see
+       OnboardingPage), a size visibly smaller than paragraph-4 while still bold enough to
+       read as a title, not body text. */
+    'headline-6-regular': {
       fontFamily: FONT_FAMILY_SERIF,
       fontSize: '1.125rem',
       fontWeight: 400,
       lineHeight: 1.3,
     },
-    'headline-5-semibold': {
+    'headline-6-semibold': {
       fontFamily: FONT_FAMILY_SERIF,
       fontSize: '1.125rem',
       fontWeight: 600,

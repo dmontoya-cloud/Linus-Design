@@ -92,9 +92,9 @@
 
 .prompt {
   margin: 0;
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
   line-height: 1.3;
   color: var(--color-text-primary, #1f2a37);
 }
@@ -229,8 +229,8 @@
 
 .thanks {
   margin: 0;
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
 }

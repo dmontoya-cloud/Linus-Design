@@ -50,7 +50,7 @@ function isAtLeastAge(
  * fields, as specified: first name, last name, and date of birth — the last one split
  * into month (a select), day, and year (plain fields) rather than a single native date
  * input. Each field group gets its own section title ("What's your name?" / "When were
- * you born?"), styled with docs/design.md's `headline-5-semibold` — a tier added to the
+ * you born?"), styled with docs/design.md's `headline-6-semibold` — a tier added to the
  * type scale specifically for this (see typography.ts), since headline-4 and even
  * paragraph-4 both read as too large for a subsection prompt this compact. First name
  * pre-fills from the name given on Legal Intro's "How

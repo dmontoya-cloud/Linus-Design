@@ -15,28 +15,28 @@
 }
 
 .welcome {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
-  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
+  line-height: var(--font-headline-6-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-lg, 24px);
 }
 
-/* Same headline-5-semibold size/weight/color as .welcome now — Figma sizes both parts of
+/* Same headline-6-semibold size/weight/color as .welcome now — Figma sizes both parts of
    the greeting identically, on request. */
 .welcomeSubtext {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
 }
 
 .copy {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
-  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
+  line-height: var(--font-headline-6-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-sm, 8px);
 }

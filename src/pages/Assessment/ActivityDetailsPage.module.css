@@ -205,9 +205,9 @@
   border-radius: var(--radius-pill, 999px);
   background: var(--color-primary-soft, #e6f2f7);
   color: var(--color-text-primary, #1f2a37);
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
 }
 
 .taskName {

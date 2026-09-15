@@ -15,20 +15,20 @@
 }
 
 .welcome {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
-  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
+  line-height: var(--font-headline-6-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-lg, 24px);
 }
 
-/* Same headline-5-semibold size/weight/color as .welcome now — Figma sizes both parts of
+/* Same headline-6-semibold size/weight/color as .welcome now — Figma sizes both parts of
    the greeting identically, on request. */
 .welcomeSubtext {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
   color: var(--color-text-primary, #1f2a37);
 }
 
@@ -40,10 +40,10 @@
 }
 
 .copy {
-  font-family: var(--font-headline-5-semibold-family, var(--font-family, system-ui, sans-serif));
-  font-size: var(--font-headline-5-semibold-size, 1.125rem);
-  font-weight: var(--font-headline-5-semibold-weight, 600);
-  line-height: var(--font-headline-5-semibold-line-height, 1.3);
+  font-family: var(--font-headline-6-semibold-family, var(--font-family, system-ui, sans-serif));
+  font-size: var(--font-headline-6-semibold-size, 1.125rem);
+  font-weight: var(--font-headline-6-semibold-weight, 600);
+  line-height: var(--font-headline-6-semibold-line-height, 1.3);
   color: var(--color-text-primary, #1f2a37);
   margin: 0 0 var(--space-sm, 8px);
 }
@@ -81,7 +81,7 @@
    than it needed to on the narrowest screens; the top/bottom padding stays as-is. One step up
    the type scale for the Welcome heading too, on request (tried at 900px/Tablet+Phone first,
    scoped back down to phone-only) — headline-4-semibold, not the modular scale's literal
-   "next size" (paragraph-3-semibold, 19px): headline-5 is deliberately off-scale on its own
+   "next size" (paragraph-3-semibold, 19px): headline-6 is deliberately off-scale on its own
    (see docs/design.md), and stepping into Paragraph would swap the accent Plus Jakarta Sans
    face for the body IBM Plex Sans one — headline-4 keeps the same headline typeface, just one
    tier up. Placed after the base rules above (not merged into an earlier block) since a media
@@ -111,7 +111,7 @@
 
 /* Tablet-only (641-900px), on request — the forced break above reads fine on Phone at its own
    bumped headline-4-semibold size (the 640px block), but on Tablet it was still splitting
-   headline-5-semibold-sized text into two short, oddly-broken lines. One step up the type scale
+   headline-6-semibold-sized text into two short, oddly-broken lines. One step up the type scale
    here too (headline-4-semibold, same size Phone already uses) rather than a Tablet-specific
    size, and the break undone — Tablet's own width comfortably fits the whole greeting on one
    line at that size, unlike Phone's narrower column. Placed last so it out-orders both the
