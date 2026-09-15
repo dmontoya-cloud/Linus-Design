@@ -64,6 +64,7 @@
         --gray-300: #a5aeb5;
         --gray-400: #81909c;
         --gray-500: #5b6b79;
+        --gray-600: #505e6a;
         --gray-700: #44505b;
         --gray-800: #323b43;
         --gray-900: #20252a;
@@ -124,7 +125,7 @@
         --color-border-success: #15803d;
         --color-border-info: #2563eb;
         --color-text-primary: #20252a;
-        --color-text-secondary: #5b6b79;
+        --color-text-secondary: #505e6a;
         --color-text-tertiary: #a5aeb5;
         --color-text-on-primary: #ffffff;
         --color-success: #15803d;
@@ -142,7 +143,7 @@
         --color-content-primary: #20252a;
         --color-content-primary-disabled: #a5aeb5;
         --color-content-primary-inverted: #ffffff;
-        --color-content-secondary: #5b6b79;
+        --color-content-secondary: #505e6a;
         --color-content-secondary-disabled: #ced3d7;
         --color-content-secondary-inverted: #eff0f2;
         --color-content-danger: #dc2626;
@@ -173,8 +174,10 @@
         --headline-3-line: 1.2;
         --headline-4-size: 1.75rem;
         --headline-4-line: 1.25;
-        --headline-5-size: 1.125rem;
-        --headline-5-line: 1.3;
+        --headline-5-size: 1.375rem;
+        --headline-5-line: 1.28;
+        --headline-6-size: 1.125rem;
+        --headline-6-line: 1.3;
         --paragraph-1-size: 0.8125rem;
         --paragraph-1-line: 1.5;
         --paragraph-2-size: 1rem;
@@ -5594,16 +5597,20 @@
           <p class="section-sub">
             Neutral scale, not a brand hue &mdash; anchored on the existing
             <code>text-secondary</code> value rather than a confirmed Figma color. Uniquely among
-            the 9 families, <code>gray</code> also carries a <code>400</code> step:
+            the 9 families, <code>gray</code> carries two extra steps: <code>400</code> &mdash;
             <code>gray-300</code> (2.25:1 against white) falls short of the 3:1 non-text-contrast
             minimum a component boundary needs, and <code>gray-500</code> (5.49:1) reads too dark
             for a border &mdash; <code>gray-400</code> (3.28:1) fills that gap and exists solely to
-            back <code>border-strong</code>.
+            back <code>border-strong</code>; and <code>600</code> (<code>#505E6A</code>, 6.69:1)
+            &mdash; new, on request, interpolated between <code>gray-500</code> and
+            <code>gray-700</code> rather than independently confirmed, and exists solely to back
+            <code>text-secondary</code>/<code>content-secondary</code> one step darker than
+            <code>gray-500</code> used to.
           </p>
 
           <div class="primitive-family">
             <span class="family-label">gray</span>
-            <div class="primitive-row" style="grid-template-columns: repeat(10, 1fr)">
+            <div class="primitive-row" style="grid-template-columns: repeat(11, 1fr)">
               <div class="primitive-swatch" data-hex="#FAFBFB">
                 <div class="fill" style="background: var(--gray-50)">
                   50
@@ -5835,6 +5842,52 @@
                       class="swatch-copy"
                       data-hex="#5B6B79"
                       aria-label="Copy hex value #5B6B79"
+                    >
+                      <svg
+                        class="swatch-copy-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 256 256"
+                        aria-hidden="true"
+                      >
+                        <rect width="256" height="256" fill="none" />
+                        <rect
+                          x="88"
+                          y="88"
+                          width="128"
+                          height="128"
+                          rx="8"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="16"
+                        />
+                        <path
+                          d="M168,88V56a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V160a8,8,0,0,0,8,8H88"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="primitive-swatch" data-hex="#505E6A">
+                <div
+                  class="fill"
+                  style="background: var(--gray-600); color: var(--color-content-primary-inverted)"
+                >
+                  600
+                  <div class="swatch-hover">
+                    <span class="swatch-hover-hex">#505E6A</span
+                    ><button
+                      type="button"
+                      class="swatch-copy"
+                      data-hex="#505E6A"
+                      aria-label="Copy hex value #505E6A"
                     >
                       <svg
                         class="swatch-copy-icon"
@@ -6512,9 +6565,9 @@
             of this system's own governing rule. All three are now direct <code>gray</code> aliases:
             <code>text-primary</code> is <code>gray-900</code> (matches
             <code>content-primary</code> exactly), <code>text-secondary</code> is
-            <code>gray-500</code> (unchanged &mdash; already an exact match, now declared as one),
-            <code>text-tertiary</code> is <code>gray-300</code> (matches
-            <code>content-primary-disabled</code> exactly).
+            <code>gray-600</code> (<code>#505E6A</code>, 6.69:1 against white &mdash; moved one step
+            darker from <code>gray-500</code> on request), <code>text-tertiary</code> is
+            <code>gray-300</code> (matches <code>content-primary-disabled</code> exactly).
           </p>
           <div class="swatch-grid">
             <div class="swatch" data-hex="#FFFFFF">
@@ -6660,16 +6713,16 @@
                 ><span class="hex">#20252A &middot; = gray-900</span>
               </div>
             </div>
-            <div class="swatch" data-hex="#5B6B79">
+            <div class="swatch" data-hex="#505E6A">
               <div class="swatch-color" style="background: var(--color-text-secondary)">
                 <span>Aa on-primary</span>
                 <div class="swatch-hover">
-                  <span class="swatch-hover-hex">#5B6B79</span
+                  <span class="swatch-hover-hex">#505E6A</span
                   ><button
                     type="button"
                     class="swatch-copy"
-                    data-hex="#5B6B79"
-                    aria-label="Copy hex value #5B6B79"
+                    data-hex="#505E6A"
+                    aria-label="Copy hex value #505E6A"
                   >
                     <svg
                       class="swatch-copy-icon"
@@ -6704,7 +6757,7 @@
               </div>
               <div class="swatch-meta">
                 <span class="name">text-secondary</span
-                ><span class="hex">#5B6B79 &middot; = gray-500</span>
+                ><span class="hex">#505E6A &middot; = gray-600</span>
               </div>
             </div>
             <div class="swatch" data-hex="#A5AEB5">
@@ -7361,16 +7414,16 @@
                 ><span class="hex">#FFFFFF &middot; safe on primary/danger/success fills only</span>
               </div>
             </div>
-            <div class="content-swatch" data-hex="#5B6B79">
+            <div class="content-swatch" data-hex="#505E6A">
               <div class="content-demo" style="background: var(--color-background)">
                 <span style="color: var(--color-content-secondary)">Aa</span>
                 <div class="swatch-hover">
-                  <span class="swatch-hover-hex">#5B6B79</span
+                  <span class="swatch-hover-hex">#505E6A</span
                   ><button
                     type="button"
                     class="swatch-copy"
-                    data-hex="#5B6B79"
-                    aria-label="Copy hex value #5B6B79"
+                    data-hex="#505E6A"
+                    aria-label="Copy hex value #505E6A"
                   >
                     <svg
                       class="swatch-copy-icon"
@@ -7405,7 +7458,7 @@
               </div>
               <div class="swatch-meta">
                 <span class="name">content-secondary</span
-                ><span class="hex">#5B6B79 &middot; = gray-500</span>
+                ><span class="hex">#505E6A &middot; = gray-600</span>
               </div>
             </div>
             <div class="content-swatch" data-hex="#CED3D7">
@@ -7653,17 +7706,17 @@
             <strong>Plus Jakarta Sans</strong> as the accent face for every Headline style (<code
               >headline-1</code
             >
-            through <code>headline-5</code>) &mdash; a deliberate accent for titles, not a wholesale
+            through <code>headline-6</code>) &mdash; a deliberate accent for titles, not a wholesale
             typeface swap. Headline's accent treatment was initially scoped to just
             <code>headline-1</code>&ndash;<code>headline-3</code>, the three largest sizes, before
-            being extended to all five Headline steps for a consistent title voice throughout. Every
+            being extended to every Headline step for a consistent title voice throughout. Every
             Paragraph/Label/button style stays on IBM Plex Sans. A
             <strong>1.200 (minor third)</strong> modular scale, base = <code>paragraph-2</code> =
-            16px, with one deliberate exception (<code>headline-5</code>, added later for a real
-            need — see below). 12 sizes &times; 2 weights = 24 tokens, plus a dedicated
-            <code>button</code> style outside the scale. No Display category and no Bold (700)
-            weight remain &mdash; both were removed after the scale was first built. Note the naming
-            direction flips between categories: Headline counts down from largest (<code
+            16px, with two deliberate exceptions (<code>headline-5</code> and
+            <code>headline-6</code>, see below). 13 sizes &times; 2 weights = 26 tokens, plus a
+            dedicated <code>button</code> style outside the scale. No Display category and no Bold
+            (700) weight remain &mdash; both were removed after the scale was first built. Note the
+            naming direction flips between categories: Headline counts down from largest (<code
               >headline-1</code
             >
             biggest), Paragraph counts up from smallest (<code>paragraph-1</code> smallest).
@@ -7792,7 +7845,7 @@
             </div>
           </div>
           <div class="type-row">
-            <div class="type-label"><strong>headline-5</strong>18px / 400&ndash;600 / 1.3</div>
+            <div class="type-label"><strong>headline-5</strong>22px / 400&ndash;600 / 1.28</div>
             <div
               class="type-sample"
               style="
@@ -7814,6 +7867,34 @@
                 font-size: var(--headline-5-size);
                 font-weight: var(--weight-semibold);
                 line-height: var(--headline-5-line);
+              "
+            >
+              Ut labore et dolore magna aliqua
+            </div>
+          </div>
+          <div class="type-row">
+            <div class="type-label"><strong>headline-6</strong>18px / 400&ndash;600 / 1.3</div>
+            <div
+              class="type-sample"
+              style="
+                font-family: var(--font-family-serif);
+                font-size: var(--headline-6-size);
+                font-weight: var(--weight-regular);
+                line-height: var(--headline-6-line);
+              "
+            >
+              Ut labore et dolore magna aliqua
+            </div>
+          </div>
+          <div class="type-row">
+            <div class="type-label"></div>
+            <div
+              class="type-sample"
+              style="
+                font-family: var(--font-family-serif);
+                font-size: var(--headline-6-size);
+                font-weight: var(--weight-semibold);
+                line-height: var(--headline-6-line);
               "
             >
               Ut labore et dolore magna aliqua
